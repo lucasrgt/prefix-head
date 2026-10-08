@@ -133,7 +133,65 @@ fn semantic(name: &str, train: &str) -> Fact {
     Fact::Grouped(alpha, Grouping::from_classes(&class, m))
 }
 
+/// Splits tokens (sorted by spelling) into units sharing a prefix: a unit is a prefix family of at
+/// most `m` tokens, refined one symbol deeper when a family is larger.
+fn prefix_units(ids: &[u32], piece: &dyn Fn(u32) -> Vec<u64>, depth: usize, m: usize, out: &mut Vec<Vec<u32>>) {
+    if ids.len() <= m {
+        out.push(ids.to_vec());
+        return;
+    }
+    let (short, long): (Vec<u32>, Vec<u32>) = ids.iter().partition(|&&t| piece(t).len() <= depth);
+    for chunk in short.chunks(m) {
+        out.push(chunk.to_vec());
+    }
+    let mut i = 0;
+    while i < long.len() {
+        let key = piece(long[i])[depth];
+        let j = long[i..].iter().position(|&t| piece(t)[depth] != key).map_or(long.len(), |p| i + p);
+        prefix_units(&long[i..j], piece, depth + 1, m, out);
+        i = j;
+    }
+}
+
+/// `grp-trie-<m>:bpe…`: classes are whole prefix families packed in spelling order, never split
+/// unless a family exceeds `m`; `grp-random-<m>:bpe…`: a uniformly random order cut into classes.
+fn trie_or_random(name: &str, train: &str) -> Fact {
+    let (spec, inner) = name.split_once(':').expect("grp-<trie|random>-<m>:<alphabet>");
+    let m: usize = spec.rsplit('-').next().unwrap().parse().unwrap();
+    let alpha = tok::by_name(inner, train);
+    let Alphabet::Bpe(bpe) = &alpha else { panic!("grouping needs a BPE alphabet") };
+    let v = bpe.vocab() as u32;
+    let piece = |t: u32| bpe.piece(t).iter().map(|&x| x as u64).collect::<Vec<u64>>();
+    let g = if spec.starts_with("grp-random") {
+        let mut r = Rng::new(0x5eed);
+        let keys: Vec<u64> = (0..v).map(|_| r.next()).collect();
+        Grouping::build(keys, m)
+    } else {
+        let mut ids: Vec<u32> = (0..v).collect();
+        ids.sort_by_key(|&t| piece(t));
+        let mut units = Vec::new();
+        prefix_units(&ids, &piece, 0, m, &mut units);
+        let mut class_of = vec![0usize; v as usize];
+        let (mut class, mut fill) = (0usize, 0usize);
+        for u in units {
+            if fill + u.len() > m {
+                class += 1;
+                fill = 0;
+            }
+            for &t in &u {
+                class_of[t as usize] = class;
+            }
+            fill += u.len();
+        }
+        Grouping::from_classes(&class_of, m)
+    };
+    Fact::Grouped(alpha, g)
+}
+
 pub(crate) fn parse(name: &str, train: &str) -> Fact {
+    if name.starts_with("grp-trie-") || name.starts_with("grp-random-") {
+        return trie_or_random(name, train);
+    }
     if name == "syl" {
         return Fact::Syl(Syllables::train(train));
     }
