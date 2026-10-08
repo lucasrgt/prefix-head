@@ -240,13 +240,13 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let d = 32;
     let flags = a.alpha.strip_prefix("nd").map_or("", |r| &r[..r.len() - r.trim_start_matches(['c', 'f']).len()]);
     let full = a.alpha.starts_with("grp-");
-    let mut m = FMlp::new(radix.clone(), d, k, a.h, a.seed, full || flags.contains('c'), full || flags.contains('f'));
+    let mut m = FMlp::new(radix.clone(), d, k, a.h, a.rng_seed(), full || flags.contains('c'), full || flags.contains('f'));
     let radix_s = radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
     eprintln!("{}: radix {radix_s}, {tpc:.3} tok/char, k {k}, params {}, train {tr_tok} tok, test {te_tok} tok", a.alpha, m.params());
 
     let steps = ((tr_tok as f64 * a.epochs) / a.batch as f64).ceil() as usize;
     let warm = 300.min(steps / 10);
-    let mut rng = Rng::new(a.seed ^ 0x9e37);
+    let mut rng = Rng::new(a.rng_seed() ^ 0x9e37);
     let mut bt = m.batch(a.batch);
     let mut ts = vec![0usize; a.batch];
     let t1 = Instant::now();

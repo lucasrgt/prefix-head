@@ -29,6 +29,14 @@ pub struct Args {
     pub di: usize,
 }
 
+impl Args {
+    /// kern::Rng keeps `seed | 1`, so seeds 2 and 3 collided; odd 2s − 1 keeps seeds 1 and 2 as they
+    /// were and makes every later seed distinct.
+    pub fn rng_seed(&self) -> u64 {
+        2 * self.seed - 1
+    }
+}
+
 fn args() -> Args {
     let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into(), di: 0 };
     let v: Vec<String> = std::env::args().skip(1).collect();
@@ -114,7 +122,7 @@ fn main() {
     let v = alpha.vocab();
     let d = v.min(32);
     let k = (a.ctx_chars * spc).ceil() as usize;
-    let mut m = nn::mlp::Mlp::new(v, d, k, a.h, a.seed);
+    let mut m = nn::mlp::Mlp::new(v, d, k, a.h, a.rng_seed());
     eprintln!(
         "{}: vocab {v}, {spc:.3} sym/char, k {k}, d {d}, params {}, train {} sym, test {} sym",
         alpha.name(),
@@ -125,7 +133,7 @@ fn main() {
 
     let steps = ((tr.len() as f64 * a.epochs) / a.batch as f64).ceil() as usize;
     let warm = 300.min(steps / 10);
-    let mut rng = Rng::new(a.seed ^ 0x9e37);
+    let mut rng = Rng::new(a.rng_seed() ^ 0x9e37);
     let mut bt = m.batch(a.batch);
     let mut ts = vec![0usize; a.batch];
     let t1 = Instant::now();
