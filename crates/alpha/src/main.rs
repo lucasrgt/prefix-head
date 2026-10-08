@@ -25,10 +25,11 @@ pub struct Args {
     pub policy: String,
     pub heads: usize,
     pub mlp: usize,
+    pub corpus: String,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into() };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -52,6 +53,7 @@ fn args() -> Args {
             "--policy" => a.policy = val.clone(),
             "--heads" => a.heads = val.parse().unwrap(),
             "--mlp" => a.mlp = val.parse().unwrap(),
+            "--corpus" => a.corpus = val.clone(),
             k => panic!("unknown flag {k}"),
         }
     }
@@ -61,10 +63,10 @@ fn args() -> Args {
 fn main() {
     let a = args();
     let root = ruler::results::root();
-    let (mut train, mut test) = ruler::corpus::load(&root.join("data/raw"));
+    let (mut train, mut test) = ruler::corpus::load(&root.join(&a.corpus));
     let mut books: Vec<String> = Vec::new();
     if a.extra {
-        books = ruler::corpus::books(&root.join("data/raw")).into_iter().map(|b| b.train).collect();
+        books = ruler::corpus::books(&root.join(&a.corpus)).into_iter().map(|b| b.train).collect();
         let extra = ruler::corpus::extra_books(&root.join("data/extra/raw"));
         for e in &extra {
             train.push_str(e);

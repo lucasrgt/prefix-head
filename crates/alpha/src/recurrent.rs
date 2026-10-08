@@ -292,8 +292,9 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"corpus\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
+        a.corpus,
         M::KIND,
         a.n,
         a.seed,
@@ -330,6 +331,7 @@ pub fn checkpoint_name(a: &Args) -> String {
         c => format!("{c}-n{}", a.n),
     };
     let extra = if a.extra { format!("-extra-{}-{}-e{}", a.select, a.policy, a.epochs) } else { String::new() };
+    let extra = if a.corpus == "data/raw" { extra } else { format!("{extra}-{}", a.corpus.replace('/', "_")) };
     format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}{extra}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
 
