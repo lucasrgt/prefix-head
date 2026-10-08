@@ -52,3 +52,5 @@ Conclusões:
 6. Achado contra a prática: somar embeddings de dígitos na entrada (como em Leviathan, arXiv 2601.22040) custa qualidade em modelo pequeno.
 
 Próximos: 3 sementes (1D vs ndcf 2D); varrer vocabulário 8k→65k com cabeça 2D; eixos com significado (morfológicos) + generalização para palavras inéditas; sílabas com as correções.
+
+Correção (2026-10-08, depois da rodada): o FMlp alocava uma tabela de condicionamento para o último fator, que nunca é lida. As contagens de `params` dos runs `nd*` acima estão infladas em V_último × h (nd1:bpe8192: 4,51M → 2,41M reais; ndcf91x91:bpe8192: 2,50M → 2,48M). Os bpc não mudam de natureza, mas a inicialização muda, então reruns diferem dentro do ruído de semente.

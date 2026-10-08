@@ -46,7 +46,7 @@ impl FMlp {
         };
         let w1 = Param::new(k * d * h, 1.0 / ((k * d) as f32).sqrt(), &mut rng);
         let b1 = Param::new(h, 0.0, &mut rng);
-        let cond = radix.iter().map(|&v| Param::new(v * h, 0.1, &mut rng)).collect();
+        let cond = radix[..f - 1].iter().map(|&v| Param::new(v * h, 0.1, &mut rng)).collect();
         let w2 = radix.iter().zip(&prefixes).map(|(&v, &p)| Param::new(p * h * v, 1.0 / (h as f32).sqrt(), &mut rng)).collect();
         let b2 = radix.iter().zip(&prefixes).map(|(&v, &p)| Param::new(p * v, 0.0, &mut rng)).collect();
         Self { radix, cond_head, full_in, d, k, h, ein, w1, b1, cond, w2, b2 }
