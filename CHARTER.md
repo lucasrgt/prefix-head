@@ -19,6 +19,7 @@ Motivação: IA útil em hardware que já existe, sem GPU e sem data center, com
 - **Kernel de referência escalar sempre existe** e todo kernel SIMD é testado bit a bit contra ele.
 - **Dispatch em runtime.** Um binário roda em AVX-512, AVX2 e escalar; o hardware antigo é alvo de primeira classe.
 - Elixir/BEAM só entra quando houver algo para orquestrar (shards, máquinas, consolidação). O caminho quente é Rust.
+- **Granularidade grossa no BEAM.** Um token do modelo 2D custa ~1 µs; uma mensagem BEAM ou chamada NIF custa ~1–5 µs, um salto de rede ~100 µs. Orquestração entra por pedido/tarefa/consulta de memória, nunca no laço de cada token; roteamento fino (ex.: cabeça por classes) fica no Rust. Antes da fase 4, medir o custo real com um NIF do `infer_step`.
 
 ## Hardware
 
