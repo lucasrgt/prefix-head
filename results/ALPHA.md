@@ -140,3 +140,18 @@ M2 (primeiros 128 tokens): frio 2.1964 → livro inteiro 2.1746 (−1,0%); outro
 - **Negativo em qualidade:** osciladores de ritmo fixo modelam pior o contexto próximo (−1,4% a −1,6% vs minGRU) e guardam menos do livro. Consistente com o argumento de seletividade (Mamba): esquecer de forma dependente da entrada importa em linguagem.
 - **Positivo inesperado:** o estado de osciladores é muito mais robusto à quantização — 2 bits por número quase não perde (momento de 64 bytes).
 - Próximo natural: oscilador seletivo — porta dependente da entrada (minGRU) × rotação de fase (osc): h_t = (1−z_t)·e^{iθ}·h_{t−1} + z_t·c_t.
+
+# Oscilador seletivo (`--core sosc --n 51`) — 2026-10-08
+
+h_t = (1 − z_t)·e^{iθ}·h_{t−1} + z_t·c_t, z_t da entrada (minGRU) × rotação de fase aprendida (osc). 51 canais complexos/camada → 24.303 MACs/char, 2.217.472 parâmetros, **estado 816 B**.
+
+| run | carregado | reset |
+|---|---|---|
+| seed 1, sem stateful | 2.0736 | 2.0801 |
+| seed 2, sem stateful | 2.0836 | 2.0894 |
+| seed 1, stateful 64 | **2.0614** | 2.0912 |
+
+- Sem stateful: média 2,0786 vs minGRU 2,0854 (−0,3%; faixas de semente se sobrepõem → empate com leve vantagem).
+- Com stateful: **2,0614, melhor do projeto** (minGRU 2,0755, osc 2,1086; 1 semente).
+- M2 (primeiros 128 tokens): frio 2.1460 → livro inteiro 2.1264; outro livro 2.1425 (próprio vs outro −0,75%; minGRU −0,95%); satura em ~256 tokens. Momento em 4 bits: 2.1271 (**102 bytes, quase sem perda**; minGRU perde ~1/3 do ganho em 4 bits); 2 bits perde ~metade.
+- Leitura: a porta seletiva traz a qualidade do minGRU; a rotação traz parte da robustez à quantização do oscilador. O horizonte curto (~256 tokens) continua sendo o limite → próximo: estado maior via matrizes estruturadas (H-caleidoscópio).
