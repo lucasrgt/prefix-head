@@ -3,4 +3,6 @@ pub mod fmlp;
 pub mod head;
 pub mod rnn;
 pub mod mlp;
+pub mod osc;
+pub mod seq;
 mod train;

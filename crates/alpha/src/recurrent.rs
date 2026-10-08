@@ -1,13 +1,35 @@
 use crate::Args;
 use crate::factored::{parse, sample_logits};
 use kern::Rng;
+use nn::osc::Osc;
 use nn::rnn::MinGru;
+use nn::seq::Seq;
 use tok::syll::from_digits;
 
 /// minGRU over a factored alphabet (`grp-first-91:bpe8192`, `nd…`). Trains on random windows of
 /// `seq` tokens from a zero state; evaluates on the test text streamed once with the state carried
 /// throughout (`test_bpc`) and with the state reset every `seq` tokens (`bpc_reset`, training's view).
 pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: usize) {
+    match a.core.as_str() {
+        "osc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+            let mut m = Osc::new(v, r, a.h, a.n, a.layers, a.seed);
+            if a.chrono > 0.0 {
+                m.chrono(a.chrono, a.seed);
+            }
+            m
+        }),
+        "mingru" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+            let mut m = MinGru::new(v, r, a.h, a.layers, a.seed);
+            if a.chrono > 0.0 {
+                m.chrono(a.chrono, a.seed);
+            }
+            m
+        }),
+        c => panic!("unknown core {c}"),
+    }
+}
+
+fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: usize, make: impl Fn(usize, Vec<usize>) -> M) {
     let fact = parse(&a.alpha, train);
     let radix = fact.radix();
     let f = radix.len();
@@ -20,13 +42,11 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let te_ids = from_digits(&te, &radix);
     let (n_tr, n_te) = (tr_ids.len(), te_ids.len());
 
-    let mut m = MinGru::new(vocab, radix.clone(), a.h, a.layers, a.seed);
-    if a.chrono > 0.0 {
-        m.chrono(a.chrono, a.seed);
-    }
+    let mut m = make(vocab, radix.clone());
     let radix_s = radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
     eprintln!(
-        "mingru {}: radix {radix_s}, h {}, layers {}, seq {}, params {}, state {} B, train {n_tr} tok",
+        "{} {}: radix {radix_s}, h {}, layers {}, seq {}, params {}, state {} B, train {n_tr} tok",
+        M::KIND,
         a.alpha,
         a.h,
         a.layers,
@@ -121,8 +141,10 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"mingru\",\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
+        M::KIND,
+        a.n,
         a.seed,
         a.h,
         a.layers,
@@ -145,12 +167,20 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
 pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
-    format!("mingru-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
+    let core = if a.core == "osc" { format!("osc-n{}", a.n) } else { "mingru".into() };
+    format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
 
 /// Scores the test text with a saved checkpoint `passes` times and reports µs and marginal package
 /// µJ per char, single-threaded and with 8 threads (8 contiguous segments, each from a cold state).
 pub fn score(a: &Args, test: &str, test_chars: usize) {
+    match a.core.as_str() {
+        "osc" => score_core::<Osc>(a, test, test_chars),
+        _ => score_core::<MinGru>(a, test, test_chars),
+    }
+}
+
+fn score_core<M: Seq + Sync>(a: &Args, test: &str, test_chars: usize) {
     let root = ruler::results::root();
     let books = ruler::corpus::books(&root.join("data/raw"));
     let train: String = books.iter().map(|b| b.train.as_str()).collect();
@@ -158,10 +188,10 @@ pub fn score(a: &Args, test: &str, test_chars: usize) {
     let radix = fact.radix();
     let f = radix.len();
     let path = root.join("data/models").join(checkpoint_name(a));
-    let (m, _) = MinGru::load(&path).unwrap();
+    let (m, _) = M::load(&path).unwrap();
     let te = fact.encode(test);
     let te_ids = from_digits(&te, &radix);
-    let bos = m.vocab as u32;
+    let bos = m.vocab() as u32;
     let segment = |lo: usize, hi: usize| {
         let (mut st, mut sc) = (m.state(), m.scratch());
         let mut out = vec![0u32; f];
@@ -188,7 +218,7 @@ pub fn score(a: &Args, test: &str, test_chars: usize) {
         });
         let chars = (test_chars * passes) as f64;
         println!(
-            "mingru {} threads={threads}: {:.4} bpc, {:.3} us/char, idle {idle:.1} W, marginal {:.2} uJ/char ({passes} passes, {secs:.1} s)",
+            "{} threads={threads}: {:.4} bpc, {:.3} us/char, idle {idle:.1} W, marginal {:.2} uJ/char ({passes} passes, {secs:.1} s)",
             checkpoint_name(a),
             nats / std::f64::consts::LN_2 / test_chars as f64,
             secs * 1e6 / chars,
