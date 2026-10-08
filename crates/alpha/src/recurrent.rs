@@ -6,6 +6,7 @@ use nn::rnn::MinGru;
 use nn::seq::Seq;
 use nn::kosc::KOsc;
 use nn::sosc::SelOsc;
+use nn::mamba::Mamba;
 use nn::tfm::Tfm;
 use tok::syll::from_digits;
 
@@ -36,6 +37,7 @@ pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usi
             m
         }),
         "tfm" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Tfm::new(v, r, a.h, a.heads, a.layers, a.mlp, a.seq, a.seed)),
+        "mamba" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Mamba::new(v, r, a.h, if a.di == 0 { a.h } else { a.di }, a.n, a.heads, a.layers, a.seed)),
         "mingru" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = MinGru::new(v, r, a.h, a.layers, a.seed);
             if a.chrono > 0.0 {
@@ -328,6 +330,7 @@ pub fn checkpoint_name(a: &Args) -> String {
     let core = match a.core.as_str() {
         "mingru" => "mingru".into(),
         "tfm" => format!("tfm-a{}-m{}", a.heads, a.mlp),
+        "mamba" => format!("mamba-a{}-n{}-di{}", a.heads, a.n, a.di),
         c => format!("{c}-n{}", a.n),
     };
     let extra = if a.extra { format!("-extra-{}-{}-e{}", a.select, a.policy, a.epochs) } else { String::new() };
@@ -343,6 +346,7 @@ pub fn score(a: &Args, train: &str, test: &str, test_chars: usize) {
         "sosc" => score_core::<SelOsc>(a, train, test, test_chars),
         "kosc" => score_core::<KOsc>(a, train, test, test_chars),
         "tfm" => score_core::<Tfm>(a, train, test, test_chars),
+        "mamba" => score_core::<Mamba>(a, train, test, test_chars),
         _ => score_core::<MinGru>(a, train, test, test_chars),
     }
 }
