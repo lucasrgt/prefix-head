@@ -1,10 +1,12 @@
 use std::time::{Duration, Instant};
 
-const RAPL: &str = "/sys/class/powercap/intel-rapl:0";
+const PACKAGE: &str = "/sys/class/powercap/intel-rapl:0";
+const CORES: &str = "/sys/class/powercap/intel-rapl:0:0";
 
-/// CPU package energy counter (RAPL). Readable by users only after
-/// `sudo chmod o+r /sys/class/powercap/intel-rapl:0/energy_uj`.
+/// RAPL energy counter: the cores-only domain when readable (less uncore/IO noise), else the package.
+/// Readable by users only after `sudo chmod o+r <domain>/energy_uj`.
 pub struct Rapl {
+    dir: &'static str,
     max_uj: u64,
 }
 
@@ -14,12 +16,18 @@ fn read_u64(path: &str) -> Option<u64> {
 
 impl Rapl {
     pub fn open() -> Option<Self> {
-        read_u64(&format!("{RAPL}/energy_uj"))?;
-        Some(Self { max_uj: read_u64(&format!("{RAPL}/max_energy_range_uj"))? })
+        [CORES, PACKAGE].into_iter().find_map(|dir| {
+            read_u64(&format!("{dir}/energy_uj"))?;
+            Some(Self { dir, max_uj: read_u64(&format!("{dir}/max_energy_range_uj"))? })
+        })
+    }
+
+    pub fn domain(&self) -> &'static str {
+        if self.dir == CORES { "cores" } else { "package" }
     }
 
     pub fn read_uj(&self) -> u64 {
-        read_u64(&format!("{RAPL}/energy_uj")).unwrap_or(0)
+        read_u64(&format!("{}/energy_uj", self.dir)).unwrap_or(0)
     }
 
     pub fn joules_since(&self, start_uj: u64) -> f64 {

@@ -1,3 +1,5 @@
+mod infer;
+
 use kern::Rng;
 use ruler::energy::Rapl;
 use kern::dense::*;
@@ -50,6 +52,10 @@ fn main() {
         eprintln!("RAPL unreadable: sudo chmod o+r /sys/class/powercap/intel-rapl:0/energy_uj");
     }
     let only = std::env::args().nth(1);
+    if only.as_deref() == Some("infer") {
+        infer::run(&rapl);
+        return;
+    }
     let want = |k: &str| only.as_deref().is_none_or(|o| k.contains(o));
     let vnni = has_avx512_vnni();
     let vpop = has_avx512_vpopcnt();
