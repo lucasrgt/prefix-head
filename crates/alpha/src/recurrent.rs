@@ -4,6 +4,7 @@ use kern::Rng;
 use nn::osc::Osc;
 use nn::rnn::MinGru;
 use nn::seq::Seq;
+use nn::sosc::SelOsc;
 use tok::syll::from_digits;
 
 /// minGRU over a factored alphabet (`grp-first-91:bpe8192`, `nd…`). Trains on random windows of
@@ -13,6 +14,13 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     match a.core.as_str() {
         "osc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
             let mut m = Osc::new(v, r, a.h, a.n, a.layers, a.seed);
+            if a.chrono > 0.0 {
+                m.chrono(a.chrono, a.seed);
+            }
+            m
+        }),
+        "sosc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+            let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
             }
@@ -167,7 +175,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
 pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
-    let core = if a.core == "osc" { format!("osc-n{}", a.n) } else { "mingru".into() };
+    let core = if a.core == "mingru" { "mingru".into() } else { format!("{}-n{}", a.core, a.n) };
     format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
 
@@ -176,6 +184,7 @@ pub fn checkpoint_name(a: &Args) -> String {
 pub fn score(a: &Args, test: &str, test_chars: usize) {
     match a.core.as_str() {
         "osc" => score_core::<Osc>(a, test, test_chars),
+        "sosc" => score_core::<SelOsc>(a, test, test_chars),
         _ => score_core::<MinGru>(a, test, test_chars),
     }
 }
