@@ -124,3 +124,19 @@ M2 (14 livros, primeiros 128 tokens do teste de cada um = abrir o livro e contin
 - Horizonte de memória ≈ 4 mil tokens (~15 mil chars): 4096 tokens = livro inteiro. O ganho de qualidade **satura**, ao contrário da curva G ∝ R^0,5 do worlds; o ganho de energia é linear no que se deixaria de reler.
 - **256 bytes bastam** (8 bits por número = idêntico); 4 bits já perde parte.
 - Reler os 14 livros: 6,8 s, 520–570 J (pacote); restaurar os 14 momentos: ~10 µs. Para a mesma qualidade basta reler ~4k tokens por livro (~16 ms), ainda ~10⁴× mais que restaurar.
+
+# H-oscilador — núcleo de osciladores amortecidos (estilo LRU) — 2026-10-08 (`--core osc --n 64`)
+
+Mesmos parâmetros (2.217.780), mesmas MACs (24.373/char) e mesmo estado (1 KB) que o minGRU h128×2. Init com meias-vidas e períodos log-uniformes 2–1024.
+
+| run | osc carregado | osc reset | minGRU carregado | minGRU reset |
+|---|---|---|---|---|
+| seed 1, sem stateful | 2.1341 | 2.1127 | 2.0875 | 2.0916 |
+| seed 2, sem stateful | 2.1410 | 2.1178 | 2.0832 | 2.0874 |
+| seed 1, stateful 64 | 2.1086 | 2.1440 | **2.0755** | 2.1054 |
+
+M2 (primeiros 128 tokens): frio 2.1964 → livro inteiro 2.1746 (−1,0%); outro livro 2.1838 (próprio vs outro −0,42%, minGRU −0,95%); satura em ~256 tokens (minGRU ~4096). Estado quantizado: 4 bits 2.1745, **2 bits 2.1749 (64 B, quase sem perda)**, 1 bit 2.1811 — o minGRU perde muito em 2 bits (2.1656 vs 2.1443).
+
+- **Negativo em qualidade:** osciladores de ritmo fixo modelam pior o contexto próximo (−1,4% a −1,6% vs minGRU) e guardam menos do livro. Consistente com o argumento de seletividade (Mamba): esquecer de forma dependente da entrada importa em linguagem.
+- **Positivo inesperado:** o estado de osciladores é muito mais robusto à quantização — 2 bits por número quase não perde (momento de 64 bytes).
+- Próximo natural: oscilador seletivo — porta dependente da entrada (minGRU) × rotação de fase (osc): h_t = (1−z_t)·e^{iθ}·h_{t−1} + z_t·c_t.
