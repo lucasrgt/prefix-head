@@ -6,14 +6,14 @@ use tok::group::Grouping;
 use tok::syll::{Syllables, from_digits, to_digits};
 use std::time::Instant;
 
-enum Fact {
+pub(crate) enum Fact {
     Syl(Syllables),
     Digits(Alphabet, Vec<usize>),
     Grouped(Alphabet, Grouping),
 }
 
 impl Fact {
-    fn radix(&self) -> Vec<usize> {
+    pub(crate) fn radix(&self) -> Vec<usize> {
         match self {
             Fact::Syl(s) => s.radix(),
             Fact::Digits(_, r) => r.clone(),
@@ -21,7 +21,7 @@ impl Fact {
         }
     }
 
-    fn encode(&self, text: &str) -> Vec<u32> {
+    pub(crate) fn encode(&self, text: &str) -> Vec<u32> {
         match self {
             Fact::Syl(s) => s.encode(text),
             Fact::Digits(a, r) => to_digits(&a.encode(text), r),
@@ -29,7 +29,7 @@ impl Fact {
         }
     }
 
-    fn decode(&self, syms: &[u32]) -> String {
+    pub(crate) fn decode(&self, syms: &[u32]) -> String {
         match self {
             Fact::Syl(s) => s.decode(syms),
             Fact::Digits(a, r) => a.decode(&from_digits(syms, r)),
@@ -72,7 +72,7 @@ fn grouped(name: &str, train: &str) -> Fact {
     Fact::Grouped(alpha, g)
 }
 
-fn parse(name: &str, train: &str) -> Fact {
+pub(crate) fn parse(name: &str, train: &str) -> Fact {
     if name == "syl" {
         return Fact::Syl(Syllables::train(train));
     }
@@ -87,7 +87,7 @@ fn parse(name: &str, train: &str) -> Fact {
     Fact::Digits(alpha, radix)
 }
 
-fn sample_logits(logits: &[f32], temp: f32, rng: &mut Rng) -> u32 {
+pub(crate) fn sample_logits(logits: &[f32], temp: f32, rng: &mut Rng) -> u32 {
     let mx = logits.iter().copied().fold(f32::MIN, f32::max);
     let p: Vec<f32> = logits.iter().map(|&l| ((l - mx) / temp).exp()).collect();
     let mut r = (rng.next() >> 40) as f32 / (1u64 << 24) as f32 * p.iter().sum::<f32>();
