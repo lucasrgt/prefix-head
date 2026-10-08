@@ -143,7 +143,8 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
             "hard" => extra.sort_by(|&i, &j| scores[j - core_books].partial_cmp(&scores[i - core_books]).unwrap()),
             "random" => {
                 let mut r = Rng::new(a.seed ^ 0x5e1);
-                extra.sort_by_key(|_| r.next());
+                let keys: Vec<u64> = (0..texts.len()).map(|_| r.next()).collect();
+                extra.sort_by_key(|&i| keys[i]);
             }
             s => panic!("unknown select {s}"),
         }
