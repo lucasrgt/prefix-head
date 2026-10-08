@@ -42,7 +42,7 @@ impl Fact {
 /// digits, e.g. `nd8x8x8x16:bpe8192`, or `nd1:<alphabet>` for a single full-softmax factor;
 /// flags after `nd`: `c` = output matrix per prefix, `f` = full-vocabulary input embedding (`ndcf16x16:bytes`).
 /// `grp-<key>-<m>:<bpe>`: two factors (class, slot); tokens sorted by `first` symbols (a prefix
-/// trie), `last` symbols (shared endings), `recipe` (left ingredient of their merge) or `freq`uency,
+/// trie), `second` symbol, `last` symbols (shared endings), `recipe` (left ingredient of their merge) or `freq`uency,
 /// then cut into classes of `m`.
 fn grouped(name: &str, train: &str) -> Fact {
     let (spec, inner) = name.split_once(':').expect("grp-<key>-<m>:<alphabet>");
@@ -55,6 +55,7 @@ fn grouped(name: &str, train: &str) -> Fact {
     let keys: Vec<(u64, Vec<u64>)> = match key {
         "first" => (0..v).map(|t| (piece(t)[0], piece(t))).collect(),
         "last" => (0..v).map(|t| (*piece(t).last().unwrap(), piece(t).into_iter().rev().collect())).collect(),
+        "second" => (0..v).map(|t| (*piece(t).get(1).unwrap_or(&piece(t)[0]), piece(t))).collect(),
         "recipe" => {
             let r = bpe.recipes();
             (0..v).map(|t| (r[t as usize].map_or(t, |(l, _)| l) as u64, piece(t))).collect()

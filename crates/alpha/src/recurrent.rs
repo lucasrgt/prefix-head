@@ -244,18 +244,31 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
         let (mut st, mut sc) = (m.state(), m.scratch());
         let mut out = vec![0u32; f];
         let mut nats = 0.0f64;
+        let mut per_factor = vec![0.0f64; f];
         let t0 = std::time::Instant::now();
         for k in 0..n_te {
             if reset.is_some_and(|r| k % r == 0) {
                 st = m.state();
             }
             let input = if k == 0 { vocab as u32 } else { te_ids[k - 1] };
-            nats -= m.infer_step(input, &mut st, &mut sc, |q, _, _| te[k * f + q], &mut out) as f64;
+            nats -= m.infer_step(
+                input,
+                &mut st,
+                &mut sc,
+                |q, logits, lse| {
+                    let c = te[k * f + q];
+                    per_factor[q] -= (logits[c as usize] - lse) as f64;
+                    c
+                },
+                &mut out,
+            ) as f64;
         }
-        (nats / std::f64::consts::LN_2 / test_chars as f64, t0.elapsed().as_secs_f64())
+        let to_bpc = |n: f64| n / std::f64::consts::LN_2 / test_chars as f64;
+        (to_bpc(nats), t0.elapsed().as_secs_f64(), per_factor.into_iter().map(to_bpc).collect::<Vec<f64>>())
     };
-    let (test_bpc, secs) = stream_bpc(None);
-    let (bpc_reset, _) = stream_bpc(Some(t));
+    let (test_bpc, secs, factors) = stream_bpc(None);
+    let (bpc_reset, _, _) = stream_bpc(Some(t));
+    let factors_s = factors.iter().map(|v| format!("{v:.4}")).collect::<Vec<_>>().join(",");
     let us_per_char = secs * 1e6 / test_chars as f64;
     let te_tpc = n_te as f64 / test_chars as f64;
     let macs_per_char = m.macs_per_token() as f64 * te_tpc;
@@ -279,7 +292,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         M::KIND,
         a.n,
