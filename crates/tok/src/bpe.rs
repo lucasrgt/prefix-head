@@ -114,6 +114,20 @@ impl Bpe {
         self.pieces.len()
     }
 
+    /// Base-alphabet symbols a token stands for.
+    pub fn piece(&self, id: u32) -> &[u32] {
+        &self.pieces[id as usize]
+    }
+
+    /// The (left, right) pair each token was merged from; `None` for base symbols.
+    pub fn recipes(&self) -> Vec<Option<(u32, u32)>> {
+        let mut r = vec![None; self.pieces.len()];
+        for (&pair, &(_, id)) in &self.merges {
+            r[id as usize] = Some(pair);
+        }
+        r
+    }
+
     pub fn crit(&self) -> Crit {
         self.crit
     }

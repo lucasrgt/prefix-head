@@ -3,6 +3,7 @@ use codec::Alphabet;
 
 pub mod bpe;
 pub mod codec;
+pub mod group;
 pub mod syll;
 
 /// Builds an alphabet by experiment name (`bytes`, `braille`, `bbpe2048-sig`, …), training BPEs on `train`.
