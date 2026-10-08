@@ -1,4 +1,5 @@
 mod factored;
+mod recurrent;
 
 use kern::Rng;
 use std::time::Instant;
@@ -11,10 +12,13 @@ pub struct Args {
     pub batch: usize,
     pub lr: f32,
     pub seed: u64,
+    pub model: String,
+    pub layers: usize,
+    pub seq: usize,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64 };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -26,6 +30,9 @@ fn args() -> Args {
             "--batch" => a.batch = val.parse().unwrap(),
             "--lr" => a.lr = val.parse().unwrap(),
             "--seed" => a.seed = val.parse().unwrap(),
+            "--model" => a.model = val.clone(),
+            "--layers" => a.layers = val.parse().unwrap(),
+            "--seq" => a.seq = val.parse().unwrap(),
             k => panic!("unknown flag {k}"),
         }
     }
@@ -43,6 +50,10 @@ fn main() {
         (train, test) = (g2("train"), g2("test"));
     }
 
+    if a.model == "mingru" {
+        recurrent::run(&a, &train, &test, train_chars, test_chars);
+        return;
+    }
     if a.alpha.starts_with("syl") || a.alpha.starts_with("nd") || a.alpha.starts_with("grp-") {
         factored::run(&a, &train, &test, train_chars, test_chars);
         return;
