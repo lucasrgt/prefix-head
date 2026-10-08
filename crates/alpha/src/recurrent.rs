@@ -184,25 +184,24 @@ pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
     let core = if a.core == "mingru" { "mingru".into() } else { format!("{}-n{}", a.core, a.n) };
-    format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
+    let extra = if a.extra { "-extra" } else { "" };
+    format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}{extra}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
 
 /// Scores the test text with a saved checkpoint `passes` times and reports µs and marginal package
 /// µJ per char, single-threaded and with 8 threads (8 contiguous segments, each from a cold state).
-pub fn score(a: &Args, test: &str, test_chars: usize) {
+pub fn score(a: &Args, train: &str, test: &str, test_chars: usize) {
     match a.core.as_str() {
-        "osc" => score_core::<Osc>(a, test, test_chars),
-        "sosc" => score_core::<SelOsc>(a, test, test_chars),
-        "kosc" => score_core::<KOsc>(a, test, test_chars),
-        _ => score_core::<MinGru>(a, test, test_chars),
+        "osc" => score_core::<Osc>(a, train, test, test_chars),
+        "sosc" => score_core::<SelOsc>(a, train, test, test_chars),
+        "kosc" => score_core::<KOsc>(a, train, test, test_chars),
+        _ => score_core::<MinGru>(a, train, test, test_chars),
     }
 }
 
-fn score_core<M: Seq + Sync>(a: &Args, test: &str, test_chars: usize) {
+fn score_core<M: Seq + Sync>(a: &Args, train: &str, test: &str, test_chars: usize) {
     let root = ruler::results::root();
-    let books = ruler::corpus::books(&root.join("data/raw"));
-    let train: String = books.iter().map(|b| b.train.as_str()).collect();
-    let fact = parse(&a.alpha, &train);
+    let fact = parse(&a.alpha, train);
     let radix = fact.radix();
     let f = radix.len();
     let path = root.join("data/models").join(checkpoint_name(a));

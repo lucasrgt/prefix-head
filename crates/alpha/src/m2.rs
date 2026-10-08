@@ -41,20 +41,20 @@ struct BookData {
 
 /// M2: how much of a book survives in the recurrent state. For each book, scores the first
 /// EVAL_TOKENS of its test part (which continues the train part) from different starting states.
-pub fn run(a: &Args) {
+pub fn run(a: &Args, train: &str) {
     match a.core.as_str() {
-        "osc" => probe::<Osc>(a),
-        "sosc" => probe::<SelOsc>(a),
-        "kosc" => probe::<KOsc>(a),
-        _ => probe::<MinGru>(a),
+        "osc" => probe::<Osc>(a, train),
+        "sosc" => probe::<SelOsc>(a, train),
+        "kosc" => probe::<KOsc>(a, train),
+        _ => probe::<MinGru>(a, train),
     }
 }
 
-fn probe<M: Seq>(a: &Args) {
+/// `train` must be the text the checkpoint's tokenizer was trained on (the 14 books, plus extras with --extra 1).
+fn probe<M: Seq>(a: &Args, train: &str) {
     let root = ruler::results::root();
     let books = ruler::corpus::books(&root.join("data/raw"));
-    let train: String = books.iter().map(|b| b.train.as_str()).collect();
-    let fact = parse(&a.alpha, &train);
+    let fact = parse(&a.alpha, train);
     let radix = fact.radix();
     let f = radix.len();
     let path = root.join("data/models").join(checkpoint_name(a));
