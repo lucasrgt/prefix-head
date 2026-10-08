@@ -236,8 +236,9 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"seed\":{},\"radix\":\"{radix_s}\",\"vocab\":{},\"head\":{},\"sym_per_char\":{te_tpc:.4},\"k\":{k},\"d\":{d},\"h\":{},\"params\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"codec_secs\":{codec_secs:.1},\"test_bpc\":{test_bpc:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"corpus\":\"{}\",\"seed\":{},\"radix\":\"{radix_s}\",\"vocab\":{},\"head\":{},\"sym_per_char\":{te_tpc:.4},\"k\":{k},\"d\":{d},\"h\":{},\"params\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"codec_secs\":{codec_secs:.1},\"test_bpc\":{test_bpc:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
+        a.corpus,
         a.seed,
         radix.iter().product::<usize>(),
         radix.iter().sum::<usize>(),
