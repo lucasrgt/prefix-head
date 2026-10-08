@@ -1,5 +1,11 @@
 # Cabeça de saída grosso→fino com classes por prefixo
 
+> Escopo: este artigo defende **só** a cabeça por prefixos. Outras frentes ficam fora:
+> **frente 2 — pilha frugal** (núcleo recorrente/oscilador seletivo, display list, LOD por token, Clockwork, morph targets, int8/ternário, energia por char);
+> **frente 3 — momentos de pensamento** (conhecimento por byte de estado, quantização do estado, ligação com OpenMoments);
+> **caderno de laboratório** (braile, osciladores puros, caleidoscópio, seleção de dados, currículo por progresso) — registrados em results/, sem artigo próprio.
+> Super-tokens entram aqui como aplicação: a cabeça barata viabiliza vocabulários grandes em modelos pequenos.
+
 Rascunho de artigo curto. Cada afirmação aponta para a evidência em `results/` e o que falta para sustentá-la.
 
 ## Afirmação
@@ -20,6 +26,10 @@ Em modelos de linguagem pequenos, uma cabeça de saída em dois níveis (classe,
 1. **Direção:** a primeira decisão é como o próximo pedaço começa (alinhada com a geração). Apoio: agrupar pelo final ≈ controle. Teste: agrupar pelo segundo caractere.
 2. **Separabilidade:** dentro de uma classe por prefixo, tokens diferem no final e o contexto os distingue; dentro de uma classe semântica, são quase sinônimos. Teste: decompor a perda em −log p(classe) e −log p(token | classe) por agrupamento.
 3. **Granularidade:** teste com tamanhos de classe 32/64/91/128/181 e profundidade de prefixo.
+
+## Aplicação: super-tokens
+
+Oscilador seletivo, corpus ampliado: super-BPE 32k (fusões atravessando espaços) + cabeça por prefixos 182×181 → 1,8886 bpc com 22,9k MACs/char e 0,205 tokens/char, contra BPE 8k + 91×91: 1,9344 bpc, 25,1k MACs/char, 0,284 tokens/char. Vocabulário 4× maior, mais barato e 2,4% melhor. Controle BPE 32k comum: pendente.
 
 ## Pendências para submissão
 
