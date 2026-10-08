@@ -20,10 +20,11 @@ pub struct Args {
     pub stateful: usize,
     pub core: String,
     pub n: usize,
+    pub extra: bool,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -42,6 +43,7 @@ fn args() -> Args {
             "--stateful" => a.stateful = val.parse().unwrap(),
             "--core" => a.core = val.clone(),
             "--n" => a.n = val.parse().unwrap(),
+            "--extra" => a.extra = val == "1",
             k => panic!("unknown flag {k}"),
         }
     }
@@ -52,6 +54,9 @@ fn main() {
     let a = args();
     let root = ruler::results::root();
     let (mut train, mut test) = ruler::corpus::load(&root.join("data/raw"));
+    if a.extra {
+        train.push_str(&ruler::corpus::extra(&root.join("data/extra/raw")));
+    }
     let train_chars = train.chars().count();
     let test_chars = test.chars().count();
     if a.alpha.starts_with("g2") {
@@ -60,11 +65,11 @@ fn main() {
     }
 
     if a.model == "score" {
-        recurrent::score(&a, &test, test_chars);
+        recurrent::score(&a, &train, &test, test_chars);
         return;
     }
     if a.model == "m2" {
-        m2::run(&a);
+        m2::run(&a, &train);
         return;
     }
     if a.model == "mingru" {

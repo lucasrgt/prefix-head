@@ -67,3 +67,16 @@ pub fn load(dir: &Path) -> (String, String) {
     let all = books(dir);
     (all.iter().map(|b| b.train.as_str()).collect(), all.iter().map(|b| b.test.as_str()).collect())
 }
+
+/// Extra training-only text: every file in `dir`, Gutenberg header stripped and normalized, in id order.
+pub fn extra(dir: &Path) -> String {
+    let mut files: Vec<_> = std::fs::read_dir(dir).unwrap().map(|e| e.unwrap().path()).filter(|p| p.extension().is_some_and(|e| e == "txt")).collect();
+    files.sort_by_key(|p| p.file_stem().and_then(|s| s.to_str()).and_then(|s| s.parse::<u64>().ok()).unwrap_or(u64::MAX));
+    let mut out = String::new();
+    for f in files {
+        let raw = std::fs::read_to_string(&f).unwrap_or_default().replace('\r', "");
+        out.push_str(&normalize(body(&raw)));
+        out.push('\n');
+    }
+    out
+}
