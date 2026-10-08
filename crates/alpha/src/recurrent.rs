@@ -21,6 +21,9 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let (n_tr, n_te) = (tr_ids.len(), te_ids.len());
 
     let mut m = MinGru::new(vocab, radix.clone(), a.h, a.layers, a.seed);
+    if a.chrono > 0.0 {
+        m.chrono(a.chrono, a.seed);
+    }
     let radix_s = radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
     eprintln!(
         "mingru {}: radix {radix_s}, h {}, layers {}, seq {}, params {}, state {} B, train {n_tr} tok",
@@ -105,11 +108,12 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"mingru\",\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"model\":\"mingru\",\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         a.seed,
         a.h,
         a.layers,
+        a.chrono,
         m.params(),
         m.state_bytes(),
         a.epochs
@@ -117,4 +121,14 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     println!("{line}");
     eprintln!("sample: {sample}\n");
     ruler::results::append("alpha.jsonl", &line);
+    let dir = ruler::results::root().join("data/models");
+    std::fs::create_dir_all(&dir).unwrap();
+    let path = dir.join(checkpoint_name(a));
+    m.save(&path, &format!("{} test_tokens={n_te} test_bpc={test_bpc:.4}", a.alpha)).unwrap();
+    eprintln!("saved {}", path.display());
+}
+
+pub fn checkpoint_name(a: &Args) -> String {
+    let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
+    format!("mingru-{}-h{}-l{}-s{}{chrono}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }

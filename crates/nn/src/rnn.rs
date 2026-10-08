@@ -62,6 +62,20 @@ impl MinGru {
         Self { vocab, h, layers, emb, wz, bz, wc, bc, head }
     }
 
+    /// Chrono initialisation (Tallec & Ollivier 2018): channel j of every layer starts with
+    /// z ≈ 1/T_j, T_j log-uniform in [2, t_max], so the state starts with a spread of memory
+    /// half-lives instead of forgetting half of itself every token.
+    pub fn chrono(&mut self, t_max: f32, seed: u64) {
+        let mut rng = Rng::new(seed ^ 0xc4);
+        for b in self.bz.iter_mut() {
+            for w in b.w.iter_mut() {
+                let u = (rng.next() >> 40) as f32 / (1u64 << 24) as f32;
+                let t = 2.0f32 * (t_max / 2.0).powf(u);
+                *w = -(t - 1.0).ln();
+            }
+        }
+    }
+
     pub fn params(&self) -> usize {
         let core: usize = self.wz.iter().chain(&self.bz).chain(&self.wc).chain(&self.bc).map(|p| p.w.len()).sum();
         self.emb.w.len() + core + self.head.params()
@@ -197,12 +211,64 @@ impl MinGru {
         norm
     }
 
+    /// Writes config line `meta` and every weight (same order as training) as little-endian f32.
+    pub fn save(&mut self, path: &std::path::Path, meta: &str) -> std::io::Result<()> {
+        use std::io::Write;
+        let header = format!("mingru {} {} {} {}\n{meta}\n", self.vocab, self.h, self.layers, self.head.radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x"));
+        let mut f = std::io::BufWriter::new(std::fs::File::create(path)?);
+        f.write_all(header.as_bytes())?;
+        for p in self.params_mut() {
+            for w in &p.w {
+                f.write_all(&w.to_le_bytes())?;
+            }
+        }
+        Ok(())
+    }
+
+    /// Reads a file from `save`; returns the model and its meta line.
+    pub fn load(path: &std::path::Path) -> std::io::Result<(Self, String)> {
+        let bytes = std::fs::read(path)?;
+        let mut lines = bytes.splitn(3, |&b| b == b'\n');
+        let head = String::from_utf8_lossy(lines.next().unwrap()).into_owned();
+        let meta = String::from_utf8_lossy(lines.next().unwrap()).into_owned();
+        let body = lines.next().unwrap();
+        let f: Vec<&str> = head.split(' ').collect();
+        assert_eq!(f[0], "mingru", "not a minGRU checkpoint");
+        let radix = f[4].split('x').map(|r| r.parse().unwrap()).collect();
+        let mut m = Self::new(f[1].parse().unwrap(), radix, f[2].parse().unwrap(), f[3].parse().unwrap(), 0);
+        let mut it = body.chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap()));
+        for p in m.params_mut() {
+            for w in p.w.iter_mut() {
+                *w = it.next().expect("checkpoint too short");
+            }
+        }
+        assert!(it.next().is_none(), "checkpoint too long");
+        Ok((m, meta))
+    }
+
     pub fn state(&self) -> State {
         State(vec![vec![0.0; self.h]; self.layers])
     }
 
     pub fn scratch(&self) -> Scratch {
         Scratch { u: vec![0.0; self.h], z: vec![0.0; self.h], c: vec![0.0; self.h], head: self.head.scratch() }
+    }
+
+    /// Reads one input id into the state without predicting: reading costs no head.
+    pub fn advance(&self, id: u32, st: &mut State, s: &mut Scratch) {
+        let h = self.h;
+        s.u.copy_from_slice(&self.emb.w[id as usize * h..(id as usize + 1) * h]);
+        for l in 0..self.layers {
+            s.z.copy_from_slice(&self.bz[l].w);
+            s.c.copy_from_slice(&self.bc[l].w);
+            gemv_rows(&s.u, &self.wz[l].w, h, &mut s.z);
+            gemv_rows(&s.u, &self.wc[l].w, h, &mut s.c);
+            for j in 0..h {
+                let z = sigmoid(s.z[j]);
+                st.0[l][j] = (1.0 - z) * st.0[l][j] + z * s.c[j];
+                s.u[j] += st.0[l][j].tanh();
+            }
+        }
     }
 
     /// Reads one input id, advances the state, and predicts the next token's factors.
@@ -268,6 +334,19 @@ mod tests {
             }
         }
         assert!(checked > 50);
+    }
+
+    #[test]
+    fn save_and_load_roundtrip() {
+        let mut m = MinGru::new(12, vec![3, 4], 8, 2, 4);
+        let path = std::env::temp_dir().join(format!("mingru-{}.bin", std::process::id()));
+        m.save(&path, "meta line").unwrap();
+        let (mut back, meta) = MinGru::load(&path).unwrap();
+        std::fs::remove_file(&path).unwrap();
+        assert_eq!(meta, "meta line");
+        let a: Vec<f32> = m.params_mut().flat_map(|p| p.w.clone()).collect();
+        let b: Vec<f32> = back.params_mut().flat_map(|p| p.w.clone()).collect();
+        assert_eq!(a, b);
     }
 
     #[test]

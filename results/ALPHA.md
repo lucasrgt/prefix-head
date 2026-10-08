@@ -84,3 +84,17 @@ Mesma forma 91×91, mesmos 2,48M parâmetros, 24.022 MACs/char; só muda quais t
 - **−5,5% bpc contra o MLP 2D com o mesmo custo** (2,085 vs 2,208, média de 2 sementes; variação entre sementes 0,2%). Melhor que o MLP com cabeça cheia BPE-8192 1D (2,184) com 24× menos MACs; 12,8% melhor que xz -9e.
 - Estado carregado além da janela de treino ajuda pouco mas sempre (−0,2% nas 3 runs): o estado guarda informação útil além de 64 tokens — pré-requisito do M2 (momentos de pensamento).
 - Janela de treino 256 ≈ 64: nesta escala, o ganho veio de sair da janela fixa de 16 chars do MLP; contexto mais longo no treino não ampliou.
+
+# M2 — quanto de um livro cabe no estado (1 KB) — 2026-10-08 (`alpha --model m2`)
+
+Modelo M1 (seed 1, init padrão). 14 livros; primeiros 1.500 tokens do trecho de teste de cada um (77.996 chars; 6.575 em tokens com maiúscula), começando de estados diferentes.
+
+| estado inicial | bpc | bpc maiúsculas |
+|---|---|---|
+| frio (zero) | 2.1475 | 2.2132 |
+| últimos 16 … 16.384 tokens | 2.1473 | 2.2132 |
+| livro inteiro (momento) | 2.1473 | 2.2132 |
+| livro inteiro, estado 8/4/2/1 bit | 2.1472–2.1474 | 2.2132–2.2133 |
+| momento de outro livro | 2.1474 | 2.2132 |
+
+**Negativo:** o estado não carrega nada do livro além de poucos tokens. Causa provável: porta z ≈ 0,5 na init padrão → metade do estado apagada a cada token. Reler os 14 livros (1,70M tokens, sem cabeça) = 6,96 s / 582 J (pacote); restaurar os 14 estados = 13 µs — o ganho de energia existe, falta o estado valer. Correção em teste: init chrono (meias-vidas log-uniformes 2–1024).
