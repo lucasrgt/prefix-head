@@ -1,3 +1,4 @@
+use crate::kosc::{self, KOsc};
 use crate::osc::{self, Osc};
 use crate::rnn::{self, MinGru, State};
 use crate::sosc::{self, SelOsc};
@@ -87,3 +88,4 @@ macro_rules! delegate {
 delegate!(MinGru, rnn, "mingru");
 delegate!(Osc, osc, "osc");
 delegate!(SelOsc, sosc, "sosc");
+delegate!(KOsc, kosc, "kosc");

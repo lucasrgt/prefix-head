@@ -1,8 +1,10 @@
 pub mod fast;
 pub mod fmlp;
 pub mod head;
+pub mod kosc;
 pub mod rnn;
 pub mod mlp;
+pub mod monarch;
 pub mod osc;
 pub mod seq;
 pub mod sosc;
