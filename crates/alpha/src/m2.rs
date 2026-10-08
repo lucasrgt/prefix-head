@@ -1,7 +1,9 @@
 use crate::Args;
 use crate::factored::parse;
 use crate::recurrent::checkpoint_name;
+use nn::osc::Osc;
 use nn::rnn::{MinGru, State};
+use nn::seq::Seq;
 use ruler::energy::Rapl;
 use tok::syll::from_digits;
 
@@ -38,6 +40,13 @@ struct BookData {
 /// M2: how much of a book survives in the recurrent state. For each book, scores the first
 /// EVAL_TOKENS of its test part (which continues the train part) from different starting states.
 pub fn run(a: &Args) {
+    match a.core.as_str() {
+        "osc" => probe::<Osc>(a),
+        _ => probe::<MinGru>(a),
+    }
+}
+
+fn probe<M: Seq>(a: &Args) {
     let root = ruler::results::root();
     let books = ruler::corpus::books(&root.join("data/raw"));
     let train: String = books.iter().map(|b| b.train.as_str()).collect();
@@ -45,9 +54,9 @@ pub fn run(a: &Args) {
     let radix = fact.radix();
     let f = radix.len();
     let path = root.join("data/models").join(checkpoint_name(a));
-    let (m, meta) = MinGru::load(&path).unwrap_or_else(|e| panic!("{}: {e} (train it with --model mingru first)", path.display()));
+    let (m, meta) = M::load(&path).unwrap_or_else(|e| panic!("{}: {e} (train it with --model mingru first)", path.display()));
     eprintln!("loaded {} ({meta}), state {} B", path.display(), m.state_bytes());
-    let bos = m.vocab as u32;
+    let bos = m.vocab() as u32;
 
     let data: Vec<BookData> = books
         .iter()
@@ -120,7 +129,7 @@ pub fn run(a: &Args) {
     conditions.push(("whole book (moment)".into(), Box::new(move |i| fl[i].clone()), state_bytes));
     for bits in [8u32, 4, 2, 1] {
         let q: Vec<State> = full.iter().map(|s| quantize(s, bits)).collect();
-        conditions.push((format!("whole book, {bits}-bit state"), Box::new(move |i| q[i].clone()), m.layers * m.h * bits as usize / 8));
+        conditions.push((format!("whole book, {bits}-bit state"), Box::new(move |i| q[i].clone()), state_bytes * bits as usize / 32));
     }
     let wrong = full.clone();
     let nb = data.len();
@@ -156,7 +165,7 @@ pub fn run(a: &Args) {
     let t1 = std::time::Instant::now();
     let restored: Vec<f32> = std::hint::black_box(&bytes).chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect();
     let restore_us = t1.elapsed().as_secs_f64() * 1e6;
-    assert_eq!(restored.len(), nb * m.layers * m.h);
+    assert_eq!(restored.len() * 4, nb * state_bytes);
     println!(
         "\nreach the end-of-train state of all {nb} books: re-read {tokens} tokens = {secs:.2} s, {:.1} J package; restore {nb} moments ({} B) = {restore_us:.1} µs",
         reread.1,
