@@ -55,6 +55,10 @@ fn main() {
         (train, test) = (g2("train"), g2("test"));
     }
 
+    if a.model == "score" {
+        recurrent::score(&a, &test, test_chars);
+        return;
+    }
     if a.model == "m2" {
         m2::run(&a);
         return;
