@@ -21,11 +21,29 @@ Em modelos de linguagem pequenos, uma cabeça de saída em dois níveis (classe,
 | prefixo vs k-means semântico, MLP | 2,2075 vs 2,2577 | 2 sementes |
 | prefixo vs k-means semântico, oscilador seletivo | 2,0640 vs 2,1421 | 2 sementes |
 
-## Hipóteses sobre o porquê
+## Por que funciona (ablação, oscilador seletivo, 14 livros, semente 1)
 
-1. **Direção:** a primeira decisão é como o próximo pedaço começa (alinhada com a geração). Apoio: agrupar pelo final ≈ controle. Teste: agrupar pelo segundo caractere.
-2. **Separabilidade:** dentro de uma classe por prefixo, tokens diferem no final e o contexto os distingue; dentro de uma classe semântica, são quase sinônimos. Teste: decompor a perda em −log p(classe) e −log p(token | classe) por agrupamento.
-3. **Granularidade:** teste com tamanhos de classe 32/64/91/128/181 e profundidade de prefixo.
+Perda decomposta em bits/char: 1ª decisão (classe) + 2ª decisão (token dentro da classe).
+
+| agrupamento | classe | dentro | total |
+|---|---|---|---|
+| 1º caractere (prefixo) | **1,184** | 0,877 | **2,061** |
+| 2º caractere | 1,286 | 0,811 | 2,097 |
+| ordem de fusão (arbitrário) | 1,296 | 0,843 | 2,139 |
+| k-means semântico | 1,448 | 0,690 | 2,138 |
+
+1. **Direção — apoiada.** O prefixo torna a 1ª decisão muito mais fácil (1,18 vs 1,29–1,45); o 2º caractere fica no meio (1,29); quanto mais a 1ª decisão é "o que vem logo depois no texto", mais o contexto a acerta, e isso domina o total.
+2. **Separabilidade — refutada.** A hipótese de que classes semânticas tornariam a 2ª decisão difícil (escolher entre sinônimos) é falsa: a 2ª decisão é *mais fácil* no semântico (0,69 vs 0,88). O semântico perde na 1ª decisão.
+3. No oscilador seletivo, semântico ≈ arbitrário (2,138 vs 2,139); o ganho do prefixo sobre o arbitrário é 3,7% (MLP: 1,8%) — cresce com a capacidade do núcleo.
+4. Granularidade (classes 32/64/128/181): pendente.
+
+## Generalidade: transformer (14 livros, semente 1)
+
+| modelo | cabeça | bpc | MACs/char |
+|---|---|---|---|
+| transformer 2 camadas | cheia 8192 | 2,0535 | 368,6k |
+| transformer 2 camadas | prefixo 91×91 | 2,0628 (+0,45%) | 87,3k (4,2× menos) |
+| transformer 1 camada | prefixo 91×91 | 2,1099 | 37,9k |
 
 ## Aplicação: super-tokens
 
