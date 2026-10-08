@@ -1,5 +1,6 @@
 use crate::osc::{self, Osc};
 use crate::rnn::{self, MinGru, State};
+use crate::sosc::{self, SelOsc};
 use std::path::Path;
 
 /// What the training, evaluation and moments code needs from a recurrent core.
@@ -85,3 +86,4 @@ macro_rules! delegate {
 
 delegate!(MinGru, rnn, "mingru");
 delegate!(Osc, osc, "osc");
+delegate!(SelOsc, sosc, "sosc");
