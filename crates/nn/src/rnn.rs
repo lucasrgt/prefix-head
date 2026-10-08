@@ -157,6 +157,10 @@ impl MinGru {
 
     /// After `forward`, makes each stream's final state the next window's starting state
     /// (truncated BPTT: no gradient flows across windows).
+    pub fn row_losses<'b>(&self, bf: &'b Buf) -> &'b [f32] {
+        &bf.head.row_loss
+    }
+
     pub fn carry(&self, b: usize, t: usize, bf: &mut Buf) {
         let h = self.h;
         for l in 0..self.layers {

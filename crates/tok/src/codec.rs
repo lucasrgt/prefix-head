@@ -356,6 +356,8 @@ mod tests {
         let wp = Bpe::train_with(&text.repeat(20), Base::Bytes, 300, Crit::WordPiece);
         let cp = Bpe::train_with(&text.repeat(20), Base::Codepoints, 150, Crit::Freq);
         let cap = Bpe::train_with(&text.repeat(20), Base::CapBytes, 320, Crit::Freq);
+        let mut sup = Bpe::train_with(&text.repeat(20), Base::Bytes, 290, Crit::Freq);
+        sup.extend_across(&text.repeat(20), 330);
         for a in [
             Alphabet::Morse,
             Alphabet::Octal,
@@ -363,6 +365,7 @@ mod tests {
             Alphabet::CapBytes,
             Alphabet::Bpe(cp),
             Alphabet::Bpe(cap),
+            Alphabet::Bpe(sup),
             Alphabet::Bits,
             Alphabet::Nibbles,
             Alphabet::Braille,

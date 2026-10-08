@@ -17,6 +17,8 @@ pub trait Seq: Sized {
     fn forward(&self, x: &[u32], tgt: &[u32], b: usize, t: usize, bf: &mut Self::Buf) -> f64;
     fn backward(&mut self, x: &[u32], tgt: &[u32], b: usize, t: usize, scale: f32, bf: &mut Self::Buf);
     fn carry(&self, b: usize, t: usize, bf: &mut Self::Buf);
+    /// −ln p per row from the last `forward`.
+    fn row_losses<'b>(&self, bf: &'b Self::Buf) -> &'b [f32];
     fn reset_stream(&self, s: usize, bf: &mut Self::Buf);
     fn step(&mut self, lr: f32, t: i32, clip: f32) -> f32;
     fn save(&mut self, path: &Path, meta: &str) -> std::io::Result<()>;
@@ -56,6 +58,9 @@ macro_rules! delegate {
             }
             fn carry(&self, b: usize, t: usize, bf: &mut Self::Buf) {
                 <$t>::carry(self, b, t, bf)
+            }
+            fn row_losses<'b>(&self, bf: &'b Self::Buf) -> &'b [f32] {
+                <$t>::row_losses(self, bf)
             }
             fn reset_stream(&self, s: usize, bf: &mut Self::Buf) {
                 <$t>::reset_stream(self, s, bf)
