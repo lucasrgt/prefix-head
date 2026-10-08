@@ -25,3 +25,17 @@ Busca sistemática por algoritmos "elo perdido" fora da IA. Cada linha: princíp
 - Hawkins, *A Thousand Brains* (2021).
 - Hooker, "The Hardware Lottery" (2020).
 - Sutton, "The Bitter Lesson" (2019) — o contra-argumento: método genérico + mais computação vence estrutura. Resposta a testar: com computação fixa e pequena, estrutura volta a importar.
+
+## Moments no Mana — os mecanismos (lidos em ~/Projects/hostpoint-live-pilot/framework, 2026-10-08)
+
+| mecanismo no Mana | medida | análogo no frugal |
+|---|---|---|
+| Declarar uma vez (DSL Ash) e derivar API, cliente Dart, privacidade, limites e o manifesto de Moments | 128 Moments nos 5 apps; bugs de segurança achados pelo mapeamento | experimento declarado uma vez → runs, esquema de resultados, tabelas derivados |
+| Linhagem `from(pai)`: o materializador roda cada ancestral **uma vez**, captura as camadas e abre cópias independentes (`fork`) | — | treinar o tronco uma vez e ramificar as cabeças; prefixo de contexto lido uma vez e ramificado |
+| Projeção **mínima e tipada**: só campos declarados (enum/intervalo) são persistidos; o resto é recomputado de fontes duráveis (reautentica, recarrega da API) | `open` 118–223 ms; patch → frame 26 ms | estado de pensamento = só o estado recorrente (h=256 → 1 KB, quantizável), não o KV cache inteiro |
+| Salvar Dart → hot restart → retomar a projeção, com API e Postgres vivos | 347 ms compilação + 756 ms retomada = 1,1 s, filtro e scroll preservados | trocar pesos/kernel/formato e continuar do mesmo estado; comparar versões a partir do mesmo ponto |
+| `affected`: grafo de imports seleciona só os Moments atingidos; artefato chaveado pelo hash dos fontes não recompila sem mudança | suíte: ~70 s em série → 18 s headless (4 workers), 23 s ponta a ponta | cache por hash (tokenizer, corpus codificado, tronco treinado); só reexecutar experimentos atingidos; inferência incremental após edição do contexto |
+| `--headless`: roda o app sem renderizador quando a prova não precisa de pixels | headless 18 s vs navegador 33–36 s | pensar sem "renderizar": pular a cabeça de saída nos passos internos (H-cot-densa) |
+| Revisões rejeitam capturas atrasadas | — | consistência ao ramificar estados |
+
+Princípio comum: **não recomputar o que dá para nomear, restaurar ou derivar; persistir só a projeção mínima tipada; recomputar o resto de fontes duráveis; executar só o trabalho atingido.** É o "desperdício mínimo" do CHARTER em forma de software.
