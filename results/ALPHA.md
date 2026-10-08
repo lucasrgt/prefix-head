@@ -169,3 +169,16 @@ Por camada: Monarch 128 → 3×512 (porta + candidato complexo, 14.336 MACs) e M
 M2 (primeiros 128 tokens): frio 2.1578 → livro inteiro 2.1514; outro livro 2.1597 (próprio vs outro −0,38%; sosc −0,75%).
 
 **Negativo neste corpus:** o estado 8× maior não comprou qualidade nem memória do livro; fica atrás do sosc (2,0614) e do minGRU (2,0755). Leitura: com ~1,7M tokens de treino e gap treino/teste de ~0,12 bpc em todos os núcleos, o regime é limitado por dados; a perda de expressividade das matrizes estruturadas pesa mais que o estado extra. Retestar no corpus ampliado (638 livros extras do Gutenberg, só no treino).
+
+# Prefixo × significado nas classes da cabeça 2D — 2026-10-08
+
+Mesma forma (91×91), mesmos parâmetros e MACs. "Significado" = k-means balanceado sobre os embeddings de entrada do modelo de referência (o critério de HDLM 2025 / TDLM 2026). 14 livros.
+
+| arquitetura | prefixo (s1 / s2 → média) | significado (s1 / s2 → média) | vantagem do prefixo |
+|---|---|---|---|
+| MLP 2D | 2.2095 / 2.2056 → **2.2075** | 2.2577 / 2.2577 → 2.2577 | 2,3% |
+| oscilador seletivo (stateful 64) | 2.0614 / 2.0665 → **2.0640** | 2.1379 / 2.1462 → 2.1421 | 3,8% |
+
+- O prefixo vence por 10–20× a variação entre sementes, nas duas arquiteturas. O agrupamento semântico fica pior até que o arbitrário por ordem de fusão (MLP 2,248).
+- Leitura: agrupar por significado põe na mesma classe tokens intercambiáveis, e a decisão dentro da classe vira a mais difícil; por prefixo, a primeira decisão segue a direção do texto e a segunda separa tokens que o contexto distingue com facilidade.
+- Contradiz a premissa do TDLM (arXiv 2604.03537) de que hierarquias de vocabulário não se alinham com a geração esquerda→direita. Observação: as duas sementes semânticas do MLP coincidiram em 2.2577 (modelos distintos — curvas e amostras diferem).
