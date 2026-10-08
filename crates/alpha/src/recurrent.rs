@@ -41,6 +41,7 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let mut rng = Rng::new(a.seed ^ 0x9e37);
     let mut bf = m.buf(b * t);
     let (mut x, mut y) = (vec![0u32; b * t], vec![0u32; b * t * f]);
+    let (mut cursor, mut windows) = (vec![0usize; b], vec![0usize; b]);
     let t1 = std::time::Instant::now();
     let mut ema = 0.0;
     let tpc = n_tr as f64 / train_chars as f64;
@@ -52,15 +53,27 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
             a.lr * (0.05 + 0.95 * 0.5 * (1.0 + (std::f32::consts::PI * p).cos()))
         };
         for stream in 0..b {
-            let start = (rng.next() % (n_tr - t) as u64) as usize;
+            if a.stateful == 0 || windows[stream] == 0 || cursor[stream] + t > n_tr {
+                cursor[stream] = (rng.next() % (n_tr - t) as u64) as usize;
+                windows[stream] = a.stateful.max(1);
+                if a.stateful > 0 {
+                    m.reset_stream(stream, &mut bf);
+                }
+            }
+            let start = cursor[stream];
             for k in 0..t {
                 let pos = start + k;
                 x[stream * t + k] = if pos == 0 { vocab as u32 } else { tr_ids[pos - 1] };
                 y[(stream * t + k) * f..(stream * t + k + 1) * f].copy_from_slice(&tr[pos * f..(pos + 1) * f]);
             }
+            cursor[stream] += t;
+            windows[stream] -= 1;
         }
         let loss = m.forward(&x, &y, b, t, &mut bf) / (b * t) as f64;
         m.backward(&x, &y, b, t, 1.0 / (b * t) as f32, &mut bf);
+        if a.stateful > 0 {
+            m.carry(b, t, &mut bf);
+        }
         let norm = m.step(lr, s as i32 + 1, 1.0);
         ema = if s == 0 { loss } else { 0.99 * ema + 0.01 * loss };
         if s % (steps / 20).max(1) == 0 {
@@ -108,12 +121,13 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"mingru\",\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"model\":\"mingru\",\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         a.seed,
         a.h,
         a.layers,
         a.chrono,
+        a.stateful,
         m.params(),
         m.state_bytes(),
         a.epochs
@@ -130,5 +144,6 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
 
 pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
-    format!("mingru-{}-h{}-l{}-s{}{chrono}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
+    let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
+    format!("mingru-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
