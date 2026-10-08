@@ -6,6 +6,7 @@ use ruler::energy::Rapl;
 use tok::syll::from_digits;
 
 const EVAL_TOKENS: usize = 1500;
+const EARLY_TOKENS: usize = 128;
 const WARM: [usize; 6] = [16, 64, 256, 1024, 4096, 16384];
 
 /// Quantizes every layer vector symmetrically to `bits` (1 bit = sign × mean |x|).
@@ -82,20 +83,24 @@ pub fn run(a: &Args) {
     let score = |d: &BookData, mut st: State| {
         let mut sc = m.scratch();
         let mut out = vec![0u32; f];
-        let (mut bits, mut cap_bits) = (0.0f64, 0.0f64);
+        let (mut bits, mut cap_bits, mut early) = (0.0f64, 0.0f64, 0.0f64);
         let mut input = *d.train_ids.last().unwrap();
         for k in 0..d.test_ids.len() {
             let nats = -m.infer_step(input, &mut st, &mut sc, |q, _, _| d.test[k * f + q], &mut out) as f64;
             let b = nats / std::f64::consts::LN_2;
             bits += b;
+            if k < EARLY_TOKENS {
+                early += b;
+            }
             if d.capital[k] {
                 cap_bits += b;
             }
             input = d.test_ids[k];
         }
-        (bits, cap_bits)
+        (bits, cap_bits, early)
     };
     let chars: usize = data.iter().map(|d| d.test_chars.iter().sum::<usize>()).sum();
+    let early_chars: usize = data.iter().map(|d| d.test_chars.iter().take(EARLY_TOKENS).sum::<usize>()).sum();
     let cap_chars: usize = data.iter().map(|d| d.test_chars.iter().zip(&d.capital).filter(|(_, c)| **c).map(|(n, _)| n).sum::<usize>()).sum();
 
     let mut conditions: Vec<(String, Box<dyn Fn(usize) -> State>, usize)> = Vec::new();
@@ -122,19 +127,20 @@ pub fn run(a: &Args) {
     conditions.push(("another book's moment".into(), Box::new(move |i| wrong[(i + 1) % nb].clone()), state_bytes));
 
     println!("{} books, {chars} chars scored ({cap_chars} in capitalised tokens)", data.len());
-    println!("{:<30}{:>10}{:>14}{:>12}", "starting state", "bpc", "bpc capitals", "state B");
+    println!("{:<30}{:>10}{:>14}{:>14}{:>12}", "starting state", "bpc", "bpc capitals", "bpc first 128", "state B");
     for (name, make, bytes) in &conditions {
-        let (mut bits, mut cap) = (0.0, 0.0);
+        let (mut bits, mut cap, mut early) = (0.0, 0.0, 0.0);
         for (i, d) in data.iter().enumerate() {
-            let (b, c) = score(d, make(i));
+            let (b, c, e) = score(d, make(i));
             bits += b;
             cap += c;
+            early += e;
         }
-        let (bpc, cbpc) = (bits / chars as f64, cap / cap_chars as f64);
-        println!("{name:<30}{bpc:>10.4}{cbpc:>14.4}{bytes:>12}");
+        let (bpc, cbpc, ebpc) = (bits / chars as f64, cap / cap_chars as f64, early / early_chars as f64);
+        println!("{name:<30}{bpc:>10.4}{cbpc:>14.4}{ebpc:>14.4}{bytes:>12}");
         ruler::results::append(
             "m2.jsonl",
-            &format!("{{\"model\":\"{}\",\"condition\":\"{name}\",\"bpc\":{bpc:.4},\"bpc_capitals\":{cbpc:.4},\"state_bytes\":{bytes},\"chars\":{chars}}}", checkpoint_name(a)),
+            &format!("{{\"model\":\"{}\",\"condition\":\"{name}\",\"bpc\":{bpc:.4},\"bpc_capitals\":{cbpc:.4},\"bpc_first128\":{ebpc:.4},\"state_bytes\":{bytes},\"chars\":{chars}}}", checkpoint_name(a)),
         );
     }
 
