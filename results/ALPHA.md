@@ -98,3 +98,29 @@ Modelo M1 (seed 1, init padrão). 14 livros; primeiros 1.500 tokens do trecho de
 | momento de outro livro | 2.1474 | 2.2132 |
 
 **Negativo:** o estado não carrega nada do livro além de poucos tokens. Causa provável: porta z ≈ 0,5 na init padrão → metade do estado apagada a cada token. Reler os 14 livros (1,70M tokens, sem cabeça) = 6,96 s / 582 J (pacote); restaurar os 14 estados = 13 µs — o ganho de energia existe, falta o estado valer. Correção em teste: init chrono (meias-vidas log-uniformes 2–1024).
+
+## M2 com init chrono e treino com estado contínuo — 2026-10-08
+
+Init chrono (meias-vidas 2–1024) sozinho: o estado passa a durar, mas o modelo nunca viu estados mais velhos que a janela de treino → carregar o estado piora (seq 64: 2,1241 carregado vs 2,0915 reset). Com **treino com estado contínuo** (`--stateful K`: cada fluxo continua K janelas com o estado carregado, BPTT truncado):
+
+| treino | bpc carregado | bpc reset a cada 64 | ganho da memória longa |
+|---|---|---|---|
+| init padrão (M1) | 2.0875 | 2.0916 | 0,2% |
+| chrono + stateful 64 | **2.0755** | 2.1054 | 1,4% |
+| chrono + stateful 256 | 2.0767 | 2.1231 | 2,2% |
+
+M2 (14 livros, primeiros 128 tokens do teste de cada um = abrir o livro e continuar):
+
+| estado inicial | stateful 64 | stateful 256 |
+|---|---|---|
+| frio | 2.1707 | 2.1856 |
+| últimos 16 / 256 / 4096 tokens | 2.1553 / 2.1468 / 2.1443 | 2.1657 / 2.1508 / 2.1475 |
+| livro inteiro (momento, 1 KB) | **2.1443** | **2.1475** |
+| momento 8 bits (256 B) | 2.1444 | 2.1476 |
+| momento 4 / 2 / 1 bit | 2.1511 / 2.1656 / 2.1820 | 2.1584 / 2.1777 / 2.1739 |
+| momento de outro livro | 2.1648 | 2.1700 |
+
+- O momento carrega conhecimento **específico do livro**: −1,0% contra o momento de outro livro, −1,2 a −1,7% contra o estado frio.
+- Horizonte de memória ≈ 4 mil tokens (~15 mil chars): 4096 tokens = livro inteiro. O ganho de qualidade **satura**, ao contrário da curva G ∝ R^0,5 do worlds; o ganho de energia é linear no que se deixaria de reler.
+- **256 bytes bastam** (8 bits por número = idêntico); 4 bits já perde parte.
+- Reler os 14 livros: 6,8 s, 520–570 J (pacote); restaurar os 14 momentos: ~10 µs. Para a mesma qualidade basta reler ~4k tokens por livro (~16 ms), ainda ~10⁴× mais que restaurar.
