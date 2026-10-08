@@ -155,3 +155,17 @@ h_t = (1 − z_t)·e^{iθ}·h_{t−1} + z_t·c_t, z_t da entrada (minGRU) × rot
 - Com stateful: **2,0614, melhor do projeto** (minGRU 2,0755, osc 2,1086; 1 semente).
 - M2 (primeiros 128 tokens): frio 2.1460 → livro inteiro 2.1264; outro livro 2.1425 (próprio vs outro −0,75%; minGRU −0,95%); satura em ~256 tokens. Momento em 4 bits: 2.1271 (**102 bytes, quase sem perda**; minGRU perde ~1/3 do ganho em 4 bits); 2 bits perde ~metade.
 - Leitura: a porta seletiva traz a qualidade do minGRU; a rotação traz parte da robustez à quantização do oscilador. O horizonte curto (~256 tokens) continua sendo o limite → próximo: estado maior via matrizes estruturadas (H-caleidoscópio).
+
+# H-caleidoscópio — oscilador seletivo com matrizes Monarch e estado 10× maior (`--core kosc --n 512`) — 2026-10-08
+
+Por camada: Monarch 128 → 3×512 (porta + candidato complexo, 14.336 MACs) e Monarch 1024 → 128 (18.432 MACs) = 32.768, igual a uma camada densa 128×128. 24.373 MACs/char, 2,22M parâmetros, **estado 8.192 B**. Gradientes da Monarch conferidos elemento a elemento. Treino ~4× mais lento (~390 s).
+
+| run | carregado | reset |
+|---|---|---|
+| seed 1, sem stateful | 2.0908 | 2.0951 |
+| seed 2, sem stateful | 2.0900 | 2.0953 |
+| seed 1, stateful 64 | 2.0866 | 2.0969 |
+
+M2 (primeiros 128 tokens): frio 2.1578 → livro inteiro 2.1514; outro livro 2.1597 (próprio vs outro −0,38%; sosc −0,75%).
+
+**Negativo neste corpus:** o estado 8× maior não comprou qualidade nem memória do livro; fica atrás do sosc (2,0614) e do minGRU (2,0755). Leitura: com ~1,7M tokens de treino e gap treino/teste de ~0,12 bpc em todos os núcleos, o regime é limitado por dados; a perda de expressividade das matrizes estruturadas pesa mais que o estado extra. Retestar no corpus ampliado (638 livros extras do Gutenberg, só no treino).
