@@ -46,3 +46,14 @@ Meta inicial: núcleo de raciocínio que caiba inteiro no L3 do T0 e num L3 de 8
 2. **Memória externa.** Índice no SSD (suffix array / vizinhos binários), io_uring + prefetch.
 3. **Curvas.** Núcleo fixo; varia memória e iterações; mede conhecimento e raciocínio separados, em J por acerto.
 4. **Orquestração.** Elixir/BEAM quando houver shards ou várias máquinas.
+
+## Estrutura
+
+| crate | papel |
+|-------|-------|
+| `kern` | kernels de matvec (escalar de referência + AVX2/AVX-512), testados bit a bit |
+| `ruler` | a régua: corpus normalizado, medidor de energia (RAPL), gravação de resultados |
+| `tok` | alfabetos e tokenizers (bytes, braile, BPE/SigGain, grau 2, sílabas, dígitos N-D) |
+| `nn` | modelos: MLP e MLP fatorado (cabeça por prefixo, entrada por token) |
+| `bench` | microbench dos kernels |
+| `alpha` | executores dos experimentos de alfabeto e de tokens fatorados |

@@ -1,5 +1,5 @@
 use crate::bpe::Bpe;
-use crate::corpus::CHARSET;
+use ruler::corpus::CHARSET;
 
 pub enum Alphabet {
     Morse,

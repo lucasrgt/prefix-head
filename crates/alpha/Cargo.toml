@@ -5,4 +5,6 @@ version.workspace = true
 
 [dependencies]
 kern = { path = "../kern" }
-matrixmultiply = { version = "0.3", features = ["threading"] }
+nn = { path = "../nn" }
+ruler = { path = "../ruler" }
+tok = { path = "../tok" }
