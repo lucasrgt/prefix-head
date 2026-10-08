@@ -1,4 +1,5 @@
 mod factored;
+mod m2;
 mod recurrent;
 
 use kern::Rng;
@@ -15,10 +16,11 @@ pub struct Args {
     pub model: String,
     pub layers: usize,
     pub seq: usize,
+    pub chrono: f32,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0 };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -33,6 +35,7 @@ fn args() -> Args {
             "--model" => a.model = val.clone(),
             "--layers" => a.layers = val.parse().unwrap(),
             "--seq" => a.seq = val.parse().unwrap(),
+            "--chrono" => a.chrono = val.parse().unwrap(),
             k => panic!("unknown flag {k}"),
         }
     }
@@ -50,6 +53,10 @@ fn main() {
         (train, test) = (g2("train"), g2("test"));
     }
 
+    if a.model == "m2" {
+        m2::run(&a);
+        return;
+    }
     if a.model == "mingru" {
         recurrent::run(&a, &train, &test, train_chars, test_chars);
         return;

@@ -40,18 +40,30 @@ fn body(s: &str) -> &str {
     &s[start..end]
 }
 
-/// Last 10% of every book goes to test, so both splits cover every author.
-pub fn load(dir: &Path) -> (String, String) {
+pub struct Book {
+    pub name: String,
+    pub train: String,
+    pub test: String,
+}
+
+/// Every book split 90/10; the test part directly continues the train part.
+pub fn books(dir: &Path) -> Vec<Book> {
     let mut files: Vec<_> = std::fs::read_dir(dir).unwrap().map(|e| e.unwrap().path()).collect();
     files.sort();
-    let (mut train, mut test) = (String::new(), String::new());
-    for f in files {
-        let raw = std::fs::read_to_string(&f).unwrap().replace('\r', "");
-        let text = normalize(body(&raw));
-        let chars: Vec<char> = text.chars().collect();
-        let cut = chars.len() * 9 / 10;
-        train.extend(&chars[..cut]);
-        test.extend(&chars[cut..]);
-    }
-    (train, test)
+    files
+        .into_iter()
+        .map(|f| {
+            let raw = std::fs::read_to_string(&f).unwrap().replace('\r', "");
+            let chars: Vec<char> = normalize(body(&raw)).chars().collect();
+            let cut = chars.len() * 9 / 10;
+            let name = f.file_stem().unwrap().to_string_lossy().into_owned();
+            Book { name, train: chars[..cut].iter().collect(), test: chars[cut..].iter().collect() }
+        })
+        .collect()
+}
+
+/// Last 10% of every book goes to test, so both splits cover every author.
+pub fn load(dir: &Path) -> (String, String) {
+    let all = books(dir);
+    (all.iter().map(|b| b.train.as_str()).collect(), all.iter().map(|b| b.test.as_str()).collect())
 }
