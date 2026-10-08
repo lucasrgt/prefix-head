@@ -1,0 +1,54 @@
+# Experimento de alfabetos — 2026-10-08
+
+Corpus: 14 romances PT (Gutenberg), 6,45M chars treino / 717k teste (últimos 10% de cada livro).
+Modelo fixo: MLP, contexto ~16 chars, d=min(32,V), h=256, 3 épocas, Adam, 1 semente. Custo = MACs por caractere na inferência.
+Dados brutos: results/alpha.jsonl. Código: crates/alpha. Grau 2: tools/louis_encode.py (liblouis 3.39, pt-pt-g2).
+
+## Fronteira de Pareto (bpc × MACs/char)
+g2bpe512 (90k, 2.346) → bbpe512 (90k, 2.289) → bbpe512-sig (92k, 2.276) → bbpe1024 (127k, 2.258)
+→ bbpe2048 (199k, 2.228) → bbpe2048-sig (205k, 2.206) → bpe8192 (587k, 2.183).
+Todo ponto interior da fronteira usa braile grau 1 como base do BPE.
+
+## Conclusões
+1. Alfabeto pequeno paga no corpo (muitos passos), vocabulário grande paga na cabeça: bits/octal/Morse/nibbles e bpe8192 estão nos extremos de custo.
+2. Base do BPE em braile grau 1 vence bytes em todo tamanho de vocabulário; ganho cai com V (512: −1,3% bpc e −15% MACs; 2048: −0,2%).
+3. Ablação (BPE-512): bytes 2.318 → +maiúscula fatorada 2.316 → +acento 1 símbolo 2.296 → ambos (braile) 2.289. O ganho vem principalmente de letra acentuada = 1 símbolo.
+4. SigGain (arXiv 2603.19261) soma ao braile: bbpe2048-sig 2.206 vs bpe2048 2.233. Sobre bytes, só 0,2%.
+5. WordPiece puro com V pequeno quase não comprime (~0,95 tok/char) e perde.
+6. Braile grau 2 (contrações humanas, liblouis) comprime 21% mas é pior de prever: perde para grau 1 em todo V.
+7. Morse (2.708) perde para octal (2.591): código de entropia inglês não ajuda em PT e o símbolo de fim de letra custa passos.
+8. Baselines: xz -9e 2.392 bpc; 21 de 31 runs vencem o xz.
+
+## Limitações
+Uma semente por run; diferenças < ~0,5% precisam de 3–5 sementes. Modelo MLP de 16 chars de contexto; efeitos podem mudar com recorrência/atenção.
+
+# Tokens fatorados (N-D) — 2026-10-08 (crates/alpha/src/fmlp.rs, factored.rs, syll.rs)
+
+Modelo fatorado: corpo 1× por token; fatores previstos em sequência, h_q = tanh(pre + Σ_{g<q} C_g[c_g]).
+Flags: `c` = matriz de saída por prefixo (softmax por classes; params ~ produto, MACs = soma); `f` = embedding de entrada por token (não soma de dígitos).
+
+| run | bpc | kMACs/char | params |
+|---|---|---|---|
+| nd1:bytes (validação; antigo 2.343) | 2.347 | 208 | 279k |
+| nd16x16:bytes | 2.467 | 150 | — |
+| ndc16x16:bytes | 2.423 | 150 | — |
+| ndf16x16:bytes | 2.391 | 150 | 164k |
+| **ndcf16x16:bytes** | **2.355** | 150 | 226k |
+| nd1:bpe8192 (antigo 2.183) | 2.184 | 587 | — |
+| nd91x91:bpe8192 | 2.796 | 24 | — |
+| nd8x8x8x16:bpe8192 | 2.880 | 14 | — |
+| nd2^13:bpe8192 | 2.928 | 13 | — |
+| ndf8x8x8x16:bpe8192 | 2.710 | 14 | 324k |
+| **ndcf91x91:bpe8192** | **2.249** | **24** | 2.50M |
+| ndcf8x8x8x16:bpe8192 | 2.301 | 14 | 2.57M |
+| syl (hangul PT, sem correções) | 2.432 | 95 | 431k |
+
+Conclusões:
+1. Fatorar ingenuamente perde muito: entrada como soma de dígitos e saída compartilhada entre prefixos.
+2. Com as duas correções, bytes 2D fica a 0,35% do 1D com −28% MACs; BPE-8192 2D fica a 3% do 1D com 24× menos MACs e domina a fronteira antiga abaixo de 2,25 bpc (bbpe1024: 2.258 @127k).
+3. Com eixos arbitrários (ordem de fusão do BPE), 2D é o ponto ideal; 4D economiza pouco e perde 2,3%.
+4. Para bytes a correção de entrada pesa mais; para BPE-8192, a de saída.
+5. Mecanismo = softmax por classes (Goodman 2001; Mikolov 2011), abandonado no regime GPU/modelo grande; no regime CPU/modelo pequeno volta a valer. Custo: memória (2,5M params ≈ 10 MB f32) — ternarizar.
+6. Achado contra a prática: somar embeddings de dígitos na entrada (como em Leviathan, arXiv 2601.22040) custa qualidade em modelo pequeno.
+
+Próximos: 3 sementes (1D vs ndcf 2D); varrer vocabulário 8k→65k com cabeça 2D; eixos com significado (morfológicos) + generalização para palavras inéditas; sílabas com as correções.

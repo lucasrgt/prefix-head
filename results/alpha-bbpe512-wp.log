@@ -1,0 +1,28 @@
+bbpe512-wp: vocab 512, 0.972 sym/char, k 16, d 32, params 279328, train 6272525 sym, test 699593 sym
+  step 0/36754 train ~8.812 bpc  0s
+  step 1837/36754 train ~2.797 bpc  9s
+  step 3674/36754 train ~2.621 bpc  18s
+  step 5511/36754 train ~2.541 bpc  27s
+  step 7348/36754 train ~2.495 bpc  36s
+  step 9185/36754 train ~2.452 bpc  45s
+  step 11022/36754 train ~2.419 bpc  54s
+  step 12859/36754 train ~2.393 bpc  63s
+  step 14696/36754 train ~2.388 bpc  72s
+  step 16533/36754 train ~2.373 bpc  80s
+  step 18370/36754 train ~2.348 bpc  89s
+  step 20207/36754 train ~2.338 bpc  98s
+  step 22044/36754 train ~2.324 bpc  107s
+  step 23881/36754 train ~2.318 bpc  116s
+  step 25718/36754 train ~2.290 bpc  125s
+  step 27555/36754 train ~2.286 bpc  135s
+  step 29392/36754 train ~2.300 bpc  144s
+  step 31229/36754 train ~2.276 bpc  153s
+  step 33066/36754 train ~2.272 bpc  162s
+  step 34903/36754 train ~2.273 bpc  170s
+  step 36740/36754 train ~2.277 bpc  179s
+sample:                             
+
+R mão perou a de frescatas, e as fosse da sua novos, tambucas as forças! A genilada os seu logo o cheio da noite, coio-me
+de grandado para a com as chapéos que estignafuis.
+O para arranto para trazeiro e reprogunta, elle com um canto a porta... Quando estivera no a
+

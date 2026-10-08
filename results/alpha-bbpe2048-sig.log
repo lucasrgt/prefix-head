@@ -1,0 +1,24 @@
+bbpe2048-sig: vocab 2048, 0.347 sym/char, k 6, d 32, params 641312, train 2239481 sym, test 255775 sym
+  step 0/13122 train ~3.823 bpc  0s
+  step 656/13122 train ~2.781 bpc  8s
+  step 1312/13122 train ~2.530 bpc  17s
+  step 1968/13122 train ~2.426 bpc  25s
+  step 2624/13122 train ~2.367 bpc  33s
+  step 3280/13122 train ~2.325 bpc  41s
+  step 3936/13122 train ~2.291 bpc  49s
+  step 4592/13122 train ~2.261 bpc  57s
+  step 5248/13122 train ~2.248 bpc  65s
+  step 5904/13122 train ~2.226 bpc  73s
+  step 6560/13122 train ~2.208 bpc  81s
+  step 7216/13122 train ~2.190 bpc  89s
+  step 7872/13122 train ~2.173 bpc  97s
+  step 8528/13122 train ~2.161 bpc  105s
+  step 9184/13122 train ~2.146 bpc  113s
+  step 9840/13122 train ~2.142 bpc  121s
+  step 10496/13122 train ~2.133 bpc  129s
+  step 11152/13122 train ~2.126 bpc  138s
+  step 11808/13122 train ~2.125 bpc  146s
+  step 12464/13122 train ~2.125 bpc  154s
+  step 13120/13122 train ~2.118 bpc  162s
+sample:                                   .   .                                                                    
+

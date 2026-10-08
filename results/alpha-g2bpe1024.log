@@ -1,0 +1,36 @@
+g2bpe1024: vocab 1024, 0.391 sym/char, k 7, d 32, params 353568, train 2520315 sym, test 286635 sym
+  step 0/14768 train ~3.920 bpc  0s
+  step 738/14768 train ~2.907 bpc  5s
+  step 1476/14768 train ~2.665 bpc  10s
+  step 2214/14768 train ~2.566 bpc  15s
+  step 2952/14768 train ~2.504 bpc  20s
+  step 3690/14768 train ~2.457 bpc  25s
+  step 4428/14768 train ~2.416 bpc  29s
+  step 5166/14768 train ~2.389 bpc  34s
+  step 5904/14768 train ~2.362 bpc  38s
+  step 6642/14768 train ~2.340 bpc  43s
+  step 7380/14768 train ~2.319 bpc  47s
+  step 8118/14768 train ~2.300 bpc  52s
+  step 8856/14768 train ~2.289 bpc  57s
+  step 9594/14768 train ~2.276 bpc  62s
+  step 10332/14768 train ~2.270 bpc  67s
+  step 11070/14768 train ~2.256 bpc  72s
+  step 11808/14768 train ~2.247 bpc  76s
+  step 12546/14768 train ~2.243 bpc  81s
+  step 13284/14768 train ~2.237 bpc  86s
+  step 14022/14768 train ~2.240 bpc  91s
+  step 14760/14768 train ~2.238 bpc  96s
+sample: ⠀⠂⠙⠕ ⠽ ⠎⠐⠎ ⠎⠕⠶⠽ ⠃⠱⠂ ⠑ ⠑⠝⠉⠓⠑⠥⠤⠇⠓⠑ ⠕ ⠎⠑⠥ ⠥ ⠏⠈⠞⠊⠈⠍ ⠑ ⠏⠇⠁
+⠃⠮⠉⠁⠯⠼ ⠙⠁ ⠍⠰⠞⠑⠄ ⠨⠓⠁⠧⠊⠁⠄ ⠨⠢⠞⠼ ⠁ ⠳⠁ ⠉⠕⠍⠏⠁⠶⠊⠁⠂
+⠝⠲⠄ ⠨⠁⠕⠏⠕⠄
+
+⠤⠤⠨⠝⠜⠕⠖
+
+⠤⠤⠨⠃⠊⠝⠞⠑ ⠏⠁⠇⠓⠜⠕⠄
+
+⠨⠑⠇⠇⠁ ⠿ ⠞⠊⠗⠁ ⠊⠝⠊⠎⠞⠊⠞⠥⠇⠕⠂ ⠟ ⠑⠇⠇⠑ ⠱⠞⠊⠍⠁⠧⠁ ⠟ ⠞⠊⠶⠁ ⠉⠦⠗⠳⠂ ⠝ ⠞⠊⠶⠁ ⠁⠇⠇⠊⠂ ⠁⠴⠁⠧⠈
+⠝⠑⠎⠎⠑⠚⠂⠙⠕⠂
+⠁ ⠉⠁⠃⠑⠯⠁⠰⠍⠄
+
+⠨⠋⠕⠊ ⠁ ⠃⠕⠁ ⠉ ⠥⠢⠛⠊⠊⠶⠕ ⠙ ⠞⠙⠁
+

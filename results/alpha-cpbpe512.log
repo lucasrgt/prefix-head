@@ -1,0 +1,33 @@
+cpbpe512: vocab 512, 0.460 sym/char, k 8, d 32, params 213792, train 2968652 sym, test 335685 sym
+  step 0/17395 train ~4.153 bpc  0s
+  step 869/17395 train ~2.858 bpc  3s
+  step 1738/17395 train ~2.672 bpc  7s
+  step 2607/17395 train ~2.571 bpc  10s
+  step 3476/17395 train ~2.499 bpc  13s
+  step 4345/17395 train ~2.455 bpc  16s
+  step 5214/17395 train ~2.416 bpc  20s
+  step 6083/17395 train ~2.391 bpc  23s
+  step 6952/17395 train ~2.364 bpc  26s
+  step 7821/17395 train ~2.336 bpc  30s
+  step 8690/17395 train ~2.322 bpc  33s
+  step 9559/17395 train ~2.310 bpc  36s
+  step 10428/17395 train ~2.294 bpc  40s
+  step 11297/17395 train ~2.283 bpc  43s
+  step 12166/17395 train ~2.270 bpc  46s
+  step 13035/17395 train ~2.259 bpc  49s
+  step 13904/17395 train ~2.263 bpc  53s
+  step 14773/17395 train ~2.248 bpc  56s
+  step 15642/17395 train ~2.233 bpc  59s
+  step 16511/17395 train ~2.239 bpc  63s
+  step 17380/17395 train ~2.245 bpc  66s
+sample: 
+                                 .
+
+Espera tudo
+para que
+viver d'um guido, reconcarna de ninguem, e tosservados, com os seus negocios, encostaviam irmãos. Assim a voz vivaste.
+
+"Não é pés! Porqua, com uma
+reporta que lhe palavrassem-lhe
+tudores a
+
