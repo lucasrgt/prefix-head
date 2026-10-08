@@ -395,3 +395,55 @@ fn score_core<M: Seq + Sync>(a: &Args, train: &str, test: &str, test_chars: usiz
         );
     }
 }
+
+/// Splits a checkpoint's test bits per char between tokens that start a word (spelled with a
+/// leading space or newline) and tokens that continue one, per factor.
+pub fn split(a: &Args, train: &str, test: &str) {
+    match a.core.as_str() {
+        "sosc" => split_core::<SelOsc>(a, train, test),
+        "tfm" => split_core::<Tfm>(a, train, test),
+        _ => split_core::<MinGru>(a, train, test),
+    }
+}
+
+fn split_core<M: Seq>(a: &Args, train: &str, test: &str) {
+    let fact = parse(&a.alpha, train);
+    let radix = fact.radix();
+    let f = radix.len();
+    let path = ruler::results::root().join("data/models").join(checkpoint_name(a));
+    let (m, _) = M::load(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    let te = fact.encode(test);
+    let te_ids = from_digits(&te, &radix);
+    let pieces: Vec<String> = te.chunks(f).map(|t| fact.decode(t)).collect();
+    let (mut st, mut sc) = (m.state(), m.scratch());
+    let mut out = vec![0u32; f];
+    let mut bits = [[0.0f64; 2]; 2];
+    let mut chars = [0usize; 2];
+    for k in 0..te_ids.len() {
+        let kind = usize::from(!pieces[k].starts_with([' ', '\n']));
+        chars[kind] += pieces[k].chars().count();
+        let input = if k == 0 { m.vocab() as u32 } else { te_ids[k - 1] };
+        m.infer_step(
+            input,
+            &mut st,
+            &mut sc,
+            |q, logits, lse| {
+                let c = te[k * f + q];
+                bits[kind][q.min(1)] -= ((logits[c as usize] - lse) / std::f32::consts::LN_2) as f64;
+                c
+            },
+            &mut out,
+        );
+    }
+    for (kind, name) in ["word-initial", "continuation"].iter().enumerate() {
+        let n = chars[kind] as f64;
+        println!(
+            "{} {name}: {} chars, class {:.4} + within {:.4} = {:.4} bits/char",
+            a.alpha,
+            chars[kind],
+            bits[kind][0] / n,
+            bits[kind][1] / n,
+            (bits[kind][0] + bits[kind][1]) / n
+        );
+    }
+}

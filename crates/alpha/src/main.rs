@@ -82,6 +82,10 @@ fn main() {
         (train, test) = (g2("train"), g2("test"));
     }
 
+    if a.model == "split" {
+        recurrent::split(&a, &train, &test);
+        return;
+    }
     if a.model == "score" {
         recurrent::score(&a, &train, &test, test_chars);
         return;

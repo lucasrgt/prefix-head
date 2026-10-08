@@ -12,6 +12,7 @@ pub enum Alphabet {
     Braille,
     Bytes,
     Bpe(Bpe),
+    Words(crate::words::Words),
 }
 
 const SPACE: u32 = 0;
@@ -284,6 +285,7 @@ impl Alphabet {
             Alphabet::Braille => "braille".into(),
             Alphabet::Bytes => "bytes".into(),
             Alphabet::Bpe(b) => format!("{}{}{}", b.base(), b.vocab(), b.crit().suffix()),
+            Alphabet::Words(w) => format!("words{}", w.vocab()),
         }
     }
 
@@ -299,6 +301,7 @@ impl Alphabet {
             Alphabet::Braille => BRAILLE_VOCAB,
             Alphabet::Bytes => 256,
             Alphabet::Bpe(b) => b.vocab(),
+            Alphabet::Words(w) => w.vocab(),
         }
     }
 
@@ -314,6 +317,7 @@ impl Alphabet {
             Alphabet::Braille => braille_encode(text),
             Alphabet::Bytes => text.bytes().map(u32::from).collect(),
             Alphabet::Bpe(b) => b.encode(text),
+            Alphabet::Words(w) => w.encode(text),
         }
     }
 
@@ -329,6 +333,7 @@ impl Alphabet {
             Alphabet::CapBytes => return capbytes_decode(syms),
             Alphabet::Bytes => syms.iter().map(|&s| s as u8).collect(),
             Alphabet::Bpe(b) => return b.decode(syms),
+            Alphabet::Words(w) => return w.decode(syms),
         };
         String::from_utf8_lossy(&bytes).into_owned()
     }
@@ -366,6 +371,7 @@ mod tests {
             Alphabet::Bpe(cp),
             Alphabet::Bpe(cap),
             Alphabet::Bpe(sup),
+            Alphabet::Words(crate::words::Words::train(&text.repeat(20), 280)),
             Alphabet::Bits,
             Alphabet::Nibbles,
             Alphabet::Braille,
@@ -378,6 +384,17 @@ mod tests {
             let syms = a.encode(text);
             assert!(syms.iter().all(|&s| (s as usize) < a.vocab()), "{}", a.name());
             assert_eq!(a.decode(&syms), text, "{}", a.name());
+        }
+    }
+}
+
+impl Alphabet {
+    /// Each token's spelling in base symbols, for alphabets whose tokens are strings (BPE, words).
+    pub fn pieces(&self) -> Option<Vec<Vec<u64>>> {
+        match self {
+            Alphabet::Bpe(b) => Some((0..b.vocab() as u32).map(|t| b.piece(t).iter().map(|&x| x as u64).collect()).collect()),
+            Alphabet::Words(w) => Some((0..w.vocab() as u32).map(|t| w.piece(t).iter().map(|&x| x as u64).collect()).collect()),
+            _ => None,
         }
     }
 }
