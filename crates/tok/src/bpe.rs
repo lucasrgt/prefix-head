@@ -88,7 +88,7 @@ pub struct Bpe {
 
 /// Splits before every space/newline. Braille number mode also resets there, so encoding
 /// chunk by chunk equals encoding the whole text.
-fn chunks(text: &str) -> impl Iterator<Item = &str> {
+pub(crate) fn chunks(text: &str) -> impl Iterator<Item = &str> {
     let b = text.as_bytes();
     let mut start = 0;
     let mut i = 1;

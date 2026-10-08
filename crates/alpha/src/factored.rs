@@ -49,14 +49,15 @@ fn grouped(name: &str, train: &str) -> Fact {
     let mut it = spec.split('-').skip(1);
     let (key, m) = (it.next().unwrap(), it.next().unwrap().parse::<usize>().unwrap());
     let alpha = tok::by_name(inner, train);
-    let Alphabet::Bpe(bpe) = &alpha else { panic!("grouping needs a BPE alphabet") };
-    let v = bpe.vocab() as u32;
-    let piece = |t: u32| bpe.piece(t).iter().map(|&x| x as u64).collect::<Vec<u64>>();
+    let all = alpha.pieces().expect("grouping needs an alphabet of strings");
+    let v = all.len() as u32;
+    let piece = |t: u32| all[t as usize].clone();
     let keys: Vec<(u64, Vec<u64>)> = match key {
         "first" => (0..v).map(|t| (piece(t)[0], piece(t))).collect(),
         "last" => (0..v).map(|t| (*piece(t).last().unwrap(), piece(t).into_iter().rev().collect())).collect(),
         "second" => (0..v).map(|t| (*piece(t).get(1).unwrap_or(&piece(t)[0]), piece(t))).collect(),
         "recipe" => {
+            let Alphabet::Bpe(bpe) = &alpha else { panic!("recipe grouping needs a BPE alphabet") };
             let r = bpe.recipes();
             (0..v).map(|t| (r[t as usize].map_or(t, |(l, _)| l) as u64, piece(t))).collect()
         }
@@ -159,9 +160,9 @@ fn trie_or_random(name: &str, train: &str) -> Fact {
     let (spec, inner) = name.split_once(':').expect("grp-<trie|random>-<m>:<alphabet>");
     let m: usize = spec.rsplit('-').next().unwrap().parse().unwrap();
     let alpha = tok::by_name(inner, train);
-    let Alphabet::Bpe(bpe) = &alpha else { panic!("grouping needs a BPE alphabet") };
-    let v = bpe.vocab() as u32;
-    let piece = |t: u32| bpe.piece(t).iter().map(|&x| x as u64).collect::<Vec<u64>>();
+    let all = alpha.pieces().expect("grouping needs an alphabet of strings");
+    let v = all.len() as u32;
+    let piece = |t: u32| all[t as usize].clone();
     let g = if spec.starts_with("grp-random") {
         let mut r = Rng::new(0x5eed);
         let keys: Vec<u64> = (0..v).map(|_| r.next()).collect();

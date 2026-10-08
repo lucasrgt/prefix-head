@@ -43,6 +43,19 @@ Perda decomposta em bits/char: 1ª decisão (classe) + 2ª decisão (token dentr
 3. No oscilador seletivo, semântico ≈ arbitrário (2,138 vs 2,139); o ganho do prefixo sobre o arbitrário é 3,7% (MLP: 1,8%) — cresce com a capacidade do núcleo.
 4. Granularidade (classes 32/64/128/181): pendente.
 
+## Onde o ganho acontece: começo × continuação de palavra (oscilador seletivo, 14 livros, semente 1)
+
+`alpha --model split`: bits/char separados por tokens que começam uma palavra (527.335 chars) e tokens que continuam uma palavra (189.476 chars).
+
+| agrupamento | começo: classe + dentro = total | continuação: classe + dentro = total |
+|---|---|---|
+| prefixo | 1,151 + 0,818 = **1,968** | 1,278 + 1,043 = **2,320** |
+| ordem de fusão | 1,172 + 0,836 = 2,007 (+1,9%) | 1,641 + 0,863 = 2,504 (+7,9%) |
+| k-means semântico | 1,266 + 0,730 = 1,997 (+1,4%) | 1,953 + 0,578 = 2,531 (+9,1%) |
+| 2º caractere | 1,220 + 0,773 = 1,994 (+1,3%) | 1,468 + 0,916 = 2,384 (+2,7%) |
+
+A vantagem do prefixo é 4–6× maior nas **continuações** e está na 1ª decisão (classe 1,28 vs 1,64–1,95). Consistente com o mecanismo: a primeira decisão prevê como a palavra em andamento continua. Explica o precedente de 2017: com palavras inteiras todo token é começo de palavra, onde o efeito é pequeno. Pendente: frequência e Brown nesse recorte (os critérios que venceram em 2017). Teste com vocabulário de palavras + bytes descartado: com 8k palavras, 77% dos tokens seriam bytes.
+
 ## Generalidade: transformer (14 livros, semente 1)
 
 | modelo | cabeça | bpc | MACs/char |

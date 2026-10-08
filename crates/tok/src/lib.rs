@@ -5,6 +5,7 @@ pub mod bpe;
 pub mod codec;
 pub mod group;
 pub mod syll;
+pub mod words;
 
 /// Builds an alphabet by experiment name (`bytes`, `braille`, `bbpe2048-sig`, …), training BPEs on `train`.
 pub fn by_name(name: &str, train: &str) -> Alphabet {
@@ -18,6 +19,7 @@ pub fn by_name(name: &str, train: &str) -> Alphabet {
         "morse" => Alphabet::Morse,
         "octal" => Alphabet::Octal,
         "capbytes" => Alphabet::CapBytes,
+        s if s.starts_with("words") => Alphabet::Words(words::Words::train(train, s["words".len()..].parse().unwrap())),
         s if s.starts_with("sbpe") => {
             let (total, words) = s["sbpe".len()..].split_once('-').expect("sbpe<total>-<word merges>");
             let mut b = Bpe::train_with(train, Base::Bytes, words.parse().unwrap(), Crit::Freq);
