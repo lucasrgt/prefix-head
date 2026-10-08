@@ -87,6 +87,11 @@ impl SelOsc {
         }
     }
 
+    /// Input embedding table, (vocab + 1) × h.
+    pub fn embedding(&self) -> &[f32] {
+        &self.emb.w
+    }
+
     pub fn params(&self) -> usize {
         let layers: usize = [&self.bre, &self.bim, &self.cre, &self.cim, &self.d, &self.wz, &self.bz, &self.theta].iter().flat_map(|v| v.iter()).map(|p| p.w.len()).sum();
         self.emb.w.len() + layers + self.head.params()

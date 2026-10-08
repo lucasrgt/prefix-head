@@ -72,9 +72,72 @@ fn grouped(name: &str, train: &str) -> Fact {
     Fact::Grouped(alpha, g)
 }
 
+/// k-means on token embeddings (squared distance), then a balanced assignment: (token, centroid)
+/// pairs in order of distance, each centroid taking at most `cap` tokens. The semantic-clustering
+/// criterion of HDLM/TDLM, sized like the prefix classes.
+fn balanced_kmeans(emb: &[f32], d: usize, k: usize, cap: usize, seed: u64) -> Vec<usize> {
+    let v = emb.len() / d;
+    let row = |t: usize| &emb[t * d..(t + 1) * d];
+    let dist = |a: &[f32], b: &[f32]| a.iter().zip(b).map(|(x, y)| (x - y) * (x - y)).sum::<f32>();
+    let mut rng = Rng::new(seed);
+    let mut cent: Vec<Vec<f32>> = (0..k).map(|_| row((rng.next() % v as u64) as usize).to_vec()).collect();
+    let mut assign = vec![0usize; v];
+    for _ in 0..25 {
+        for t in 0..v {
+            assign[t] = (0..k).min_by(|&a, &b| dist(row(t), &cent[a]).partial_cmp(&dist(row(t), &cent[b])).unwrap()).unwrap();
+        }
+        let mut sum = vec![vec![0.0f32; d]; k];
+        let mut n = vec![0usize; k];
+        for t in 0..v {
+            n[assign[t]] += 1;
+            for (s, &x) in sum[assign[t]].iter_mut().zip(row(t)) {
+                *s += x;
+            }
+        }
+        for c in 0..k {
+            if n[c] > 0 {
+                cent[c] = sum[c].iter().map(|s| s / n[c] as f32).collect();
+            }
+        }
+    }
+    let mut pairs: Vec<(f32, usize, usize)> = (0..v).flat_map(|t| (0..k).map(move |c| (t, c))).map(|(t, c)| (dist(row(t), &cent[c]), t, c)).collect();
+    pairs.sort_by(|a, b| a.0.partial_cmp(&b.0).unwrap());
+    let (mut class, mut fill) = (vec![usize::MAX; v], vec![0usize; k]);
+    for (_, t, c) in pairs {
+        if class[t] == usize::MAX && fill[c] < cap {
+            class[t] = c;
+            fill[c] += 1;
+        }
+    }
+    class
+}
+
+/// `grp-sem-<m>:bpe8192`: classes by balanced k-means over the input embeddings of the 14-book
+/// reference model (whose ids are its prefix codes, mapped back to BPE ids here).
+fn semantic(name: &str, train: &str) -> Fact {
+    let (spec, inner) = name.split_once(':').expect("grp-sem-<m>:<alphabet>");
+    let m: usize = spec.rsplit('-').next().unwrap().parse().unwrap();
+    let alpha = tok::by_name(inner, train);
+    let Alphabet::Bpe(bpe) = &alpha else { panic!("grouping needs a BPE alphabet") };
+    let v = bpe.vocab() as u32;
+    let piece = |t: u32| bpe.piece(t).iter().map(|&x| x as u64).collect::<Vec<u64>>();
+    let first = Grouping::build((0..v).map(|t| (piece(t)[0], piece(t))).collect(), 91);
+    let path = ruler::results::root().join("data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin");
+    let (model, _) = nn::sosc::SelOsc::load(&path).expect("reference checkpoint");
+    let d = model.h;
+    let table = model.embedding();
+    let codes = first.encode(&(0..v).collect::<Vec<u32>>());
+    let emb: Vec<f32> = codes.iter().flat_map(|&c| table[c as usize * d..(c as usize + 1) * d].iter().copied()).collect();
+    let class = balanced_kmeans(&emb, d, (v as usize).div_ceil(m), m, 7);
+    Fact::Grouped(alpha, Grouping::from_classes(&class, m))
+}
+
 pub(crate) fn parse(name: &str, train: &str) -> Fact {
     if name == "syl" {
         return Fact::Syl(Syllables::train(train));
+    }
+    if name.starts_with("grp-sem-") {
+        return semantic(name, train);
     }
     if name.starts_with("grp-") {
         return grouped(name, train);

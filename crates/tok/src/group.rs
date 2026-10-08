@@ -24,6 +24,23 @@ impl Grouping {
         Self { m, classes, code, id }
     }
 
+    /// Places the tokens of class c (in id order) into codes c·m, c·m + 1, …; classes hold at most m.
+    pub fn from_classes(class_of: &[usize], m: usize) -> Self {
+        let classes = class_of.iter().max().map_or(0, |c| c + 1);
+        let mut fill = vec![0usize; classes];
+        let mut code = vec![0u32; class_of.len()];
+        for (t, &c) in class_of.iter().enumerate() {
+            assert!(fill[c] < m, "class {c} holds more than {m} tokens");
+            code[t] = (c * m + fill[c]) as u32;
+            fill[c] += 1;
+        }
+        let mut id = vec![None; classes * m];
+        for (t, &c) in code.iter().enumerate() {
+            id[c as usize] = Some(t as u32);
+        }
+        Self { m, classes, code, id }
+    }
+
     pub fn encode(&self, ids: &[u32]) -> Vec<u32> {
         ids.iter().map(|&t| self.code[t as usize]).collect()
     }
