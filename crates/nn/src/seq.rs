@@ -1,4 +1,5 @@
 use crate::kosc::{self, KOsc};
+use crate::mamba::{self, Mamba};
 use crate::osc::{self, Osc};
 use crate::rnn::{self, MinGru, State};
 use crate::sosc::{self, SelOsc};
@@ -96,3 +97,4 @@ delegate!(Osc, osc, "osc");
 delegate!(SelOsc, sosc, "sosc");
 delegate!(KOsc, kosc, "kosc");
 delegate!(Tfm, tfm, "tfm");
+delegate!(Mamba, mamba, "mamba");

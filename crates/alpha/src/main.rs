@@ -26,10 +26,11 @@ pub struct Args {
     pub heads: usize,
     pub mlp: usize,
     pub corpus: String,
+    pub di: usize,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into() };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into(), di: 0 };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -54,6 +55,7 @@ fn args() -> Args {
             "--heads" => a.heads = val.parse().unwrap(),
             "--mlp" => a.mlp = val.parse().unwrap(),
             "--corpus" => a.corpus = val.clone(),
+            "--di" => a.di = val.parse().unwrap(),
             k => panic!("unknown flag {k}"),
         }
     }

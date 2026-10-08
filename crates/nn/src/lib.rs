@@ -2,6 +2,7 @@ pub mod fast;
 pub mod fmlp;
 pub mod head;
 pub mod kosc;
+pub mod mamba;
 pub mod rnn;
 pub mod mlp;
 pub mod monarch;

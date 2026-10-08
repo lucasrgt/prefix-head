@@ -77,7 +77,7 @@ fn slope(h: usize, heads: usize) -> f32 {
 }
 
 /// y = (x − μ)/σ·g + b over rows of width d; keeps x̂ and 1/σ for backward.
-fn ln_forward(x: &[f32], d: usize, g: &[f32], b: &[f32], y: &mut [f32], xhat: &mut [f32], rstd: &mut [f32]) {
+pub(crate) fn ln_forward(x: &[f32], d: usize, g: &[f32], b: &[f32], y: &mut [f32], xhat: &mut [f32], rstd: &mut [f32]) {
     for r in 0..x.len() / d {
         let row = &x[r * d..(r + 1) * d];
         let mu = row.iter().sum::<f32>() / d as f32;
@@ -93,7 +93,7 @@ fn ln_forward(x: &[f32], d: usize, g: &[f32], b: &[f32], y: &mut [f32], xhat: &m
 }
 
 /// Adds dL/dx into `dx` given dL/dy, accumulating dg and db.
-fn ln_backward(dy: &[f32], d: usize, g: &[f32], xhat: &[f32], rstd: &[f32], gg: &mut [f32], gb: &mut [f32], dx: &mut [f32]) {
+pub(crate) fn ln_backward(dy: &[f32], d: usize, g: &[f32], xhat: &[f32], rstd: &[f32], gg: &mut [f32], gb: &mut [f32], dx: &mut [f32]) {
     for r in 0..dy.len() / d {
         let (mut s1, mut s2) = (0.0f32, 0.0f32);
         for c in 0..d {
