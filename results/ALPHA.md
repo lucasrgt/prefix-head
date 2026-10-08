@@ -70,3 +70,17 @@ Mesma forma 91×91, mesmos 2,48M parâmetros, 24.022 MACs/char; só muda quais t
 - **Início (árvore de prefixos) vence por 1,8%** (2,208 vs 2,248), muito acima da variação entre sementes (~0,2%). Fica a 1,1% do BPE-8192 1D (2,184) com 24× menos MACs e empata com bbpe2048-sig (2,206) com 8,5× menos.
 - Frequência, receita (AE2) e final ficam a ≤0,4% do controle.
 - Leitura: a primeira decisão da cabeça deve seguir a direção do texto (como o pedaço começa); é o LOD dos jogos aplicado à previsão. Agrupar por receita perde porque os grupos são pequenos e a ordem entre eles segue o id do ingrediente, misturando prefixos sem relação dentro de uma classe.
+
+# M1 — primeiro modelo recorrente (minGRU + cabeça por prefixos) — 2026-10-08
+
+`alpha --model mingru --alpha grp-first-91:bpe8192 --h 128 --layers 2` (crates/nn/src/rnn.rs, head.rs). Gradientes conferidos por diferenças finitas; inferência em fluxo reproduz a perda do lote. Mesmo orçamento do MLP 2D: 24.373 vs 24.022 MACs/char; 2,22M parâmetros; **estado = 1.024 bytes**; ~95 s de treino em CPU (8 threads).
+
+| run | semente | bpc (estado carregado) | bpc (reset a cada janela) |
+|---|---|---|---|
+| seq 64 | 1 | 2.0875 | 2.0916 |
+| seq 64 | 2 | 2.0832 | 2.0874 |
+| seq 256 | 1 | 2.0856 | 2.0871 |
+
+- **−5,5% bpc contra o MLP 2D com o mesmo custo** (2,085 vs 2,208, média de 2 sementes; variação entre sementes 0,2%). Melhor que o MLP com cabeça cheia BPE-8192 1D (2,184) com 24× menos MACs; 12,8% melhor que xz -9e.
+- Estado carregado além da janela de treino ajuda pouco mas sempre (−0,2% nas 3 runs): o estado guarda informação útil além de 64 tokens — pré-requisito do M2 (momentos de pensamento).
+- Janela de treino 256 ≈ 64: nesta escala, o ganho veio de sair da janela fixa de 16 chars do MLP; contexto mais longo no treino não ampliou.
