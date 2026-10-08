@@ -39,3 +39,14 @@ Busca sistemática por algoritmos "elo perdido" fora da IA. Cada linha: princíp
 | Revisões rejeitam capturas atrasadas | — | consistência ao ramificar estados |
 
 Princípio comum: **não recomputar o que dá para nomear, restaurar ou derivar; persistir só a projeção mínima tipada; recomputar o resto de fontes duráveis; executar só o trabalho atingido.** É o "desperdício mínimo" do CHARTER em forma de software.
+
+## Projetos do próprio usuário: AeroModelLib e Worldline (lidos via GitHub, 2026-10-08)
+
+| origem | princípio | algoritmo candidato | medir | status |
+|---|---|---|---|---|
+| AeroModelLib: LOD / render distance (animar perto, estático longe) | gastar pelo que importa | saída antecipada por token: tokens fáceis saem após a 1ª camada, guiado pela confiança da classe (cf. CALM, Google 2022) | fração de tokens que saem cedo × bpc × MACs/char | aberto |
+| AeroModelLib: display lists (pré-compilar o estático) | não recalcular o constante | projeção da 1ª camada pré-calculada por token (tabela vocab × 3n), consulta em vez de matvec | MACs/char (−~20%), µs/char, bpc idêntico | aberto, ganho garantido |
+| AeroModelLib: keyframes + interpolação | calcular pouco e interpolar | recorrência multi-velocidade (Clockwork RNN, 2014): canais atualizados a cada 1/4/16 tokens | bpc × MACs/char | aberto |
+| AeroModelLib: morph targets | forma = mistura de poucas bases | pesos dinâmicos: W = Σ α_k(contexto)·W_k com poucas bases | bpc × params × MACs | aberto |
+| Worldline: provas endereçadas por conteúdo | não refazer o que não mudou | cache de resultados por hash (código + args + dados); só reexecutar o atingido | tempo de pesquisa | aberto (metodologia) |
+| Worldline: oráculo oficial + determinismo + fail closed | evidência antes de afirmação | já praticado (referência escalar, fluxo × lote, reprodução exata); formalizar recibos | — | parcial |
