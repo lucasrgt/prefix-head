@@ -1,0 +1,29 @@
+bbpe2048-wp: vocab 2048, 0.933 sym/char, k 15, d 32, params 715040, train 6019587 sym, test 671833 sym
+  step 0/35272 train ~10.251 bpc  0s
+  step 1763/35272 train ~2.795 bpc  21s
+  step 3526/35272 train ~2.626 bpc  43s
+  step 5289/35272 train ~2.530 bpc  64s
+  step 7052/35272 train ~2.469 bpc  86s
+  step 8815/35272 train ~2.448 bpc  108s
+  step 10578/35272 train ~2.423 bpc  130s
+  step 12341/35272 train ~2.394 bpc  152s
+  step 14104/35272 train ~2.378 bpc  175s
+  step 15867/35272 train ~2.360 bpc  198s
+  step 17630/35272 train ~2.346 bpc  222s
+  step 19393/35272 train ~2.330 bpc  246s
+  step 21156/35272 train ~2.310 bpc  269s
+  step 22919/35272 train ~2.291 bpc  293s
+  step 24682/35272 train ~2.277 bpc  316s
+  step 26445/35272 train ~2.285 bpc  340s
+  step 28208/35272 train ~2.272 bpc  364s
+  step 29971/35272 train ~2.259 bpc  387s
+  step 31734/35272 train ~2.260 bpc  411s
+  step 33497/35272 train ~2.266 bpc  434s
+  step 35260/35272 train ~2.243 bpc  457s
+sample:           
+
+NAPITULO NXVIIII CAVICAPISE FGIB)
+longuia-se deu ama Herde no seu comeria por ou o porto! E Amaro, que coisse tem com a sua barras na corça e olvasse-me devarto, com os tranquilitinados.
+
+A quinta decerto não lhes era de uma escada a outra--cavalleiro
+

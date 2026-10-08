@@ -1,0 +1,25 @@
+g2: vocab 70, 0.862 sym/char, k 14, d 32, params 135206, train 5562432 sym, test 620837 sym
+  step 0/32593 train ~5.299 bpc  0s
+  step 1629/32593 train ~2.857 bpc  4s
+  step 3258/32593 train ~2.668 bpc  7s
+  step 4887/32593 train ~2.599 bpc  11s
+  step 6516/32593 train ~2.532 bpc  14s
+  step 8145/32593 train ~2.498 bpc  18s
+  step 9774/32593 train ~2.478 bpc  22s
+  step 11403/32593 train ~2.454 bpc  25s
+  step 13032/32593 train ~2.433 bpc  29s
+  step 14661/32593 train ~2.401 bpc  33s
+  step 16290/32593 train ~2.397 bpc  37s
+  step 17919/32593 train ~2.382 bpc  41s
+  step 19548/32593 train ~2.369 bpc  44s
+  step 21177/32593 train ~2.358 bpc  48s
+  step 22806/32593 train ~2.337 bpc  52s
+  step 24435/32593 train ~2.342 bpc  56s
+  step 26064/32593 train ~2.330 bpc  60s
+  step 27693/32593 train ~2.326 bpc  63s
+  step 29322/32593 train ~2.315 bpc  67s
+  step 30951/32593 train ~2.313 bpc  71s
+  step 32580/32593 train ~2.307 bpc  74s
+sample: ⠀⠕ ⠕ ⠨⠉⠕⠞⠑ ⠨⠕ ⠨⠑⠛⠁ ⠧⠑⠗ ⠍⠕⠝⠞⠕ ⠙⠕ ⠉⠕⠶⠑⠉⠑⠗ ⠧⠊⠁ ⠎⠕⠁⠓⠽ ⠟ ⠁ ⠁⠛⠥⠁ ⠁⠉⠦⠗⠁ ⠙ ⠋⠁⠊⠂⠙⠕ ⠁ ⠏⠩⠟⠣⠎ ⠲⠖⠑⠛⠑⠝⠉⠁⠧⠁⠂ ⠒⠍⠊⠙⠕⠂ ⠴⠁⠯⠁⠙⠕⠂ ⠋⠕⠊ ⠏⠁⠛⠥⠇⠕ ⠝⠁ ⠎⠁ ⠙⠮⠎⠕ ⠙ ⠍⠰⠉⠣⠎ ⠙ ⠍⠪⠂ ⠙⠁⠙⠽ ⠉ ⠍⠊⠎⠑⠗⠁ ⠁⠃⠦⠞⠁ ⠋⠊⠛⠥⠎⠞⠁ ⠎⠁⠃⠑⠙⠽⠂ ⠑⠍ ⠟ ⠁ ⠍⠕⠯⠁⠄ ⠨⠎
+⠁ ⠨⠙⠄ ⠨⠁⠝⠝⠑⠇⠇⠁⠄ ⠨⠩⠎⠪ ⠍⠱⠍⠕ ⠙⠳⠞⠰ ⠙⠑⠎⠎⠑ ⠿ ⠥ ⠉⠕⠗⠕⠑⠝⠑⠉⠊⠕ ⠙ ⠞⠙⠎ 
+

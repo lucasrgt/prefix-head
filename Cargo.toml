@@ -1,0 +1,14 @@
+[workspace]
+resolver = "3"
+members = ["crates/kern", "crates/bench", "crates/alpha"]
+
+[workspace.package]
+edition = "2024"
+version = "0.1.0"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+debug = "line-tables-only"

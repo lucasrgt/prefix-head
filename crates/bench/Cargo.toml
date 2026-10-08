@@ -1,0 +1,7 @@
+[package]
+name = "bench"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+kern = { path = "../kern" }

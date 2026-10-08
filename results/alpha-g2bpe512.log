@@ -1,0 +1,30 @@
+g2bpe512: vocab 512, 0.449 sym/char, k 8, d 32, params 213792, train 2897789 sym, test 328155 sym
+  step 0/16980 train ~4.051 bpc  0s
+  step 849/16980 train ~2.925 bpc  3s
+  step 1698/16980 train ~2.729 bpc  7s
+  step 2547/16980 train ~2.623 bpc  10s
+  step 3396/16980 train ~2.561 bpc  13s
+  step 4245/16980 train ~2.516 bpc  17s
+  step 5094/16980 train ~2.472 bpc  20s
+  step 5943/16980 train ~2.442 bpc  23s
+  step 6792/16980 train ~2.408 bpc  27s
+  step 7641/16980 train ~2.387 bpc  30s
+  step 8490/16980 train ~2.368 bpc  33s
+  step 9339/16980 train ~2.358 bpc  36s
+  step 10188/16980 train ~2.340 bpc  40s
+  step 11037/16980 train ~2.328 bpc  43s
+  step 11886/16980 train ~2.313 bpc  46s
+  step 12735/16980 train ~2.297 bpc  50s
+  step 13584/16980 train ~2.304 bpc  53s
+  step 14433/16980 train ~2.296 bpc  56s
+  step 15282/16980 train ~2.289 bpc  59s
+  step 16131/16980 train ~2.291 bpc  63s
+sample: ⠀⠲ ⠙⠕
+⠨⠉⠁⠞⠥⠗⠙⠕ ⠥⠁ ⠃⠕⠉⠓⠁⠝⠐⠑ ⠑ ⠩ ⠎⠗⠩ ⠟ ⠓⠑ ⠙⠑⠧⠊⠁ ⠎⠑⠗⠲ ⠋⠑⠊⠞⠊⠋⠊⠉⠊⠕⠎⠁⠰⠍ ⠁⠕ ⠉⠿⠞⠕⠂ ⠉ ⠥⠁ ⠃⠑⠇⠇⠁ ⠙⠁ ⠃⠕⠉⠇⠊⠝⠁⠙⠕ ⠟⠂ ⠎ ⠙⠱⠏⠑⠙⠊⠥⠒
+
+
+⠨⠩⠎⠪⠂ ⠮⠎⠕⠢
+
+⠤⠤⠨⠝ ⠓⠑ ⠞⠑⠥⠞⠓⠕⠂ ⠳⠕ ⠋⠇⠕⠗⠱ ⠝⠽ ⠕⠓⠽ ⠑⠍ ⠧⠁⠛⠈⠗⠱⠂ ⠎ ⠓⠕⠝⠎⠎⠲⠂⠯⠪⠱ ⠑⠗⠛⠥⠑⠥ ⠎⠏ ⠟
+⠕⠑⠎⠑⠂ ⠉ ⠑⠑ ⠙⠕ ⠁⠥⠟⠊⠝⠎⠁⠄ ⠨⠁ ⠞⠦⠗⠊⠝⠁ ⠟ ⠓⠑                
+

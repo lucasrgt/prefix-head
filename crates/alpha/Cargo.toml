@@ -1,0 +1,8 @@
+[package]
+name = "alpha"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+kern = { path = "../kern" }
+matrixmultiply = { version = "0.3", features = ["threading"] }

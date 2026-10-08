@@ -1,0 +1,31 @@
+codepoints: vocab 101, 1.000 sym/char, k 16, d 32, params 160549, train 6450989 sym, test 716784 sym
+  step 0/37799 train ~6.684 bpc  0s
+  step 1889/37799 train ~2.795 bpc  5s
+  step 3778/37799 train ~2.626 bpc  9s
+  step 5667/37799 train ~2.554 bpc  14s
+  step 7556/37799 train ~2.504 bpc  19s
+  step 9445/37799 train ~2.473 bpc  24s
+  step 11334/37799 train ~2.441 bpc  29s
+  step 13223/37799 train ~2.422 bpc  34s
+  step 15112/37799 train ~2.391 bpc  39s
+  step 17001/37799 train ~2.385 bpc  43s
+  step 18890/37799 train ~2.358 bpc  48s
+  step 20779/37799 train ~2.342 bpc  53s
+  step 22668/37799 train ~2.328 bpc  58s
+  step 24557/37799 train ~2.323 bpc  62s
+  step 26446/37799 train ~2.312 bpc  67s
+  step 28335/37799 train ~2.300 bpc  71s
+  step 30224/37799 train ~2.293 bpc  76s
+  step 32113/37799 train ~2.278 bpc  80s
+  step 34002/37799 train ~2.273 bpc  85s
+  step 35891/37799 train ~2.275 bpc  89s
+  step 37780/37799 train ~2.271 bpc  94s
+sample: 
+
+                                A sim, carmia tio Victoria seguir a abordecinumera desa na
+velha, não deitado de
+sua incidade! que eu
+repetera n'essa, immopia
+ponta do janella,, incontar os cadavam. O--Gonçalo alto o conversa. É respondeu razão, e amordando as
+acisadas as mãos perigos no Commulia,
+
