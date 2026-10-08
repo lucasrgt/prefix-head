@@ -8,4 +8,5 @@ pub mod monarch;
 pub mod osc;
 pub mod seq;
 pub mod sosc;
+pub mod tfm;
 mod train;

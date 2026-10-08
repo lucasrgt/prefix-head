@@ -2,6 +2,7 @@ use crate::kosc::{self, KOsc};
 use crate::osc::{self, Osc};
 use crate::rnn::{self, MinGru, State};
 use crate::sosc::{self, SelOsc};
+use crate::tfm::{self, Tfm};
 use std::path::Path;
 
 /// What the training, evaluation and moments code needs from a recurrent core.
@@ -94,3 +95,4 @@ delegate!(MinGru, rnn, "mingru");
 delegate!(Osc, osc, "osc");
 delegate!(SelOsc, sosc, "sosc");
 delegate!(KOsc, kosc, "kosc");
+delegate!(Tfm, tfm, "tfm");

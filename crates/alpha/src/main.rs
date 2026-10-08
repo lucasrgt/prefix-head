@@ -23,10 +23,12 @@ pub struct Args {
     pub extra: bool,
     pub select: String,
     pub policy: String,
+    pub heads: usize,
+    pub mlp: usize,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into() };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256 };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -48,6 +50,8 @@ fn args() -> Args {
             "--extra" => a.extra = val == "1",
             "--select" => a.select = val.clone(),
             "--policy" => a.policy = val.clone(),
+            "--heads" => a.heads = val.parse().unwrap(),
+            "--mlp" => a.mlp = val.parse().unwrap(),
             k => panic!("unknown flag {k}"),
         }
     }
