@@ -17,10 +17,11 @@ pub struct Args {
     pub layers: usize,
     pub seq: usize,
     pub chrono: f32,
+    pub stateful: usize,
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0 };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -36,6 +37,7 @@ fn args() -> Args {
             "--layers" => a.layers = val.parse().unwrap(),
             "--seq" => a.seq = val.parse().unwrap(),
             "--chrono" => a.chrono = val.parse().unwrap(),
+            "--stateful" => a.stateful = val.parse().unwrap(),
             k => panic!("unknown flag {k}"),
         }
     }

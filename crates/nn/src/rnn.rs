@@ -25,6 +25,8 @@ pub struct MinGru {
 
 pub struct Buf {
     n: usize,
+    /// Starting state per layer (streams × h); zero unless the caller carries state between windows.
+    pub h0: Vec<Vec<f32>>,
     u: Vec<Vec<f32>>,
     z: Vec<Vec<f32>>,
     c: Vec<Vec<f32>>,
@@ -93,6 +95,7 @@ impl MinGru {
         let v = |k: usize| (0..k).map(|_| vec![0.0; n * self.h]).collect::<Vec<_>>();
         Buf {
             n,
+            h0: Vec::new(),
             u: v(self.layers),
             z: v(self.layers),
             c: v(self.layers),
@@ -106,11 +109,14 @@ impl MinGru {
         }
     }
 
-    /// `x` is b×t input ids (row r = stream·t + step), `tgt` is b×t×F target factors; every
-    /// stream starts from a zero state. Returns Σ −ln p.
+    /// `x` is b×t input ids (row r = stream·t + step), `tgt` is b×t×F target factors; streams start
+    /// from `bf.h0` (zero when empty). Returns Σ −ln p.
     pub fn forward(&self, x: &[u32], tgt: &[u32], b: usize, t: usize, bf: &mut Buf) -> f64 {
         let (h, n) = (self.h, b * t);
         debug_assert_eq!(bf.n, n);
+        if bf.h0.len() != self.layers || bf.h0[0].len() != b * h {
+            bf.h0 = vec![vec![0.0; b * h]; self.layers];
+        }
         for (r, &id) in x.iter().enumerate() {
             bf.u[0][r * h..(r + 1) * h].copy_from_slice(&self.emb.w[id as usize * h..(id as usize + 1) * h]);
         }
@@ -126,7 +132,7 @@ impl MinGru {
             }
             for s in 0..b {
                 for j in 0..h {
-                    let mut prev = 0.0f32;
+                    let mut prev = bf.h0[l][s * h + j];
                     for k in 0..t {
                         let i = (s * t + k) * h + j;
                         let z = bf.z[l][i];
@@ -149,6 +155,25 @@ impl MinGru {
         self.head.forward(&bf.out, tgt, n, &mut bf.head)
     }
 
+    /// After `forward`, makes each stream's final state the next window's starting state
+    /// (truncated BPTT: no gradient flows across windows).
+    pub fn carry(&self, b: usize, t: usize, bf: &mut Buf) {
+        let h = self.h;
+        for l in 0..self.layers {
+            for s in 0..b {
+                let last = (s * t + t - 1) * h;
+                let (src, dst) = (&bf.hs[l][last..last + h], &mut bf.h0[l][s * h..(s + 1) * h]);
+                dst.copy_from_slice(src);
+            }
+        }
+    }
+
+    pub fn reset_stream(&self, s: usize, bf: &mut Buf) {
+        for l in bf.h0.iter_mut() {
+            l[s * self.h..(s + 1) * self.h].fill(0.0);
+        }
+    }
+
     /// Gradients of `scale`·loss after `forward` on the same batch.
     pub fn backward(&mut self, x: &[u32], tgt: &[u32], b: usize, t: usize, scale: f32, bf: &mut Buf) {
         let (h, n) = (self.h, b * t);
@@ -165,7 +190,7 @@ impl MinGru {
                         let i = (s * t + k) * h + j;
                         g += bf.tmp[i];
                         let z = bf.z[l][i];
-                        let prev = if k > 0 { bf.hs[l][i - h] } else { 0.0 };
+                        let prev = if k > 0 { bf.hs[l][i - h] } else { bf.h0[l][s * h + j] };
                         bf.dc[i] = g * z;
                         bf.dz[i] = g * (bf.c[l][i] - prev) * z * (1.0 - z);
                         g *= 1.0 - z;
@@ -313,6 +338,7 @@ mod tests {
         let mut rng = Rng::new(5);
         let (x, y) = batch(&mut rng, vocab, &radix, b, t);
         let mut bf = m.buf(b * t);
+        bf.h0 = (0..layers).map(|_| (0..b * h).map(|_| rng.f32()).collect()).collect();
         m.forward(&x, &y, b, t, &mut bf);
         m.backward(&x, &y, b, t, 1.0, &mut bf);
         let grads: Vec<Vec<f32>> = m.all_params().iter().map(|p| p.g.clone()).collect();
@@ -350,14 +376,21 @@ mod tests {
     }
 
     #[test]
-    fn streaming_inference_matches_batched_forward() {
+    fn streaming_inference_matches_windows_with_carried_state() {
         let radix = vec![3, 4];
         let (vocab, h, layers, t) = (12, 8, 2, 9);
         let m = MinGru::new(vocab, radix.clone(), h, layers, 3);
         let mut rng = Rng::new(8);
         let (x, y) = batch(&mut rng, vocab, &radix, 1, t);
-        let mut bf = m.buf(t);
-        let want = m.forward(&x, &y, 1, t, &mut bf);
+        let mut carried = Vec::new();
+        let mut want = 0.0f64;
+        for (lo, hi) in [(0, t / 2), (t / 2, t)] {
+            let mut bf = m.buf(hi - lo);
+            bf.h0 = carried;
+            want += m.forward(&x[lo..hi], &y[lo * 2..hi * 2], 1, hi - lo, &mut bf);
+            m.carry(1, hi - lo, &mut bf);
+            carried = bf.h0;
+        }
         let (mut st, mut s) = (m.state(), m.scratch());
         let mut out = vec![0u32; 2];
         let mut got = 0.0f64;
@@ -365,5 +398,6 @@ mod tests {
             got -= m.infer_step(x[k], &mut st, &mut s, |q, _, _| y[k * 2 + q], &mut out) as f64;
         }
         assert!((got - want).abs() < 1e-3 * want.abs(), "{got} vs {want}");
+        assert_eq!(st.0, carried);
     }
 }
