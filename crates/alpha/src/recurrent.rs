@@ -16,32 +16,32 @@ use tok::syll::from_digits;
 pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usize, test_chars: usize) {
     match a.core.as_str() {
         "osc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
-            let mut m = Osc::new(v, r, a.h, a.n, a.layers, a.seed);
+            let mut m = Osc::new(v, r, a.h, a.n, a.layers, a.rng_seed());
             if a.chrono > 0.0 {
-                m.chrono(a.chrono, a.seed);
+                m.chrono(a.chrono, a.rng_seed());
             }
             m
         }),
         "sosc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
-            let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.seed);
+            let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.rng_seed());
             if a.chrono > 0.0 {
-                m.chrono(a.chrono, a.seed);
+                m.chrono(a.chrono, a.rng_seed());
             }
             m
         }),
         "kosc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
-            let mut m = KOsc::new(v, r, a.h, a.n, a.layers, a.seed);
+            let mut m = KOsc::new(v, r, a.h, a.n, a.layers, a.rng_seed());
             if a.chrono > 0.0 {
-                m.chrono(a.chrono, a.seed);
+                m.chrono(a.chrono, a.rng_seed());
             }
             m
         }),
-        "tfm" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Tfm::new(v, r, a.h, a.heads, a.layers, a.mlp, a.seq, a.seed)),
-        "mamba" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Mamba::new(v, r, a.h, if a.di == 0 { a.h } else { a.di }, a.n, a.heads, a.layers, a.seed)),
+        "tfm" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Tfm::new(v, r, a.h, a.heads, a.layers, a.mlp, a.seq, a.rng_seed())),
+        "mamba" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Mamba::new(v, r, a.h, if a.di == 0 { a.h } else { a.di }, a.n, a.heads, a.layers, a.rng_seed())),
         "mingru" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
-            let mut m = MinGru::new(v, r, a.h, a.layers, a.seed);
+            let mut m = MinGru::new(v, r, a.h, a.layers, a.rng_seed());
             if a.chrono > 0.0 {
-                m.chrono(a.chrono, a.seed);
+                m.chrono(a.chrono, a.rng_seed());
             }
             m
         }),
@@ -146,7 +146,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
             "easy" => extra.sort_by(|&i, &j| scores[i - core_books].partial_cmp(&scores[j - core_books]).unwrap()),
             "hard" => extra.sort_by(|&i, &j| scores[j - core_books].partial_cmp(&scores[i - core_books]).unwrap()),
             "random" => {
-                let mut r = Rng::new(a.seed ^ 0x5e1);
+                let mut r = Rng::new(a.rng_seed() ^ 0x5e1);
                 let keys: Vec<u64> = (0..texts.len()).map(|_| r.next()).collect();
                 extra.sort_by_key(|&i| keys[i]);
             }
@@ -184,7 +184,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
     let (b, t) = (a.batch, a.seq);
     let steps = ((n_tr as f64 * a.epochs) / (b * t) as f64).ceil() as usize;
     let warm = 300.min(steps / 10);
-    let mut rng = Rng::new(a.seed ^ 0x9e37);
+    let mut rng = Rng::new(a.rng_seed() ^ 0x9e37);
     let mut bf = m.buf(b * t);
     let (mut x, mut y) = (vec![0u32; b * t], vec![0u32; b * t * f]);
     let (mut cursor, mut windows, mut book_of) = (vec![0usize; b], vec![0usize; b], vec![0usize; b]);
