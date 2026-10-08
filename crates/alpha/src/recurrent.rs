@@ -147,3 +147,52 @@ pub fn checkpoint_name(a: &Args) -> String {
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
     format!("mingru-{}-h{}-l{}-s{}{chrono}{stateful}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
+
+/// Scores the test text with a saved checkpoint `passes` times and reports µs and marginal package
+/// µJ per char, single-threaded and with 8 threads (8 contiguous segments, each from a cold state).
+pub fn score(a: &Args, test: &str, test_chars: usize) {
+    let root = ruler::results::root();
+    let books = ruler::corpus::books(&root.join("data/raw"));
+    let train: String = books.iter().map(|b| b.train.as_str()).collect();
+    let fact = parse(&a.alpha, &train);
+    let radix = fact.radix();
+    let f = radix.len();
+    let path = root.join("data/models").join(checkpoint_name(a));
+    let (m, _) = MinGru::load(&path).unwrap();
+    let te = fact.encode(test);
+    let te_ids = from_digits(&te, &radix);
+    let bos = m.vocab as u32;
+    let segment = |lo: usize, hi: usize| {
+        let (mut st, mut sc) = (m.state(), m.scratch());
+        let mut out = vec![0u32; f];
+        let mut nats = 0.0f64;
+        for k in lo..hi {
+            let input = if k == lo { bos } else { te_ids[k - 1] };
+            nats -= m.infer_step(input, &mut st, &mut sc, |q, _, _| te[k * f + q], &mut out) as f64;
+        }
+        nats
+    };
+    let rapl = ruler::energy::Rapl::open().expect("RAPL unreadable");
+    let n = te_ids.len();
+    for threads in [1usize, 8] {
+        let idle = rapl.idle_watts(std::time::Duration::from_secs(3));
+        let passes = a.epochs.max(1.0) as usize;
+        let mut nats = 0.0;
+        let (secs, joules) = rapl.measure(|| {
+            for _ in 0..passes {
+                nats = std::thread::scope(|s| {
+                    let hs: Vec<_> = (0..threads).map(|i| s.spawn(move || segment(n * i / threads, n * (i + 1) / threads))).collect();
+                    hs.into_iter().map(|h| h.join().unwrap()).sum::<f64>()
+                });
+            }
+        });
+        let chars = (test_chars * passes) as f64;
+        println!(
+            "mingru {} threads={threads}: {:.4} bpc, {:.3} us/char, idle {idle:.1} W, marginal {:.2} uJ/char ({passes} passes, {secs:.1} s)",
+            checkpoint_name(a),
+            nats / std::f64::consts::LN_2 / test_chars as f64,
+            secs * 1e6 / chars,
+            (joules - idle * secs) * 1e6 / chars
+        );
+    }
+}
