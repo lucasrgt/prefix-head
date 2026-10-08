@@ -2,12 +2,14 @@ use crate::Args;
 use kern::Rng;
 use nn::fmlp::FMlp;
 use tok::codec::Alphabet;
+use tok::group::Grouping;
 use tok::syll::{Syllables, from_digits, to_digits};
 use std::time::Instant;
 
 enum Fact {
     Syl(Syllables),
     Digits(Alphabet, Vec<usize>),
+    Grouped(Alphabet, Grouping),
 }
 
 impl Fact {
@@ -15,6 +17,7 @@ impl Fact {
         match self {
             Fact::Syl(s) => s.radix(),
             Fact::Digits(_, r) => r.clone(),
+            Fact::Grouped(_, g) => vec![g.classes, g.m],
         }
     }
 
@@ -22,6 +25,7 @@ impl Fact {
         match self {
             Fact::Syl(s) => s.encode(text),
             Fact::Digits(a, r) => to_digits(&a.encode(text), r),
+            Fact::Grouped(a, g) => to_digits(&g.encode(&a.encode(text)), &[g.classes, g.m]),
         }
     }
 
@@ -29,6 +33,7 @@ impl Fact {
         match self {
             Fact::Syl(s) => s.decode(syms),
             Fact::Digits(a, r) => a.decode(&from_digits(syms, r)),
+            Fact::Grouped(a, g) => a.decode(&g.decode(&from_digits(syms, &[g.classes, g.m]))),
         }
     }
 }
@@ -36,9 +41,43 @@ impl Fact {
 /// `syl` = Hangul-style syllable blocks; `nd<radix>:<alphabet>` = flat alphabet as mixed-radix
 /// digits, e.g. `nd8x8x8x16:bpe8192`, or `nd1:<alphabet>` for a single full-softmax factor;
 /// flags after `nd`: `c` = output matrix per prefix, `f` = full-vocabulary input embedding (`ndcf16x16:bytes`).
+/// `grp-<key>-<m>:<bpe>`: two factors (class, slot); tokens sorted by `first` symbols (a prefix
+/// trie), `last` symbols (shared endings), `recipe` (left ingredient of their merge) or `freq`uency,
+/// then cut into classes of `m`.
+fn grouped(name: &str, train: &str) -> Fact {
+    let (spec, inner) = name.split_once(':').expect("grp-<key>-<m>:<alphabet>");
+    let mut it = spec.split('-').skip(1);
+    let (key, m) = (it.next().unwrap(), it.next().unwrap().parse::<usize>().unwrap());
+    let alpha = tok::by_name(inner, train);
+    let Alphabet::Bpe(bpe) = &alpha else { panic!("grouping needs a BPE alphabet") };
+    let v = bpe.vocab() as u32;
+    let piece = |t: u32| bpe.piece(t).iter().map(|&x| x as u64).collect::<Vec<u64>>();
+    let keys: Vec<(u64, Vec<u64>)> = match key {
+        "first" => (0..v).map(|t| (piece(t)[0], piece(t))).collect(),
+        "last" => (0..v).map(|t| (*piece(t).last().unwrap(), piece(t).into_iter().rev().collect())).collect(),
+        "recipe" => {
+            let r = bpe.recipes();
+            (0..v).map(|t| (r[t as usize].map_or(t, |(l, _)| l) as u64, piece(t))).collect()
+        }
+        "freq" => {
+            let mut n = vec![0u64; v as usize];
+            for t in alpha.encode(train) {
+                n[t as usize] += 1;
+            }
+            (0..v).map(|t| (0, vec![u64::MAX - n[t as usize]])).collect()
+        }
+        k => panic!("unknown grouping key {k}"),
+    };
+    let g = Grouping::build(keys, m);
+    Fact::Grouped(alpha, g)
+}
+
 fn parse(name: &str, train: &str) -> Fact {
     if name == "syl" {
         return Fact::Syl(Syllables::train(train));
+    }
+    if name.starts_with("grp-") {
+        return grouped(name, train);
     }
     let rest = name.strip_prefix("nd").map(|r| r.trim_start_matches(['c', 'f']));
     let (spec, inner) = rest.and_then(|s| s.split_once(':')).expect("nd<radix>:<alphabet> or ndc<radix>:<alphabet>");
@@ -77,7 +116,8 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let k = (a.ctx_chars * tpc).ceil() as usize;
     let d = 32;
     let flags = a.alpha.strip_prefix("nd").map_or("", |r| &r[..r.len() - r.trim_start_matches(['c', 'f']).len()]);
-    let mut m = FMlp::new(radix.clone(), d, k, a.h, a.seed, flags.contains('c'), flags.contains('f'));
+    let full = a.alpha.starts_with("grp-");
+    let mut m = FMlp::new(radix.clone(), d, k, a.h, a.seed, full || flags.contains('c'), full || flags.contains('f'));
     let radix_s = radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
     eprintln!("{}: radix {radix_s}, {tpc:.3} tok/char, k {k}, params {}, train {tr_tok} tok, test {te_tok} tok", a.alpha, m.params());
 
@@ -132,8 +172,9 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"radix\":\"{radix_s}\",\"vocab\":{},\"head\":{},\"sym_per_char\":{te_tpc:.4},\"k\":{k},\"d\":{d},\"h\":{},\"params\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"codec_secs\":{codec_secs:.1},\"test_bpc\":{test_bpc:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"seed\":{},\"radix\":\"{radix_s}\",\"vocab\":{},\"head\":{},\"sym_per_char\":{te_tpc:.4},\"k\":{k},\"d\":{d},\"h\":{},\"params\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"codec_secs\":{codec_secs:.1},\"test_bpc\":{test_bpc:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
+        a.seed,
         radix.iter().product::<usize>(),
         radix.iter().sum::<usize>(),
         m.h,

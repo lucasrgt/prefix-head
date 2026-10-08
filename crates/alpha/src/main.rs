@@ -43,7 +43,7 @@ fn main() {
         (train, test) = (g2("train"), g2("test"));
     }
 
-    if a.alpha.starts_with("syl") || a.alpha.starts_with("nd") {
+    if a.alpha.starts_with("syl") || a.alpha.starts_with("nd") || a.alpha.starts_with("grp-") {
         factored::run(&a, &train, &test, train_chars, test_chars);
         return;
     }
