@@ -14,6 +14,8 @@ pub struct Head {
 }
 
 pub struct HeadBuf {
+    /// −ln p of each row's token from the last `forward`.
+    pub row_loss: Vec<f32>,
     hs: Vec<Vec<f32>>,
     zs: Vec<Vec<f32>>,
     dh: Vec<f32>,
@@ -59,6 +61,7 @@ impl Head {
 
     pub fn buf(&self, n: usize) -> HeadBuf {
         HeadBuf {
+            row_loss: vec![0.0; n],
             hs: (0..self.f()).map(|_| vec![0.0; n * self.h]).collect(),
             zs: self.radix.iter().map(|&v| vec![0.0; n * v]).collect(),
             dh: vec![0.0; n * self.h],
@@ -69,6 +72,7 @@ impl Head {
     pub fn forward(&self, x: &[f32], tgt: &[u32], n: usize, b: &mut HeadBuf) -> f64 {
         let (h, f) = (self.h, self.f());
         let mut loss = 0.0f64;
+        b.row_loss[..n].fill(0.0);
         for q in 0..f {
             let v = self.radix[q];
             for i in 0..n {
@@ -108,6 +112,7 @@ impl Head {
                     *z -= lse;
                 }
                 loss -= row[tgt[i * f + q] as usize] as f64;
+                b.row_loss[i] -= row[tgt[i * f + q] as usize];
             }
         }
         loss

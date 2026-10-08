@@ -11,30 +11,30 @@ use tok::syll::from_digits;
 /// minGRU over a factored alphabet (`grp-first-91:bpe8192`, `nd…`). Trains on random windows of
 /// `seq` tokens from a zero state; evaluates on the test text streamed once with the state carried
 /// throughout (`test_bpc`) and with the state reset every `seq` tokens (`bpc_reset`, training's view).
-pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: usize) {
+pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usize, test_chars: usize) {
     match a.core.as_str() {
-        "osc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+        "osc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = Osc::new(v, r, a.h, a.n, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
             }
             m
         }),
-        "sosc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+        "sosc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
             }
             m
         }),
-        "kosc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+        "kosc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = KOsc::new(v, r, a.h, a.n, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
             }
             m
         }),
-        "mingru" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+        "mingru" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = MinGru::new(v, r, a.h, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
@@ -45,18 +45,123 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
     }
 }
 
-fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: usize, make: impl Fn(usize, Vec<usize>) -> M) {
+/// Chooses which book each training stream reads next: uniformly by length, inside a selected
+/// subset, or by learning progress (Graves et al. 2017: books whose loss drops fastest when
+/// trained on are picked more, with ε of length-weighted exploration).
+struct Sampler {
+    lens: Vec<usize>,
+    allowed: Vec<usize>,
+    progress: Vec<f64>,
+    lp: bool,
+}
+
+impl Sampler {
+    fn pick(&self, rng: &mut Rng, min_len: usize) -> usize {
+        let u = |rng: &mut Rng| (rng.next() >> 11) as f64 / (1u64 << 53) as f64;
+        let ok: Vec<usize> = self.allowed.iter().copied().filter(|&i| self.lens[i] > min_len).collect();
+        if ok.len() == 1 {
+            return ok[0];
+        }
+        let by_len = |rng: &mut Rng| {
+            let total: f64 = ok.iter().map(|&i| self.lens[i] as f64).sum();
+            let mut r = u(rng) * total;
+            for &i in &ok {
+                r -= self.lens[i] as f64;
+                if r <= 0.0 {
+                    return i;
+                }
+            }
+            *ok.last().unwrap()
+        };
+        if !self.lp || u(rng) < 0.3 {
+            return by_len(rng);
+        }
+        let scale = ok.iter().map(|&i| self.progress[i].abs()).sum::<f64>() / ok.len() as f64 + 1e-9;
+        let w: Vec<f64> = ok.iter().map(|&i| (self.progress[i] / scale).min(30.0).exp()).collect();
+        let mut r = u(rng) * w.iter().sum::<f64>();
+        for (k, &i) in ok.iter().enumerate() {
+            r -= w[k];
+            if r <= 0.0 {
+                return i;
+            }
+        }
+        *ok.last().unwrap()
+    }
+}
+
+/// Bits per char of each book's first 20k chars under the 14-book reference model (its own tokenizer).
+fn reference_scores(extra: &[String]) -> Vec<f64> {
+    let root = ruler::results::root();
+    let (train14, _) = ruler::corpus::load(&root.join("data/raw"));
+    let fact = parse("grp-first-91:bpe8192", &train14);
+    let radix = fact.radix();
+    let f = radix.len();
+    let path = root.join("data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin");
+    let (m, _) = SelOsc::load(&path).expect("reference checkpoint");
+    let score = |text: &str| {
+        let cut = text.char_indices().nth(20_000).map_or(text.len(), |(i, _)| i);
+        let chars = text[..cut].chars().count().max(1);
+        let d = fact.encode(&text[..cut]);
+        let ids = from_digits(&d, &radix);
+        let (mut st, mut sc) = (m.state(), m.scratch());
+        let mut out = vec![0u32; f];
+        let mut nats = 0.0f64;
+        for k in 0..ids.len() {
+            let input = if k == 0 { m.vocab() as u32 } else { ids[k - 1] };
+            nats -= m.infer_step(input, &mut st, &mut sc, |q, _, _| d[k * f + q], &mut out) as f64;
+        }
+        nats / std::f64::consts::LN_2 / chars as f64
+    };
+    let chunk = extra.len().div_ceil(8).max(1);
+    std::thread::scope(|s| {
+        let hs: Vec<_> = extra.chunks(chunk).map(|c| s.spawn(|| c.iter().map(|t| score(t)).collect::<Vec<f64>>())).collect();
+        hs.into_iter().flat_map(|h| h.join().unwrap()).collect()
+    })
+}
+
+fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train_chars: usize, test_chars: usize, make: impl Fn(usize, Vec<usize>) -> M) {
     let fact = parse(&a.alpha, train);
     let radix = fact.radix();
     let f = radix.len();
     let vocab: usize = radix.iter().product();
     assert!(vocab <= 1 << 20, "input vocabulary {vocab} too large for a full embedding");
-    let tr = fact.encode(train);
+    let texts: Vec<&str> = if books.is_empty() { vec![train] } else { books.iter().map(|s| s.as_str()).collect() };
+    let book_tr: Vec<Vec<u32>> = texts.iter().map(|t| fact.encode(t)).collect();
+    let book_ids: Vec<Vec<u32>> = book_tr.iter().map(|d| from_digits(d, &radix)).collect();
     let te = fact.encode(test);
     assert_eq!(fact.decode(&te), test, "lossless");
-    let tr_ids = from_digits(&tr, &radix);
     let te_ids = from_digits(&te, &radix);
-    let (n_tr, n_te) = (tr_ids.len(), te_ids.len());
+    let n_tr: usize = book_ids.iter().map(|b| b.len()).sum();
+    let n_te = te_ids.len();
+    let core_books = if books.is_empty() { 1 } else { 14 };
+    let mut allowed: Vec<usize> = (0..texts.len()).collect();
+    if a.select != "all" {
+        let scores = reference_scores(&books[core_books..]);
+        let mut extra: Vec<usize> = (core_books..texts.len()).collect();
+        match a.select.as_str() {
+            "easy" => extra.sort_by(|&i, &j| scores[i - core_books].partial_cmp(&scores[j - core_books]).unwrap()),
+            "hard" => extra.sort_by(|&i, &j| scores[j - core_books].partial_cmp(&scores[i - core_books]).unwrap()),
+            "random" => {
+                let mut r = Rng::new(a.seed ^ 0x5e1);
+                extra.sort_by_key(|_| r.next());
+            }
+            s => panic!("unknown select {s}"),
+        }
+        let half: usize = extra.iter().map(|&i| book_ids[i].len()).sum::<usize>() / 2;
+        let mut kept = Vec::new();
+        let mut acc = 0;
+        for i in extra {
+            if acc >= half {
+                break;
+            }
+            acc += book_ids[i].len();
+            kept.push(i);
+        }
+        let mean = |v: &[usize]| v.iter().map(|&i| scores[i - core_books]).sum::<f64>() / v.len().max(1) as f64;
+        eprintln!("select {}: {} of {} extra books, {acc} tokens, mean reference bpc {:.3} (all {:.3})", a.select, kept.len(), texts.len() - core_books, mean(&kept), scores.iter().sum::<f64>() / scores.len() as f64);
+        allowed = (0..core_books).chain(kept).collect();
+    }
+    let mut sampler = Sampler { lens: book_ids.iter().map(|b| b.len()).collect(), allowed, progress: vec![0.0; texts.len()], lp: a.policy == "lp" };
 
     let mut m = make(vocab, radix.clone());
     let radix_s = radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
@@ -77,7 +182,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
     let mut rng = Rng::new(a.seed ^ 0x9e37);
     let mut bf = m.buf(b * t);
     let (mut x, mut y) = (vec![0u32; b * t], vec![0u32; b * t * f]);
-    let (mut cursor, mut windows) = (vec![0usize; b], vec![0usize; b]);
+    let (mut cursor, mut windows, mut book_of) = (vec![0usize; b], vec![0usize; b], vec![0usize; b]);
     let t1 = std::time::Instant::now();
     let mut ema = 0.0;
     let tpc = n_tr as f64 / train_chars as f64;
@@ -89,28 +194,42 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
             a.lr * (0.05 + 0.95 * 0.5 * (1.0 + (std::f32::consts::PI * p).cos()))
         };
         for stream in 0..b {
-            if a.stateful == 0 || windows[stream] == 0 || cursor[stream] + t > n_tr {
-                cursor[stream] = (rng.next() % (n_tr - t) as u64) as usize;
+            let bk = book_of[stream];
+            if a.stateful == 0 || windows[stream] == 0 || cursor[stream] + t > book_ids[bk].len() {
+                let bk = sampler.pick(&mut rng, t + 1);
+                book_of[stream] = bk;
+                cursor[stream] = (rng.next() % (book_ids[bk].len() - t) as u64) as usize;
                 windows[stream] = a.stateful.max(1);
                 if a.stateful > 0 {
                     m.reset_stream(stream, &mut bf);
                 }
             }
+            let (ids, tr) = (&book_ids[book_of[stream]], &book_tr[book_of[stream]]);
             let start = cursor[stream];
             for k in 0..t {
                 let pos = start + k;
-                x[stream * t + k] = if pos == 0 { vocab as u32 } else { tr_ids[pos - 1] };
+                x[stream * t + k] = if pos == 0 { vocab as u32 } else { ids[pos - 1] };
                 y[(stream * t + k) * f..(stream * t + k + 1) * f].copy_from_slice(&tr[pos * f..(pos + 1) * f]);
             }
             cursor[stream] += t;
             windows[stream] -= 1;
         }
         let loss = m.forward(&x, &y, b, t, &mut bf) / (b * t) as f64;
+        let before: Vec<f32> = if sampler.lp { (0..b).map(|s| m.row_losses(&bf)[s * t..(s + 1) * t].iter().sum()).collect() } else { Vec::new() };
         m.backward(&x, &y, b, t, 1.0 / (b * t) as f32, &mut bf);
+        let norm = m.step(lr, s as i32 + 1, 1.0);
+        if sampler.lp {
+            m.forward(&x, &y, b, t, &mut bf);
+            for stream in 0..b {
+                let after: f32 = m.row_losses(&bf)[stream * t..(stream + 1) * t].iter().sum();
+                let gain = (before[stream] - after) as f64 / t as f64;
+                let p = &mut sampler.progress[book_of[stream]];
+                *p = 0.7 * *p + 0.3 * gain;
+            }
+        }
         if a.stateful > 0 {
             m.carry(b, t, &mut bf);
         }
-        let norm = m.step(lr, s as i32 + 1, 1.0);
         ema = if s == 0 { loss } else { 0.99 * ema + 0.01 * loss };
         if s % (steps / 20).max(1) == 0 {
             eprintln!("  step {s}/{steps} train ~{:.3} bpc  |g| {norm:.2}  {:.0}s", ema / std::f64::consts::LN_2 * tpc, t1.elapsed().as_secs_f64());
@@ -157,7 +276,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         M::KIND,
         a.n,
@@ -166,6 +285,9 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
         a.layers,
         a.chrono,
         a.stateful,
+        a.select,
+        a.policy,
+        steps * b * t,
         m.params(),
         m.state_bytes(),
         a.epochs
@@ -173,6 +295,9 @@ fn train_core<M: Seq>(a: &Args, train: &str, test: &str, train_chars: usize, tes
     println!("{line}");
     eprintln!("sample: {sample}\n");
     ruler::results::append("alpha.jsonl", &line);
+    if a.epochs < 0.5 {
+        return;
+    }
     let dir = ruler::results::root().join("data/models");
     std::fs::create_dir_all(&dir).unwrap();
     let path = dir.join(checkpoint_name(a));
@@ -184,7 +309,7 @@ pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
     let core = if a.core == "mingru" { "mingru".into() } else { format!("{}-n{}", a.core, a.n) };
-    let extra = if a.extra { "-extra" } else { "" };
+    let extra = if a.extra { format!("-extra-{}-{}-e{}", a.select, a.policy, a.epochs) } else { String::new() };
     format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}{extra}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
 

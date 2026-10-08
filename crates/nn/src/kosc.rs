@@ -166,6 +166,10 @@ impl KOsc {
         self.head.forward(&bf.out, tgt, rows, &mut bf.head)
     }
 
+    pub fn row_losses<'b>(&self, bf: &'b Buf) -> &'b [f32] {
+        &bf.head.row_loss
+    }
+
     pub fn carry(&self, b: usize, t: usize, bf: &mut Buf) {
         let n2 = 2 * self.n;
         for l in 0..self.layers {

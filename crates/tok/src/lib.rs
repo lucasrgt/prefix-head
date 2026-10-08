@@ -18,6 +18,13 @@ pub fn by_name(name: &str, train: &str) -> Alphabet {
         "morse" => Alphabet::Morse,
         "octal" => Alphabet::Octal,
         "capbytes" => Alphabet::CapBytes,
+        s if s.starts_with("sbpe") => {
+            let (total, words) = s["sbpe".len()..].split_once('-').expect("sbpe<total>-<word merges>");
+            let mut b = Bpe::train_with(train, Base::Bytes, words.parse().unwrap(), Crit::Freq);
+            let cut = train.char_indices().nth(20_000_000).map_or(train.len(), |(i, _)| i);
+            b.extend_across(&train[..cut], total.parse().unwrap());
+            Alphabet::Bpe(b)
+        }
         s if ["bpe", "bbpe", "g2bpe", "cpbpe", "capbpe"].iter().any(|p| s.starts_with(p)) => {
             let (head, crit) = match s.split_once('-') {
                 Some((h, "sig")) => (h, Crit::SigGain),
