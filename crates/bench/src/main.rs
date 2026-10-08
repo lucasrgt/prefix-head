@@ -1,32 +1,9 @@
 use kern::Rng;
+use ruler::energy::Rapl;
 use kern::dense::*;
 use kern::ternary::*;
 use std::hint::black_box;
 use std::time::{Duration, Instant};
-
-const RAPL: &str = "/sys/class/powercap/intel-rapl:0";
-
-struct Rapl {
-    max_uj: u64,
-}
-
-impl Rapl {
-    fn open() -> Option<Self> {
-        Self::read_uj()?;
-        let max_uj = std::fs::read_to_string(format!("{RAPL}/max_energy_range_uj")).ok()?.trim().parse().ok()?;
-        Some(Self { max_uj })
-    }
-
-    fn read_uj() -> Option<u64> {
-        std::fs::read_to_string(format!("{RAPL}/energy_uj")).ok()?.trim().parse().ok()
-    }
-
-    fn joules_since(&self, start: u64) -> f64 {
-        let end = Self::read_uj().unwrap_or(start);
-        let d = if end >= start { end - start } else { end + self.max_uj - start };
-        d as f64 / 1e6
-    }
-}
 
 struct Stat {
     ns: f64,
@@ -39,7 +16,7 @@ fn measure(rapl: &Option<Rapl>, mut f: impl FnMut()) -> Stat {
     }
     let budget = Duration::from_millis(600);
     let mut samples = Vec::new();
-    let e0 = rapl.as_ref().and_then(|_| Rapl::read_uj());
+    let e0 = rapl.as_ref().map(Rapl::read_uj);
     let t0 = Instant::now();
     while t0.elapsed() < budget || samples.len() < 5 {
         let t = Instant::now();
@@ -70,7 +47,7 @@ fn report(name: &str, rows: usize, cols: usize, bytes: usize, s: Stat) {
 fn main() {
     let rapl = Rapl::open();
     if rapl.is_none() {
-        eprintln!("RAPL unreadable: sudo chmod o+r {RAPL}/energy_uj");
+        eprintln!("RAPL unreadable: sudo chmod o+r /sys/class/powercap/intel-rapl:0/energy_uj");
     }
     let only = std::env::args().nth(1);
     let want = |k: &str| only.as_deref().is_none_or(|o| k.contains(o));

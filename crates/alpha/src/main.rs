@@ -1,14 +1,6 @@
-mod bpe;
-mod codec;
-mod corpus;
 mod factored;
-mod fmlp;
-mod mlp;
-mod syll;
 
-use codec::Alphabet;
 use kern::Rng;
-use std::io::Write;
 use std::time::Instant;
 
 pub struct Args {
@@ -40,45 +32,10 @@ fn args() -> Args {
     a
 }
 
-pub fn build_alpha(name: &str, train: &str) -> Alphabet {
-    match name {
-        "bits" => Alphabet::Bits,
-        "nibbles" => Alphabet::Nibbles,
-        "braille" => Alphabet::Braille,
-        "bytes" => Alphabet::Bytes,
-        "g2" => Alphabet::Cells,
-        "codepoints" => Alphabet::Codepoints,
-        "morse" => Alphabet::Morse,
-        "octal" => Alphabet::Octal,
-        "capbytes" => Alphabet::CapBytes,
-        s if ["bpe", "bbpe", "g2bpe", "cpbpe", "capbpe"].iter().any(|p| s.starts_with(p)) => {
-            let (head, crit) = match s.split_once('-') {
-                Some((h, "sig")) => (h, bpe::Crit::SigGain),
-                Some((h, "wp")) => (h, bpe::Crit::WordPiece),
-                None => (s, bpe::Crit::Freq),
-                _ => panic!("unknown bpe criterion in {s}"),
-            };
-            let (base, n) = if let Some(n) = head.strip_prefix("bbpe") {
-                (bpe::Base::Braille, n)
-            } else if let Some(n) = head.strip_prefix("g2bpe") {
-                (bpe::Base::Cells, n)
-            } else if let Some(n) = head.strip_prefix("cpbpe") {
-                (bpe::Base::Codepoints, n)
-            } else if let Some(n) = head.strip_prefix("capbpe") {
-                (bpe::Base::CapBytes, n)
-            } else {
-                (bpe::Base::Bytes, &head[3..])
-            };
-            Alphabet::Bpe(bpe::Bpe::train_with(train, base, n.parse().unwrap(), crit))
-        }
-        s => panic!("unknown alphabet {s}"),
-    }
-}
-
 fn main() {
     let a = args();
-    let root = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("../..");
-    let (mut train, mut test) = corpus::load(&root.join("data/raw"));
+    let root = ruler::results::root();
+    let (mut train, mut test) = ruler::corpus::load(&root.join("data/raw"));
     let train_chars = train.chars().count();
     let test_chars = test.chars().count();
     if a.alpha.starts_with("g2") {
@@ -87,12 +44,12 @@ fn main() {
     }
 
     if a.alpha.starts_with("syl") || a.alpha.starts_with("nd") {
-        factored::run(&a, &root, &train, &test, train_chars, test_chars);
+        factored::run(&a, &train, &test, train_chars, test_chars);
         return;
     }
 
     let t0 = Instant::now();
-    let alpha = build_alpha(&a.alpha, &train);
+    let alpha = tok::by_name(&a.alpha, &train);
     let tr = alpha.encode(&train);
     let te = alpha.encode(&test);
     assert_eq!(alpha.decode(&te), test, "lossless");
@@ -102,7 +59,7 @@ fn main() {
     let v = alpha.vocab();
     let d = v.min(32);
     let k = (a.ctx_chars * spc).ceil() as usize;
-    let mut m = mlp::Mlp::new(v, d, k, a.h, a.seed);
+    let mut m = nn::mlp::Mlp::new(v, d, k, a.h, a.seed);
     eprintln!(
         "{}: vocab {v}, {spc:.3} sym/char, k {k}, d {d}, params {}, train {} sym, test {} sym",
         alpha.name(),
@@ -165,7 +122,5 @@ fn main() {
     );
     println!("{line}");
     eprintln!("sample: {sample}\n");
-    std::fs::create_dir_all(root.join("results")).unwrap();
-    let mut f = std::fs::OpenOptions::new().create(true).append(true).open(root.join("results/alpha.jsonl")).unwrap();
-    writeln!(f, "{line}").unwrap();
+    ruler::results::append("alpha.jsonl", &line);
 }

@@ -1,10 +1,8 @@
-use crate::codec::Alphabet;
-use crate::fmlp::FMlp;
-use crate::syll::{Syllables, from_digits, to_digits};
-use crate::{Args, build_alpha};
+use crate::Args;
 use kern::Rng;
-use std::io::Write;
-use std::path::Path;
+use nn::fmlp::FMlp;
+use tok::codec::Alphabet;
+use tok::syll::{Syllables, from_digits, to_digits};
 use std::time::Instant;
 
 enum Fact {
@@ -44,7 +42,7 @@ fn parse(name: &str, train: &str) -> Fact {
     }
     let rest = name.strip_prefix("nd").map(|r| r.trim_start_matches(['c', 'f']));
     let (spec, inner) = rest.and_then(|s| s.split_once(':')).expect("nd<radix>:<alphabet> or ndc<radix>:<alphabet>");
-    let alpha = build_alpha(inner, train);
+    let alpha = tok::by_name(inner, train);
     let radix: Vec<usize> = if spec == "1" { vec![alpha.vocab()] } else { spec.split('x').map(|r| r.parse().unwrap()).collect() };
     assert!(radix.iter().product::<usize>() >= alpha.vocab(), "radix {radix:?} too small for {inner}");
     Fact::Digits(alpha, radix)
@@ -63,7 +61,7 @@ fn sample_logits(logits: &[f32], temp: f32, rng: &mut Rng) -> u32 {
     p.len() as u32 - 1
 }
 
-pub fn run(a: &Args, root: &Path, train: &str, test: &str, train_chars: usize, test_chars: usize) {
+pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: usize) {
     let t0 = Instant::now();
     let fact = parse(&a.alpha, train);
     let radix = fact.radix();
@@ -144,7 +142,5 @@ pub fn run(a: &Args, root: &Path, train: &str, test: &str, train_chars: usize, t
     );
     println!("{line}");
     eprintln!("sample: {sample}\n");
-    std::fs::create_dir_all(root.join("results")).unwrap();
-    let mut fh = std::fs::OpenOptions::new().create(true).append(true).open(root.join("results/alpha.jsonl")).unwrap();
-    writeln!(fh, "{line}").unwrap();
+    ruler::results::append("alpha.jsonl", &line);
 }
