@@ -4,6 +4,7 @@ use crate::recurrent::checkpoint_name;
 use nn::osc::Osc;
 use nn::rnn::{MinGru, State};
 use nn::seq::Seq;
+use nn::kosc::KOsc;
 use nn::sosc::SelOsc;
 use ruler::energy::Rapl;
 use tok::syll::from_digits;
@@ -44,6 +45,7 @@ pub fn run(a: &Args) {
     match a.core.as_str() {
         "osc" => probe::<Osc>(a),
         "sosc" => probe::<SelOsc>(a),
+        "kosc" => probe::<KOsc>(a),
         _ => probe::<MinGru>(a),
     }
 }

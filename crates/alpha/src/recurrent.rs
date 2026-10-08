@@ -4,6 +4,7 @@ use kern::Rng;
 use nn::osc::Osc;
 use nn::rnn::MinGru;
 use nn::seq::Seq;
+use nn::kosc::KOsc;
 use nn::sosc::SelOsc;
 use tok::syll::from_digits;
 
@@ -21,6 +22,13 @@ pub fn run(a: &Args, train: &str, test: &str, train_chars: usize, test_chars: us
         }),
         "sosc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
             let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.seed);
+            if a.chrono > 0.0 {
+                m.chrono(a.chrono, a.seed);
+            }
+            m
+        }),
+        "kosc" => train_core(a, train, test, train_chars, test_chars, |v, r| {
+            let mut m = KOsc::new(v, r, a.h, a.n, a.layers, a.seed);
             if a.chrono > 0.0 {
                 m.chrono(a.chrono, a.seed);
             }
@@ -185,6 +193,7 @@ pub fn score(a: &Args, test: &str, test_chars: usize) {
     match a.core.as_str() {
         "osc" => score_core::<Osc>(a, test, test_chars),
         "sosc" => score_core::<SelOsc>(a, test, test_chars),
+        "kosc" => score_core::<KOsc>(a, test, test_chars),
         _ => score_core::<MinGru>(a, test, test_chars),
     }
 }
