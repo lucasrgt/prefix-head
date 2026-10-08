@@ -5,4 +5,5 @@ version.workspace = true
 
 [dependencies]
 kern = { path = "../kern" }
+nn = { path = "../nn" }
 ruler = { path = "../ruler" }

@@ -1,5 +1,7 @@
 # frugal
 
+**Desperdício mínimo de conhecimento e computação.**
+
 Inteligência por joule, CPU-only, em hardware doméstico. Hiperotimização de cada detalhe desde o dia 1.
 
 ## Objetivo

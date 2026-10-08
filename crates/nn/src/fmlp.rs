@@ -1,3 +1,4 @@
+use crate::fast::{gemv_rows, logsumexp, tanh_inplace};
 use crate::train::{Param, gemm};
 use kern::Rng;
 
@@ -22,6 +23,14 @@ pub struct FMlp {
     cond: Vec<Param>,
     w2: Vec<Param>,
     b2: Vec<Param>,
+}
+
+/// Reusable buffers for `infer_step`, so generation allocates nothing per token.
+pub struct Scratch {
+    x: Vec<f32>,
+    pre: Vec<f32>,
+    hq: Vec<f32>,
+    logits: Vec<f32>,
 }
 
 pub struct Batch {
@@ -301,6 +310,48 @@ impl FMlp {
             }
             out[q] = pick(q, &logits);
         }
+    }
+
+    pub fn scratch(&self) -> Scratch {
+        let vmax = self.radix.iter().copied().max().unwrap();
+        Scratch { x: vec![0.0; self.k * self.d], pre: vec![0.0; self.h], hq: vec![0.0; self.h], logits: vec![0.0; vmax] }
+    }
+
+    /// One generated token on one core with SIMD kernels and fast tanh/exp. `pick(q, logits, lse)`
+    /// chooses factor q (log p = logit − lse); returns ln p(token) of the picked factors.
+    pub fn infer_step(&self, ctx: &[u32], s: &mut Scratch, mut pick: impl FnMut(usize, &[f32], f32) -> u32, out: &mut [u32]) -> f32 {
+        let (h, d, f) = (self.h, self.d, self.f());
+        s.x.fill(0.0);
+        for j in 0..self.k {
+            let slot = &mut s.x[j * d..(j + 1) * d];
+            for (tb, row) in self.rows(&ctx[j * f..(j + 1) * f]) {
+                for (a, &e) in slot.iter_mut().zip(&self.ein[tb].w[row * d..(row + 1) * d]) {
+                    *a += e;
+                }
+            }
+        }
+        s.pre.copy_from_slice(&self.b1.w);
+        gemv_rows(&s.x, &self.w1.w, h, &mut s.pre);
+        let mut logp = 0.0;
+        for q in 0..f {
+            let v = self.radix[q];
+            s.hq.copy_from_slice(&s.pre);
+            for g in 0..q {
+                let c = out[g] as usize;
+                for (a, &e) in s.hq.iter_mut().zip(&self.cond[g].w[c * h..(c + 1) * h]) {
+                    *a += e;
+                }
+            }
+            tanh_inplace(&mut s.hq);
+            let p = self.prefix(out, q);
+            let logits = &mut s.logits[..v];
+            logits.copy_from_slice(&self.b2[q].w[p * v..(p + 1) * v]);
+            gemv_rows(&s.hq, &self.w2[q].w[p * h * v..(p + 1) * h * v], v, logits);
+            let lse = logsumexp(logits);
+            out[q] = pick(q, logits, lse);
+            logp += logits[out[q] as usize] - lse;
+        }
+        logp
     }
 
     pub fn context_of(&self, seq: &[u32], t: usize) -> Vec<u32> {
