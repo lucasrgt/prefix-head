@@ -54,3 +54,19 @@ Conclusões:
 Próximos: 3 sementes (1D vs ndcf 2D); varrer vocabulário 8k→65k com cabeça 2D; eixos com significado (morfológicos) + generalização para palavras inéditas; sílabas com as correções.
 
 Correção (2026-10-08, depois da rodada): o FMlp alocava uma tabela de condicionamento para o último fator, que nunca é lida. As contagens de `params` dos runs `nd*` acima estão infladas em V_último × h (nd1:bpe8192: 4,51M → 2,41M reais; ndcf91x91:bpe8192: 2,50M → 2,48M). Os bpc não mudam de natureza, mas a inicialização muda, então reruns diferem dentro do ruído de semente.
+
+# Agrupamento das classes da cabeça 2D — 2026-10-08 (tok::group, `grp-<chave>-91:bpe8192`)
+
+Mesma forma 91×91, mesmos 2,48M parâmetros, 24.022 MACs/char; só muda quais tokens dividem classe (ordenados pela chave e cortados a cada 91). Duas sementes.
+
+| run | semente 1 | semente 2 | média |
+|---|---|---|---|
+| ndcf91x91:bpe8192 | 2.2490 | 2.2474 | 2.2482 |
+| grp-freq-91:bpe8192 | 2.2449 | 2.2439 | 2.2444 |
+| grp-recipe-91:bpe8192 | 2.2433 | 2.2374 | 2.2404 |
+| grp-last-91:bpe8192 | 2.2443 | 2.2464 | 2.2454 |
+| grp-first-91:bpe8192 | 2.2095 | 2.2056 | 2.2075 |
+
+- **Início (árvore de prefixos) vence por 1,8%** (2,208 vs 2,248), muito acima da variação entre sementes (~0,2%). Fica a 1,1% do BPE-8192 1D (2,184) com 24× menos MACs e empata com bbpe2048-sig (2,206) com 8,5× menos.
+- Frequência, receita (AE2) e final ficam a ≤0,4% do controle.
+- Leitura: a primeira decisão da cabeça deve seguir a direção do texto (como o pedaço começa); é o LOD dos jogos aplicado à previsão. Agrupar por receita perde porque os grupos são pequenos e a ordem entre eles segue o id do ingrediente, misturando prefixos sem relação dentro de uma classe.
