@@ -6,6 +6,7 @@ use nn::rnn::MinGru;
 use nn::seq::Seq;
 use nn::kosc::KOsc;
 use nn::sosc::SelOsc;
+use nn::tfm::Tfm;
 use tok::syll::from_digits;
 
 /// minGRU over a factored alphabet (`grp-first-91:bpe8192`, `nd…`). Trains on random windows of
@@ -34,6 +35,7 @@ pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usi
             }
             m
         }),
+        "tfm" => train_core(a, train, books, test, train_chars, test_chars, |v, r| Tfm::new(v, r, a.h, a.heads, a.layers, a.mlp, a.seq, a.seed)),
         "mingru" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = MinGru::new(v, r, a.h, a.layers, a.seed);
             if a.chrono > 0.0 {
@@ -309,7 +311,11 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
 pub fn checkpoint_name(a: &Args) -> String {
     let chrono = if a.chrono > 0.0 { format!("-chrono{}", a.chrono) } else { String::new() };
     let stateful = if a.stateful > 0 { format!("-stateful{}", a.stateful) } else { String::new() };
-    let core = if a.core == "mingru" { "mingru".into() } else { format!("{}-n{}", a.core, a.n) };
+    let core = match a.core.as_str() {
+        "mingru" => "mingru".into(),
+        "tfm" => format!("tfm-a{}-m{}", a.heads, a.mlp),
+        c => format!("{c}-n{}", a.n),
+    };
     let extra = if a.extra { format!("-extra-{}-{}-e{}", a.select, a.policy, a.epochs) } else { String::new() };
     format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}{extra}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)
 }
@@ -321,6 +327,7 @@ pub fn score(a: &Args, train: &str, test: &str, test_chars: usize) {
         "osc" => score_core::<Osc>(a, train, test, test_chars),
         "sosc" => score_core::<SelOsc>(a, train, test, test_chars),
         "kosc" => score_core::<KOsc>(a, train, test, test_chars),
+        "tfm" => score_core::<Tfm>(a, train, test, test_chars),
         _ => score_core::<MinGru>(a, train, test, test_chars),
     }
 }

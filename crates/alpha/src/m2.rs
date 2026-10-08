@@ -6,6 +6,7 @@ use nn::rnn::{MinGru, State};
 use nn::seq::Seq;
 use nn::kosc::KOsc;
 use nn::sosc::SelOsc;
+use nn::tfm::Tfm;
 use ruler::energy::Rapl;
 use tok::syll::from_digits;
 
@@ -46,6 +47,7 @@ pub fn run(a: &Args, train: &str) {
         "osc" => probe::<Osc>(a, train),
         "sosc" => probe::<SelOsc>(a, train),
         "kosc" => probe::<KOsc>(a, train),
+        "tfm" => probe::<Tfm>(a, train),
         _ => probe::<MinGru>(a, train),
     }
 }
