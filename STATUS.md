@@ -16,7 +16,7 @@ O projeto está pausado por decisão do Lucas (foco no Host Point). Tudo abaixo 
 ## Para publicar (decisão do Lucas)
 
 - arXiv (cs.CL ou cs.LG): primeira submissão exige endosso de alguém que já publicou na área.
-- Preencher no `\thanks` o link do repositório se for publicar o código.
+- Código público em https://github.com/lucasrgt/prefix-head (MIT), já citado no rodapé do artigo.
 - Antes: reler o texto; os números vêm de `results/retro-kl.jsonl`, `results/retro-gpu.jsonl`, `results/gem-bench.jsonl`, `results/alpha.jsonl`.
 
 ## Como retomar experimentos
