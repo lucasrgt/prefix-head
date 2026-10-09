@@ -1,7 +1,7 @@
 {
   "title": "Sort the Vocabulary: Prefix-Ordered Token Classes Make Two-Level Language-Model Heads Cheap and Faithful — code and experimental results",
   "upload_type": "software",
-  "description": "Research code, reproducible experiment scripts, raw results, and the seven-page preprint on prefix-ordered token classes for two-level language-model output heads. The study compares grouping criteria in five frozen open language models and models trained from scratch, with end-to-end CPU and head-only GPU cost measurements. Likelihood and KL results are limited to the text domains described in the paper; downstream tasks and speculative-decoding acceptance were not evaluated.",
+  "description": "Research code, reproducible experiment scripts, raw results, and the preprint on prefix-ordered token classes for two-level language-model output heads. The study compares grouping criteria in five frozen open language models and models trained from scratch, with end-to-end CPU and head-only GPU cost measurements. Likelihood and KL results are limited to the text domains described in the paper; downstream tasks and speculative-decoding acceptance were not evaluated. The variations study includes a word-start/continuation hybrid, reversed-spelling controls, three-level trees, block-size sweeps, and a failed refinement heuristic.",
   "creators": [
     {
       "name": "Tinoco, Lucas",
