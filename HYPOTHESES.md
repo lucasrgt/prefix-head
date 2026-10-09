@@ -1,5 +1,7 @@
 # Hipóteses
 
+> *Caderno de ideias: brainstorm aberto, a maioria não testada. A única afirmação do artigo é a cabeça por prefixo (ver `paper/`).*
+
 Cada hipótese: enunciado, como medir, status.
 
 - **H-alfabeto** — O alfabeto ótimo depende da razão custo(cabeça)/custo(corpo). Em modelo pequeno, alfabeto pequeno (braile 6 pontos) empata em bpc com bytes e custa menos. Medir: bpc × MACs/char por alfabeto (crates/alpha). Status: confirmada em parte (2026-10-08, results/ALPHA.md) — ganho vem de acento = 1 símbolo; cai com V; falta repetir com sementes. Relacionado: BrailleLLM (arXiv 2510.18288, EMNLP 2025) usa braile como tarefa (tradução/acessibilidade), não como representação interna; datasets EBMD/CBMD abertos. Braile chinês é fonético (sílaba+tom) — redução extrema de vocabulário, mas com perda (homófonos).
