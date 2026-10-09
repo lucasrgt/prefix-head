@@ -5,7 +5,7 @@
 \usepackage{booktabs}
 \usepackage[numbers]{natbib}
 \usepackage{amsmath,amssymb}
-\usepackage{hyperref}
+\usepackage[hidelinks]{hyperref}
 \usepackage{xcolor}
 \newcommand{\pending}[1]{\textbf{\textcolor{red}{[#1]}}}
 
@@ -17,7 +17,7 @@
 \maketitle
 
 \begin{abstract}
-In small language models with large subword vocabularies, the output head is a large share of the per-token cost: 21--63\% of the weight bytes read per generated token in Gemma~3 270M, Qwen3-0.6B and Llama~3.2~1B. A two-level (class-factored) softmax cuts that cost by $\sqrt{V}$-fold, and has returned in 2025--26 in speculative-decoding drafters and drop-in head replacements; what remains open is \emph{how to form the classes}. We show that the simplest possible rule---sort the subword vocabulary by spelling and cut it into equal blocks---gives the most faithful factored head among the criteria in current use. Swapping the head of five frozen open models (Gemma~3 270M/1B, Gemma~4 E2B, Qwen3-0.6B, gpt-oss-20b; three vendors, four tokenizers), prefix-ordered classes have the lowest KL divergence to the original model in four of five (tied with semantic $k$-means on the fifth), and 27--33\% lower KL than the token ordering Google ships with its Gemma~4 drafters, at equal cost, including on Gemma~4 itself. Trained from scratch, prefix classes beat frequency, merge-order, random and semantic classes in recurrent, MLP and Transformer models, in Portuguese and English, with the gap shrinking as the vocabulary grows. A per-decision and word-start/continuation decomposition explains why: the first decision follows the generation direction, and the gain concentrates on tokens that continue a word---which also explains why alphabetical classes lost at the whole-word level (Jiang et al., 2017). On a CPU at batch size one, the factored head makes Gemma~3 270M generate 2.4$\times$ faster end to end (2.1$\times$ with AVX2 only).
+In small language models with large subword vocabularies, the output head is a large share of the per-token cost: 21--63\% of the weight bytes read per generated token in Gemma~3 270M, Qwen3-0.6B and Llama~3.2~1B. A two-level (class-factored) softmax reduces output-weight reads by approximately $\sqrt{V}/2$-fold, and has returned in 2025--26 in speculative-decoding drafters and drop-in head replacements; what remains open is \emph{how to form the classes}. We show that the simplest possible rule---sort the subword vocabulary by spelling and cut it into equal blocks---gives the most faithful factored head in four of the five models tested. Swapping the head of five frozen open models (Gemma~3 270M/1B, Gemma~4 E2B, Qwen3-0.6B, gpt-oss-20b; three vendors, four tokenizers), prefix-ordered classes have the lowest KL divergence to the original model in four of five (semantic $k$-means has a slightly lower mean on the fifth), and 27--33\% lower KL than the token ordering Google ships with its Gemma~4 drafters, at equal cost, including on Gemma~4 itself. Trained from scratch, prefix classes outperform the tested alternative groupings in recurrent and MLP models, with replication in English and a gap that shrinks as the vocabulary grows. A Transformer with a prefix head is within 0.45\% of the full head in bits per character at 4.2$\times$ fewer total MACs. A per-decision and word-start/continuation decomposition explains why: the first decision follows the generation direction, and the gain concentrates on tokens that continue a word---which also explains why alphabetical classes lost at the whole-word level (Jiang et al., 2017). On a CPU at batch size one, the factored head raises Gemma~3 270M throughput by 2.4$\times$ in end-to-end, one-token-at-a-time scoring (2.1$\times$ with AVX2 only).
 \end{abstract}
 
 \section{Introduction}
@@ -28,23 +28,23 @@ Class-factored softmax \citep{goodman2001classes,mikolov2011extensions} is the c
 
 We ask which grouping makes the factored head most faithful, at equal cost, and find that a rule needing no data and no model---\emph{sort the vocabulary by spelling, cut into equal blocks}---wins. Our contributions:
 \begin{itemize}
-\item \textbf{Retrofit evidence on five frozen open models} (Section~\ref{sec:retrofit}): prefix classes give the lowest KL to the original head in four of five models (a tie in the fifth), and beat the ordering shipped with Gemma~4 by 27--33\% in KL at equal cost.
+\item \textbf{Retrofit evidence on five frozen open models} (Section~\ref{sec:retrofit}): prefix classes give the lowest KL to the original head in four of five models (semantic classes have a slightly lower mean in the fifth), and beat the ordering shipped with Gemma~4 by 27--33\% in KL at equal cost.
 \item \textbf{From-scratch evidence} across MLP, recurrent and Transformer models, two languages and vocabularies of 8k--100k (Section~\ref{sec:scratch}), including the honest finding that the gap shrinks with vocabulary size.
 \item \textbf{A mechanism} (Section~\ref{sec:why}): the class decision becomes easy because it follows the generation direction; the gain is 4--6$\times$ larger on word-continuation tokens. This reconciles our result with the opposite whole-word finding of \citet{jiang2017}.
-\item \textbf{End-to-end cost} on CPU and a consumer GPU at batch one (Section~\ref{sec:cost}).
+\item \textbf{End-to-end CPU throughput and head-only GPU cost} at batch one (Section~\ref{sec:cost}).
 \end{itemize}
 
 \section{Method}
 
 \paragraph{Two-level head.} Given a partition of the vocabulary into classes $c(t)$ with members $M_c$, the head computes
 \[
-\log p(t\mid h) = \log \mathrm{softmax}(A h + b)_{c(t)} + \log \mathrm{softmax}\big(W_{M_{c(t)}}\, h\big)_{t},
+\log p(t\mid h) = \log \mathrm{softmax}(A h + b)_{c(t)} + \log \mathrm{softmax}\big(\ell_{M_{c(t)}}(h)\big)_{t},
 \]
-where $A\in\mathbb{R}^{C\times d}$ predicts the class and $W_{M_c}$ are the output rows of the class members. The factorization is exact: no token is ever excluded. Sampling draws a class, then a token. At inference the head reads $C\cdot d$ class weights and one block of $m\cdot d$ token weights.
+where $A\in\mathbb{R}^{C\times d}$ predicts the class and $\ell_{M_c}(h)$ are the original logits restricted to that class (including logit soft-capping where used). This defines a normalized distribution over the entire vocabulary: no token is excluded. It reproduces the full head only when the predicted class probabilities equal its class marginals. Sampling draws a class, then a token. At inference the head reads $C\cdot d$ class weights and one block of $m\cdot d$ token weights.
 
 \paragraph{Groupings compared.} \emph{Prefix}: sort tokens by their byte spelling, cut into equal blocks of $m$. \emph{Frequency}: sort by training frequency (the criterion of adaptive softmax and frequency-trimmed drafters). \emph{Token id / merge order}: the tokenizer's own order (CORAL-style groups). \emph{Random}. \emph{Semantic}: balanced $k$-means on the output embeddings (as in FlashHead and, by our inspection, Gemma~4). \emph{Gemma~4}: the \texttt{token\_ordering} buffer released with the Gemma~4 E4B drafter, cut into its 2{,}048 blocks of 128.
 
-\paragraph{Retrofitting a frozen model.} We keep the model and its output rows frozen and train only $A,b$. In the \emph{self} setting the class predictor is trained to reproduce the model's own class marginals $p(c\mid h)=\sum_{t\in M_c}p_{\text{full}}(t\mid h)$ on training text (no labels, no other model), so its deviation from the full head is the pure cost of factoring. We report $\mathrm{KL}(p_{\text{full}}\,\|\,p_{\text{2-level}})$ in bits per character on held-out text; because $p(t\mid c,h)$ is exact, this equals the class-level KL. In the \emph{adapt} setting both the full head and the two-level head (class predictor and blocks) are fine-tuned on the same text with the same budget.
+\paragraph{Retrofitting a frozen model.} We keep the model and its output rows frozen and train only $A,b$. In the \emph{self} setting the class predictor is trained to reproduce the model's own class marginals $p(c\mid h)=\sum_{t\in M_c}p_{\text{full}}(t\mid h)$ on training text (no labels, no other model), so its deviation from the full head is the pure cost of factoring. We report $\mathrm{KL}(p_{\text{full}}\,\|\,p_{\text{2-level}})$ in bits per character on held-out text; because $p(t\mid c,h)$ is exact, this equals the class-level KL. In the \emph{adapt} setting both the full head and the two-level head (class predictor and blocks) are fine-tuned on the same text with the same budget. The self-trained predictor uses Adam for two epochs, batch size 512, initial learning rate $10^{-3}$ with linear decay, and class-centroid initialization; the output rows in the adapted heads use learning rate $10^{-4}$.
 
 \section{Retrofitting frozen models}\label{sec:retrofit}
 
@@ -52,29 +52,29 @@ where $A\in\mathbb{R}^{C\times d}$ predicts the class and $W_{M_c}$ are the outp
 
 \begin{table}[t]
 \centering
-\caption{Fidelity of the factored head to the original model: $\mathrm{KL}(p_{\text{full}}\|p_{\text{2-level}})$ in bits/char on held-out text (lower is better). Prefix, semantic and the 128-block columns: mean $\pm$ s.d.\ over 3 seeds (2 for semantic on Gemma~3 270M); others: 1 seed.}
+\caption{Fidelity of the factored head to the original model: $\mathrm{KL}(p_{\text{full}}\|p_{\text{2-level}})$ in bits/char on held-out text (lower is better). Prefix, semantic and the 128-block columns: mean $\pm$ sample s.d.\ over 3 seeds (2 for semantic on Gemma~3 270M); others: 1 seed.}
 \label{tab:kl}
 \small
 \begin{tabular}{lccccc}
 \toprule
 model (vocab, classes) & prefix & semantic & frequency & random & token id \\
 \midrule
-Gemma 3 270M-it (262k, 512) & \textbf{0.1368}$\pm$.0001 & 0.1621$\pm$.0045 & -- & -- & -- \\
-Gemma 3 1B-pt (262k, 512) & 0.0867$\pm$.0000 & \textbf{0.0854}$\pm$.0014 & 0.133 & 0.192 & 0.214 \\
-Gemma 4 E2B-it (262k, 512) & \textbf{0.1838}$\pm$.0001 & 0.2738$\pm$.0024 & 0.271 & 0.329 & 0.364 \\
-Qwen3-0.6B (152k, 390) & \textbf{0.0958}$\pm$.0001 & 0.1953$\pm$.0026 & 0.133 & 0.177 & 0.200 \\
-gpt-oss-20b (201k, 448) & \textbf{0.0197}$\pm$.0001 & 0.0337$\pm$.0019 & 0.024 & 0.042 & 0.037 \\
+Gemma 3 270M-it (262k, 512) & \textbf{0.1368}$\pm$0.0002 & 0.1621$\pm$0.0064 & -- & -- & -- \\
+Gemma 3 1B-pt (262k, 512) & 0.0867$\pm$0.0001 & \textbf{0.0854}$\pm$0.0018 & 0.133 & 0.192 & 0.214 \\
+Gemma 4 E2B-it (262k, 512) & \textbf{0.1838}$\pm$0.0002 & 0.2738$\pm$0.0029 & 0.271 & 0.329 & 0.364 \\
+Qwen3-0.6B (152k, 390) & \textbf{0.0958}$\pm$0.0001 & 0.1953$\pm$0.0032 & 0.133 & 0.177 & 0.200 \\
+gpt-oss-20b (201k, 448) & \textbf{0.0197}$\pm$0.0001 & 0.0337$\pm$0.0024 & 0.024 & 0.042 & 0.037 \\
 \midrule
 \multicolumn{6}{l}{\emph{equal cost, 2{,}048 classes of 128: prefix vs.\ the ordering shipped with Gemma 4 (3 seeds)}} \\
 model & prefix & Gemma 4 & \multicolumn{3}{l}{prefix reduction} \\
-Gemma 3 270M-it & \textbf{0.1158}$\pm$.0001 & 0.1593$\pm$.0003 & \multicolumn{3}{l}{27\%} \\
-Gemma 3 1B-pt & \textbf{0.0724}$\pm$.0001 & 0.1086$\pm$.0001 & \multicolumn{3}{l}{33\%} \\
-Gemma 4 E2B-it & \textbf{0.1656}$\pm$.0005 & 0.2414$\pm$.0005 & \multicolumn{3}{l}{31\%} \\
+Gemma 3 270M-it & \textbf{0.1158}$\pm$0.0001 & 0.1593$\pm$0.0003 & \multicolumn{3}{l}{27\%} \\
+Gemma 3 1B-pt & \textbf{0.0724}$\pm$0.0002 & 0.1086$\pm$0.0002 & \multicolumn{3}{l}{33\%} \\
+Gemma 4 E2B-it & \textbf{0.1656}$\pm$0.0006 & 0.2414$\pm$0.0006 & \multicolumn{3}{l}{31\%} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\paragraph{Results.} Table~\ref{tab:kl}. Prefix is the most faithful grouping in four of five models; on Gemma~3 1B semantic $k$-means is marginally better (0.0854 vs.\ 0.0867, within one s.d.\ of its seed spread), but semantic classes are is worse than frequency on Qwen3 and Gemma~4. At equal cost prefix blocks deviate 27--33\% less than Gemma~4's own ordering, including on Gemma~4.
+\paragraph{Results.} Table~\ref{tab:kl}. Prefix is the most faithful grouping in four of five models; on Gemma~3 1B semantic $k$-means is marginally better (0.0854 vs.\ 0.0867, within one s.d.\ of its seed spread), but semantic classes are worse than frequency on Qwen3 and Gemma~4. At equal cost prefix blocks deviate 27--33\% less than Gemma~4's own ordering, including on Gemma~4.
 
 \paragraph{Bits per character, and a calibration caveat.} On base models the factored head costs a little: Gemma~3 1B-pt 1.561$\to$1.615 bpc (+3.5\%; 1.600 with 128-blocks), Qwen3-0.6B 1.918$\to$1.942 (+1.2\%), gpt-oss-20b 2.685$\to$2.697 (+0.5\%). On the instruction-tuned Gemmas the self-trained factored heads score \emph{below} the full head (Gemma~4 E2B-it: 2.604$\to$2.475), and the bpc ranking of groupings even inverts; the smoother class predictor partly corrects the instruction-tuned model's miscalibration on this out-of-domain text. We therefore use KL to the original model, not bpc, as the primary retrofit metric.
 
@@ -147,7 +147,7 @@ SmolLM2-135M & 49k $\times$ 576 & 28M of 135M & 21\% \\
 
 \paragraph{GPU, head only.} On an RTX 4060 (fp16, CUDA graphs), scoring or sampling one token with the two-level head is 31--46$\times$ faster than the full head at batch one for the Llama~3.2~1B, Qwen3-0.6B and Gemma~3 270M head shapes, 20--31$\times$ at batch 8, and 2--10$\times$ at batch 512 with a naive per-row block gather.
 
-\paragraph{CPU, end to end.} We wrote a minimal Gemma~3 runtime in Rust (Q8\_0 weights, AVX-512/AVX2, persistent thread pool) that matches llama.cpp to 0.3\% in bpc over 700 tokens, and swapped only the head. Table~\ref{tab:cpu} reports tokens/s on an idle Ryzen~7~7700 (Zen~4, 32\,MB L3, dual-channel DDR5), 512 tokens of test text scored one at a time, mean of three runs. The full head takes 51--57\% of each token's time; the prefix head (512 classes of 512) takes 1--2\%. Whole-model throughput rises 2.4$\times$ with AVX-512 and 2.1$\times$ with AVX2, at 1 or 8 threads; with 2{,}048 classes of 128 the gain is 2.4$\times$ as well. Package energy per token (RAPL, total, not idle-subtracted, because the spinning thread pool keeps the package busy) falls by the same factor (0.58 to 0.24\,J/token at 8 threads). Bits per character on these tokens: full 2.489, prefix head 2.435 (instruction-tuned model; see the calibration caveat above).
+\paragraph{CPU, end to end.} We wrote a minimal Gemma~3 runtime in Rust (Q8\_0 weights, AVX-512/AVX2, persistent thread pool) that matches llama.cpp to 0.3\% in bpc over 700 tokens, and swapped only the head. Table~\ref{tab:cpu} reports tokens/s on an idle Ryzen~7~7700 (Zen~4, 32\,MB L3, dual-channel DDR5), 512 tokens of test text scored one at a time, mean of three runs. The full head takes 51--57\% of each token's time; the prefix head (512 classes of 512) takes 1--2\%. Whole-model throughput rises 2.4$\times$ with AVX-512 and 2.1$\times$ with AVX2, at 1 or 8 threads; with 2{,}048 classes of 128 the gain is 2.4$\times$ as well. Total package energy estimated from RAPL falls from approximately 0.59 to 0.25\,J/token at 8 threads. These totals are reconstructed from the logged idle-subtracted energy by adding \texttt{idle\_w}/\texttt{tok\_per\_s} per run; idle subtraction itself is unstable because the spinning thread pool keeps the package busy. Bits per character on these tokens: full 2.489, prefix head 2.435 (instruction-tuned model; see the calibration caveat above).
 
 \begin{table}[t]
 \centering
@@ -157,7 +157,7 @@ SmolLM2-135M & 49k $\times$ 576 & 28M of 135M & 21\% \\
 \toprule
 ISA, threads & full head & prefix head (512$\times$512) & speedup & full-head share of time \\
 \midrule
-AVX-512, 8 & 131.9 & 321.2 & 2.4$\times$ & 56\% \\
+AVX-512, 8 & 132.0 & 321.2 & 2.4$\times$ & 56\% \\
 AVX-512, 1 & 75.5 & 183.5 & 2.4$\times$ & 57\% \\
 AVX2, 8 & 119.2 & 256.0 & 2.1$\times$ & 52\% \\
 AVX2, 1 & 58.2 & 120.5 & 2.1$\times$ & 52\% \\
@@ -167,11 +167,11 @@ AVX2, 1 & 58.2 & 120.5 & 2.1$\times$ & 52\% \\
 
 \section{Related work}
 
-Class-based and hierarchical softmax \citep{goodman2001classes,morin2005hierarchical,mikolov2011extensions}; adaptive softmax \citep{grave2017adaptive}; tree-based hierarchical softmax with alphabetical, Huffman and Brown trees at the word level \citep{jiang2017}; prefix-tree lexicons for speech decoding search \citep{ney1992}. Screening and approximate heads: SVD-softmax \citep{shim2017svd}, L2S \citep{chen2019l2s}, FlashHead \citep{flashhead}. Drafter heads: Gemma~4 \citep{gemma4}, CORAL \citep{coral}, FR-Spec \citep{frspec}, VocabTrim \citep{vocabtrim}. Training-memory reduction of large heads without changing inference cost: Cut Cross-Entropy \citep{wijmans2025cut}. Semantic hierarchies for decoding: HDLM and TDLM. To our knowledge no prior work orders a subword vocabulary by spelling to form output classes.
+Class-based and hierarchical softmax \citep{goodman2001classes,morin2005hierarchical,mikolov2011extensions}; adaptive softmax \citep{grave2017adaptive}; tree-based hierarchical softmax with alphabetical, Huffman and Brown trees at the word level \citep{jiang2017}; prefix-tree lexicons for speech decoding search \citep{ney1992}. Screening and approximate heads: SVD-softmax \citep{shim2017svd}, L2S \citep{chen2019l2s}, FlashHead \citep{flashhead}. Drafter heads: Gemma~4 \citep{gemma4}, CORAL \citep{coral}, FR-Spec \citep{frspec}, VocabTrim \citep{vocabtrim}. Training-memory reduction of large heads without changing inference cost: Cut Cross-Entropy \citep{wijmans2025cut}. To our knowledge no prior work orders a subword vocabulary by spelling to form output classes.
 
 \section{A frugal recurrent body (secondary study)}\label{sec:quartzo}
 
-For CPU deployment we pair the head with a diagonal complex linear recurrence $h_t=(1-z_t)\,e^{i\theta}h_{t-1}+z_t c_t$ with input-only gates and a learned, data-independent rotation. We arrived at it independently, but it is the HGRU recurrence of HGRN \citep{qin2023hgrn}; our differences are a chrono-style log-uniform initialization of gate biases and stateful truncated-BPTT training. At tiny scale (2.2M parameters, 2 layers, 51 complex channels per layer) it matches a 2-layer Transformer with the same head (2.063 vs.\ 2.063 bpc) at 3.6$\times$ fewer MACs per character and an 816-byte inference state instead of a growing 128\,KB KV cache, and beats our Mamba-2-style baseline (2.078 bpc at 1.6$\times$ the MACs). Removing the rotation ($\theta=0$, so the real and imaginary halves become $2\times51$ independent real channels in the same 816 bytes) costs 0.8\%: 2.079 bpc (2 seeds: 2.0799, 2.0789) against 2.063 (3 seeds: 2.0614, 2.0665, 2.0608). At this scale the rotation helps, unlike the findings of HGRN2 and Griffin at larger scale with expanded real states. We also tried a synthetic associative-recall task (2--32 key--value pairs per line, 2M characters, 30 epochs): neither the recurrent core with or without rotation nor a same-width Transformer learned it within that budget (recurrent: 3--5\% accuracy on recalled characters, chance 3.8\%; Transformer: 5--7\%, declining with the number of pairs), so this probe is inconclusive and the known recall weakness of fixed-size states \citep{arora2023zoology,jelassi2024repeat} remains untested here.
+For CPU deployment we pair the head with a diagonal complex linear recurrence $h_t=(1-z_t)\,e^{i\theta}h_{t-1}+z_t c_t$ with input-only gates and a learned, data-independent rotation. We arrived at it independently, but it is the HGRU recurrence of HGRN \citep{qin2023hgrn}; our differences are a chrono-style log-uniform initialization of gate biases and stateful truncated-BPTT training. At tiny scale (2.2M parameters, 2 layers, 51 complex channels per layer) it matches a 2-layer Transformer with the same head (2.063 vs.\ 2.063 bpc) at 3.6$\times$ fewer MACs per character and an 816-byte inference state instead of a growing 128\,KB KV cache, and beats our Mamba-2-style baseline (2.078 bpc at 1.6$\times$ the MACs). Removing the rotation ($\theta=0$, so the real and imaginary halves become $2\times51$ independent real channels in the same 816 bytes) costs 0.8\%: 2.079 bpc (2 seeds: 2.0799, 2.0789) against 2.063 (3 seeds: 2.0614, 2.0665, 2.0608). At this scale the rotation helps. We also tried a synthetic associative-recall task (2--32 key--value pairs per line, 2M characters, 30 epochs): neither the recurrent core with or without rotation nor a same-width Transformer learned it within that budget (recurrent: 3--5\% accuracy on recalled characters, chance 3.8\%; Transformer: 5--7\%, declining with the number of pairs), so this probe is inconclusive and the known recall weakness of fixed-size states \citep{arora2023zoology,jelassi2024repeat} remains untested here.
 
 \section{Limitations}
 
@@ -192,9 +192,9 @@ Thanks to Gabriel for many ideas along the way.
 \bibitem[Chen et~al.(2019)]{chen2019l2s} P.~H.~Chen, S.~Si, S.~Kumar, Y.~Li, C.-J.~Hsieh. Learning to screen for fast softmax inference on large vocabulary neural networks. ICLR, 2019.
 \bibitem[Tranheden et~al.(2026)]{flashhead} W.~Tranheden, S.~Ahmed, D.~Dubhashi, J.~Matthiesen, H.~von Essen. FlashHead: efficient drop-in replacement for the classification head in language model inference. arXiv:2603.14591, 2026.
 \bibitem[Gemma Team(2026)]{gemma4} Gemma Team. Gemma 4 technical report. arXiv:2607.02770, 2026.
-\bibitem[Weng et~al.(2025)]{coral} Weng et~al. CORAL: learning consistent representations across multi-step training with lighter speculative drafter. arXiv:2502.16880, 2025.
+\bibitem[Weng et~al.(2025)]{coral} Y.~Weng et~al. CORAL: learning consistent representations across multi-step training with lighter speculative drafter. arXiv:2502.16880, 2025.
 \bibitem[Zhao et~al.(2025)]{frspec} W.~Zhao, T.~Pan, X.~Han et~al. FR-Spec: accelerating large-vocabulary language models via frequency-ranked speculative sampling. ACL, 2025.
-\bibitem[VocabTrim(2025)]{vocabtrim} VocabTrim: vocabulary pruning for efficient speculative decoding in LLMs. arXiv:2506.22694, 2025.
+\bibitem[Goel et~al.(2025)]{vocabtrim} R.~Goel et~al. VOCABTRIM: vocabulary pruning for efficient speculative decoding in LLMs. arXiv:2506.22694, 2025.
 \bibitem[Wijmans et~al.(2025)]{wijmans2025cut} E.~Wijmans, B.~Huval, A.~Hertzberg, V.~Koltun, P.~Kr\"ahenb\"uhl. Cut your losses in large-vocabulary language models. ICLR, 2025.
 \bibitem[Arora et~al.(2023)]{arora2023zoology} S.~Arora et~al. Zoology: measuring and improving recall in efficient language models. arXiv:2312.04927, 2023.
 \bibitem[Jelassi et~al.(2024)]{jelassi2024repeat} S.~Jelassi, D.~Brandfonbrener, S.~M.~Kakade, E.~Malach. Repeat after me: Transformers are better than state space models at copying. arXiv:2402.01032, 2024.

@@ -1,0 +1,29 @@
+{
+  "title": "Sort the Vocabulary: Prefix-Ordered Token Classes Make Two-Level Language-Model Heads Cheap and Faithful — code and experimental results",
+  "upload_type": "software",
+  "description": "Research code, reproducible experiment scripts, raw results, and the seven-page preprint on prefix-ordered token classes for two-level language-model output heads. The study compares grouping criteria in five frozen open language models and models trained from scratch, with end-to-end CPU and head-only GPU cost measurements. Likelihood and KL results are limited to the text domains described in the paper; downstream tasks and speculative-decoding acceptance were not evaluated.",
+  "creators": [
+    {
+      "name": "Tinoco, Lucas",
+      "affiliation": "Independent researcher"
+    }
+  ],
+  "license": "mit",
+  "access_right": "open",
+  "version": "1.0",
+  "language": "eng",
+  "keywords": [
+    "language models",
+    "hierarchical softmax",
+    "subword vocabulary",
+    "prefix ordering",
+    "efficient inference"
+  ],
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/lucasrgt/prefix-head",
+      "relation": "isSupplementTo",
+      "scheme": "url"
+    }
+  ]
+}

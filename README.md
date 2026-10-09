@@ -4,7 +4,7 @@
 
 Paper: [`paper/main.pdf`](paper/main.pdf) (source: [`paper/main.tex`](paper/main.tex)).
 
-In small language models with large vocabularies, the output head is a large share of the cost of every generated token (63% of the weight bytes read per token in Gemma 3 270M). A two-level head first predicts a class of tokens, then a token inside it, and reads ~√V× fewer weights. This repository shows that the simplest way to form the classes is also the most faithful one: **sort the subword vocabulary by spelling and cut it into equal blocks.**
+In small language models with large vocabularies, the output head is a large share of the cost of every generated token (63% of the weight bytes read per token in Gemma 3 270M). A two-level head first predicts a class of tokens, then a token inside it, and reads ~√V× fewer weights. This repository shows that sorting tokens by spelling gives the most faithful head in four of the five models tested: **sort the subword vocabulary by spelling and cut it into equal blocks.**
 
 ## Results at a glance
 
@@ -20,7 +20,7 @@ In small language models with large vocabularies, the output head is a large sha
 
 At equal cost (2,048 classes of 128), prefix blocks deviate **27–33% less** than the token ordering Google ships with its Gemma 4 drafters, including on Gemma 4 itself.
 
-**End to end on a CPU** (Gemma 3 270M, Q8_0, batch 1, our Rust runtime, Ryzen 7 7700): 132 → 321 tokens/s with AVX-512 (**2.4×**), 119 → 256 with AVX2 only (**2.1×**).
+**End-to-end sequential scoring on a CPU** (Gemma 3 270M, Q8_0, batch 1, our Rust runtime, Ryzen 7 7700): 132 → 321 tokens/s with AVX-512 (**2.4×**), 119 → 256 with AVX2 only (**2.1×**).
 
 **Why it works.** The class decision follows the generation direction; the gain concentrates on tokens that continue a word, which is also why alphabetical classes lost at the whole-word level in earlier work (Jiang et al., IJCAI 2017).
 

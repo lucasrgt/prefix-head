@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "If you use this software or experimental results, please cite this release."
+type: software
+title: "prefix-head: prefix-ordered token classes for two-level language-model heads"
+version: "1.0"
+authors:
+  - family-names: "Tinoco"
+    given-names: "Lucas"
+    affiliation: "Independent researcher"
+repository-code: "https://github.com/lucasrgt/prefix-head"
+url: "https://github.com/lucasrgt/prefix-head"
+license: MIT
+keywords:
+  - language models
+  - hierarchical softmax
+  - efficient inference
+abstract: >-
+  Research code, experiment scripts, raw results, and a preprint on grouping
+  subword tokens by spelling for two-level language-model output heads.
