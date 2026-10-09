@@ -3,6 +3,8 @@ message: "If you use this software or experimental results, please cite this rel
 type: software
 title: "prefix-head: prefix-ordered token classes for two-level language-model heads"
 version: "1.0"
+doi: "10.5281/zenodo.23271285"
+date-released: "2026-10-09"
 authors:
   - family-names: "Tinoco"
     given-names: "Lucas"

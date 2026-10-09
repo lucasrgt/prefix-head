@@ -4,6 +4,8 @@
 
 Paper: [`paper/main.pdf`](paper/main.pdf) (source: [`paper/main.tex`](paper/main.tex)).
 
+Archived version 1.0 (code, results and preprint): [10.5281/zenodo.23271285](https://doi.org/10.5281/zenodo.23271285).
+
 In small language models with large vocabularies, the output head is a large share of the cost of every generated token (63% of the weight bytes read per token in Gemma 3 270M). A two-level head first predicts a class of tokens, then a token inside it, and reads ~√V× fewer weights. This repository shows that sorting tokens by spelling gives the most faithful head among the standard grouping baselines in four of the five models tested: **sort the subword vocabulary by spelling and cut it into equal blocks.**
 
 ## Results at a glance
