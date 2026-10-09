@@ -2,6 +2,7 @@
 # 14 public-domain 19th-century English novels for the cross-language replication.
 set -uo pipefail
 cd "$(dirname "$0")/.."
+mkdir -p data/en/raw
 for id in 1342 1400 1260 768 2701 84 345 98 158 145 174 161 766 1661; do
   f=data/en/raw/$id.txt
   [ -s "$f" ] && continue
