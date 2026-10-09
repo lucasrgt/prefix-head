@@ -94,6 +94,14 @@ fn main() {
         recurrent::split(&a, &train, &test);
         return;
     }
+    if a.model == "norm" {
+        let dir = root.join("data/norm");
+        std::fs::create_dir_all(&dir).unwrap();
+        std::fs::write(dir.join("train.txt"), &train).unwrap();
+        std::fs::write(dir.join("test.txt"), &test).unwrap();
+        std::fs::write(dir.join("all.txt"), format!("{train}{test}")).unwrap();
+        return;
+    }
     if a.model == "recall" {
         recurrent::recall(&a, &train);
         return;
