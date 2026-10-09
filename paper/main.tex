@@ -178,7 +178,7 @@ For CPU deployment we pair the head with a diagonal complex linear recurrence $h
 One text domain (19th-century public-domain literature) for all retrofit and most scratch results, plus English for replication. Retrofit models up to 21B parameters (3.6B active); scratch models are tiny. We evaluate likelihood and KL, not downstream tasks, and not speculative-decoding acceptance rates, which is how Gemma~4 uses its ordering (top-32 clusters, approximate). The factored head does not reduce the stored model size, only the bytes read per token. Gains at large batch on GPUs are modest.
 
 \section*{Acknowledgments}
-Thanks to Gabriel for many ideas along the way.
+Thanks to Gabriel Ribeiro for many ideas along the way, and to Claude (Anthropic), the AI assistant that helped implement, run and write up this work.
 
 \bibliographystyle{plainnat}
 \begin{thebibliography}{99}
