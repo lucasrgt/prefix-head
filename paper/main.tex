@@ -195,6 +195,8 @@ suffix (reversed spelling) & 0.197 & 0.141 & 0.139 & 0.257 & 0.030 \\
 
 \paragraph{Granularity.} Prefix blocks have lower KL than random blocks at every block size with a matched random control. Prefix-only sweeps cover block sizes from 64 to 4{,}096 (up to 1{,}024 for gpt-oss-20b); random controls are available at 128, approximately $\sqrt V$, and 2{,}048 (the first two for gpt-oss-20b). The shape of the cost--fidelity curve is model dependent: for the Gemmas and Qwen3, many small classes beat few large ones in the tested configurations (Qwen3 at a 116$\times$ vs.\ 72$\times$ cut: 0.075 with 128-token blocks vs.\ 0.101 with 2{,}048-token blocks), whereas gpt-oss-20b becomes \emph{less} faithful with small blocks (0.037 at 64 vs.\ 0.020 at 449).
 
+\paragraph{Speculative-decoding acceptance.} Gemma~3 270M as drafter, Gemma~3 1B and Gemma~4 E2B as targets (identical tokenizations, 214k positions). We report the per-position acceptance of a sampled draft token, $\alpha=\sum_t\min(p_t,q_t)$, a teacher-forced proxy for speculative decoding \citep{leviathan2023spec}. With the exact two-level head and 128-token blocks (2{,}176 rows read), prefix blocks keep $\alpha=0.477$ / $0.371$ (targets 1B / E2B) against $0.460$ / $0.345$ for the Gemma~4 ordering and $0.490$ / $0.396$ for the full drafter head: prefix loses about half as much acceptance. Gemma~4's own scheme---score the classes, keep the top 32, softmax over their tokens (6{,}144 rows)---is nearly lossless with any ordering ($0.453$--$0.488$ / $0.397$--$0.398$), and with it the Gemma~4 ordering is better than prefix on the 1B target ($0.480$ vs.\ $0.453$); under that scheme greedy acceptance is the same for every ordering ($0.447$ / $0.384$). So for drafters verified by a target, top-$k$ screening makes the ordering nearly irrelevant, and prefix ordering does not improve it; the exact prefix head reaches similar acceptance on the 1B target while reading 2.8$\times$ fewer rows, and remains the option for standalone models that need probabilities for every token.
+
 \paragraph{Refinement.} Starting from prefix blocks, we moved each token to the class whose trained predictor already assigns high probability in that token's contexts (capacity-limited) and retrained, for three rounds. Every round was worse than the prefix start in every model (e.g.\ Qwen3: 0.096 $\to$ 0.167, 0.132, 0.145), so this heuristic does not improve on spelling order; whether a direct KL-optimizing search can is left open.
 
 \section{Related work}
@@ -207,7 +209,7 @@ For CPU deployment we pair the head with a diagonal complex linear recurrence $h
 
 \section{Limitations}
 
-One text domain (19th-century public-domain literature) for all retrofit and most scratch results, plus English for replication. Retrofit models up to 21B parameters (3.6B active); scratch models are tiny. We evaluate likelihood and KL, not downstream tasks, and not speculative-decoding acceptance rates, which is how Gemma~4 uses its ordering (top-32 clusters, approximate). The factored head does not reduce the stored model size, only the bytes read per token. Gains at large batch on GPUs are modest.
+One text domain (19th-century public-domain literature) for all retrofit and most scratch results, plus English for replication. Retrofit models up to 21B parameters (3.6B active); scratch models are tiny. We evaluate likelihood, KL and a teacher-forced acceptance proxy, not downstream tasks or wall-clock speculative decoding. The factored head does not reduce the stored model size, only the bytes read per token. Gains at large batch on GPUs are modest.
 
 \section*{Acknowledgments}
 Thanks to Gabriel Ribeiro for many ideas along the way, and to Claude (Anthropic), the AI assistant that helped implement, run and write up this work.
@@ -230,6 +232,7 @@ Thanks to Gabriel Ribeiro for many ideas along the way, and to Claude (Anthropic
 \bibitem[Wijmans et~al.(2025)]{wijmans2025cut} E.~Wijmans, B.~Huval, A.~Hertzberg, V.~Koltun, P.~Kr\"ahenb\"uhl. Cut your losses in large-vocabulary language models. ICLR, 2025.
 \bibitem[Arora et~al.(2023)]{arora2023zoology} S.~Arora et~al. Zoology: measuring and improving recall in efficient language models. arXiv:2312.04927, 2023.
 \bibitem[Jelassi et~al.(2024)]{jelassi2024repeat} S.~Jelassi, D.~Brandfonbrener, S.~M.~Kakade, E.~Malach. Repeat after me: Transformers are better than state space models at copying. arXiv:2402.01032, 2024.
+\bibitem[Leviathan et~al.(2023)]{leviathan2023spec} Y.~Leviathan, M.~Kalman, Y.~Matias. Fast inference from Transformers via speculative decoding. ICML, 2023.
 \bibitem[Qin et~al.(2023)]{qin2023hgrn} Z.~Qin, S.~Yang, Y.~Zhong. Hierarchically gated recurrent neural network for sequence modeling. NeurIPS, 2023.
 \end{thebibliography}
 
