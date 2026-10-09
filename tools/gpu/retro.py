@@ -107,14 +107,19 @@ def ordering(kind, w, pcs, train_y, m, seed):
         return np.random.default_rng(seed).permutation(v)
     if kind == "sem":
         return semantic(w, m, seed)
+    if kind == "hyb":
+        n = np.bincount(train_y.cpu().numpy(), minlength=v)
+        start = [t for t in range(v) if pcs[t][:1] in (b" ", b"\n") or pcs[t].startswith("▁".encode())]
+        rest = sorted(set(range(v)) - set(start), key=lambda t: (pcs[t], t))
+        return np.array(sorted(start, key=lambda t: (-n[t], t)) + rest)
     if kind == "g4":
         return np.fromfile(root / "data/models/g4/e4b-assistant.order", dtype=np.uint32).astype(np.int64)
-    raise SystemExit("grouping: prefix|freq|id|random|sem|g4, optionally @<block size>")
+    raise SystemExit("grouping: prefix|freq|id|random|sem|hyb|g4, optionally @<block size>")
 
 
 class Groups:
-    def __init__(self, order, v, m):
-        self.k = math.ceil(v / m)
+    def __init__(self, order, v, m, k=None):
+        self.k = k or math.ceil(v / m)
         self.m = m
         pad = np.full(self.k * m, -1, dtype=np.int64)
         pad[: len(order)] = order

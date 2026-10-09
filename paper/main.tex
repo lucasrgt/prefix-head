@@ -32,6 +32,7 @@ We ask which grouping makes the factored head most faithful, at equal cost, and 
 \item \textbf{From-scratch evidence} across MLP, recurrent and Transformer models, two languages and vocabularies of 8k--100k (Section~\ref{sec:scratch}), including the honest finding that the gap shrinks with vocabulary size.
 \item \textbf{A mechanism} (Section~\ref{sec:why}): the class decision becomes easy because it follows the generation direction; the gain is 4--6$\times$ larger on word-continuation tokens. This reconciles our result with the opposite whole-word finding of \citet{jiang2017}.
 \item \textbf{End-to-end CPU throughput and head-only GPU cost} at batch one (Section~\ref{sec:cost}).
+\item \textbf{Variations} (Section~\ref{sec:variations}): a word-start/continuation hybrid, controls that isolate the mechanism, three-level trees, block size, and a failed refinement.
 \end{itemize}
 
 \section{Method}
@@ -164,6 +165,36 @@ AVX2, 1 & 58.2 & 120.5 & 2.1$\times$ & 52\% \\
 \bottomrule
 \end{tabular}
 \end{table}
+
+\section{Variations}\label{sec:variations}
+
+All numbers in this section are KL to the original model (bits/char, self setting, Section~\ref{sec:retrofit}); prefix and hybrid rows are means over 3 seeds (s.d.\ $\le$0.0003), the rest single runs (\texttt{tools/gpu/explore.py}, \texttt{results/explore.jsonl}).
+
+\paragraph{Mixing criteria and controls.} Table~\ref{tab:variants}. Ordering word-start tokens by frequency and word-continuation tokens by spelling (\emph{hybrid}) improves on pure prefix in four models (by 2--11\%) and is 0.6\% worse on Gemma~4, at $\sqrt V$-sized blocks. With 128-token blocks the hybrid is worse than pure prefix on all three Gemmas (e.g.\ Gemma~3 1B: 0.0886 vs.\ 0.0724), though still better than the Gemma~4 ordering (0.1086). Three controls support the mechanism: ordering word starts semantically instead of by frequency is worse; ignoring the leading space, which merges word-start and continuation spellings, is worse; and sorting by the \emph{reversed} spelling (suffix order) is far worse---similar spelling is not what matters, the beginning of the next piece is.
+
+\begin{table}[t]
+\centering
+\caption{Grouping variants at $\sqrt V$-sized blocks (KL, lower is better).}
+\label{tab:variants}
+\small
+\begin{tabular}{lccccc}
+\toprule
+variant & G3 270M & Qwen3 0.6B & G3 1B & G4 E2B & gpt-oss 20b \\
+\midrule
+prefix & 0.137 & 0.096 & 0.087 & \textbf{0.184} & 0.020 \\
+hybrid: starts by frequency, continuations by prefix & \textbf{0.126} & \textbf{0.091} & \textbf{0.077} & 0.185 & \textbf{0.019} \\
+starts by semantic $k$-means, continuations by prefix & 0.144 & 0.107 & 0.090 & 0.204 & 0.021 \\
+prefix ignoring the leading space & 0.157 & 0.102 & 0.100 & 0.199 & 0.025 \\
+suffix (reversed spelling) & 0.197 & 0.141 & 0.139 & 0.257 & 0.030 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\paragraph{Depth.} A three-level prefix tree (super-class, class, token; e.g.\ $64\times64\times64$ for 262k tokens) reads 976--1{,}365$\times$ fewer output rows than the full head. Its KL is 1.3--1.8$\times$ that of the two-level prefix head (Gemma~3 1B: 0.124 vs.\ 0.087; Qwen3: 0.127 vs.\ 0.096), and about half that of the same three-level structure over a random order in every model (Gemma~4 E2B: 0.262 vs.\ 0.493; gpt-oss: 0.036 vs.\ 0.056). The advantage of spelling order over random order grows with depth, as expected if the prefix tree is the natural hierarchy. Because the two-level head already takes only 1--2\% of a token's time on CPU (Section~\ref{sec:cost}), deeper heads matter mainly for drafters whose body is tiny next to a 262k vocabulary.
+
+\paragraph{Granularity.} Prefix blocks have roughly half the KL of random blocks at every block size tested (64 to 4{,}096). The shape of the cost--fidelity curve is model dependent: for the Gemmas and Qwen3, many small classes beat few large ones at equal head cost (Qwen3 at a 116$\times$ vs.\ 72$\times$ cut: 0.075 with 128-token blocks vs.\ 0.101 with 2{,}048-token blocks), whereas gpt-oss-20b becomes \emph{less} faithful with small blocks (0.037 at 64 vs.\ 0.020 at 449).
+
+\paragraph{Refinement.} Starting from prefix blocks, we moved each token to the class whose trained predictor already assigns high probability in that token's contexts (capacity-limited) and retrained, for three rounds. Every round was worse than the prefix start in every model (e.g.\ Qwen3: 0.096 $\to$ 0.167, 0.132, 0.145), so this heuristic does not improve on spelling order; whether a direct KL-optimizing search can is left open.
 
 \section{Related work}
 
