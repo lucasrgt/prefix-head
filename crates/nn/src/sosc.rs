@@ -22,6 +22,7 @@ pub struct SelOsc {
     wz: Vec<Param>,
     bz: Vec<Param>,
     theta: Vec<Param>,
+    rotate: bool,
     pub head: Head,
 }
 
@@ -70,7 +71,7 @@ impl SelOsc {
         let bz = mk(n, 0.0, &mut rng);
         let theta = mk(n, 0.0, &mut rng);
         let head = Head::new(radix, h, &mut rng);
-        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, head };
+        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, rotate: true, head };
         m.chrono(1024.0, seed);
         m
     }
@@ -84,6 +85,14 @@ impl SelOsc {
                 self.bz[l].w[j] = -(lu(&mut rng) - 1.0).ln();
                 self.theta[l].w[j] = std::f32::consts::TAU / lu(&mut rng);
             }
+        }
+    }
+
+    /// θ = 0 and frozen: the re/im halves become 2n independent real channels in the same state bytes.
+    pub fn without_rotation(&mut self) {
+        self.rotate = false;
+        for t in &mut self.theta {
+            t.w.iter_mut().for_each(|w| *w = 0.0);
         }
     }
 
@@ -251,7 +260,9 @@ impl SelOsc {
                         (gr, gi) = (ct * dr + st * di, -st * dr + ct * di);
                     }
                 }
-                self.theta[l].g[j] += gth;
+                if self.rotate {
+                    self.theta[l].g[j] += gth;
+                }
             }
             gemm(h, rows, n, &bf.u[l], true, &bf.dz, false, 1.0, &mut self.wz[l].g);
             for r in 0..rows {

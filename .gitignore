@@ -1,3 +1,6 @@
 target/
 data/
 .tools/
+.venv-gpu/
+paper/*.log
+paper/*.aux

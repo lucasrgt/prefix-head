@@ -1,6 +1,6 @@
 use kern::Rng;
 
-pub(crate) struct Param {
+pub struct Param {
     pub w: Vec<f32>,
     pub g: Vec<f32>,
     m: Vec<f32>,
@@ -28,7 +28,7 @@ impl Param {
 }
 
 /// `a` is m×k (or k×m when `ta`), `b` is k×n (or n×k when `tb`), all row-major; c = a·b + beta·c.
-pub(crate) fn gemm(m: usize, k: usize, n: usize, a: &[f32], ta: bool, b: &[f32], tb: bool, beta: f32, c: &mut [f32]) {
+pub fn gemm(m: usize, k: usize, n: usize, a: &[f32], ta: bool, b: &[f32], tb: bool, beta: f32, c: &mut [f32]) {
     let (rsa, csa) = if ta { (1, m as isize) } else { (k as isize, 1) };
     let (rsb, csb) = if tb { (1, k as isize) } else { (n as isize, 1) };
     unsafe {

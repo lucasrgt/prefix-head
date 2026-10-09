@@ -1,0 +1,15 @@
+{"model":"sosc","checkpoint":"sosc-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":2,"accuracy":0.0417,"bits_per_value_char":4.703,"chance_bits":4.700,"state_bytes":816}
+{"model":"sosc","checkpoint":"sosc-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":4,"accuracy":0.0304,"bits_per_value_char":4.701,"chance_bits":4.700,"state_bytes":816}
+{"model":"sosc","checkpoint":"sosc-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":8,"accuracy":0.0400,"bits_per_value_char":4.702,"chance_bits":4.700,"state_bytes":816}
+{"model":"sosc","checkpoint":"sosc-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":16,"accuracy":0.0352,"bits_per_value_char":4.702,"chance_bits":4.700,"state_bytes":816}
+{"model":"sosc","checkpoint":"sosc-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":32,"accuracy":0.0372,"bits_per_value_char":4.703,"chance_bits":4.700,"state_bytes":816}
+{"model":"sreal","checkpoint":"sreal-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":2,"accuracy":0.0483,"bits_per_value_char":4.704,"chance_bits":4.700,"state_bytes":816}
+{"model":"sreal","checkpoint":"sreal-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":4,"accuracy":0.0262,"bits_per_value_char":4.706,"chance_bits":4.700,"state_bytes":816}
+{"model":"sreal","checkpoint":"sreal-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":8,"accuracy":0.0404,"bits_per_value_char":4.702,"chance_bits":4.700,"state_bytes":816}
+{"model":"sreal","checkpoint":"sreal-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":16,"accuracy":0.0389,"bits_per_value_char":4.702,"chance_bits":4.700,"state_bytes":816}
+{"model":"sreal","checkpoint":"sreal-n51-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":32,"accuracy":0.0403,"bits_per_value_char":4.702,"chance_bits":4.700,"state_bytes":816}
+{"model":"tfm","checkpoint":"tfm-a4-m256-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":2,"accuracy":0.0733,"bits_per_value_char":4.650,"chance_bits":4.700,"state_bytes":1179648}
+{"model":"tfm","checkpoint":"tfm-a4-m256-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":4,"accuracy":0.0692,"bits_per_value_char":4.650,"chance_bits":4.700,"state_bytes":1179648}
+{"model":"tfm","checkpoint":"tfm-a4-m256-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":8,"accuracy":0.0683,"bits_per_value_char":4.657,"chance_bits":4.700,"state_bytes":1179648}
+{"model":"tfm","checkpoint":"tfm-a4-m256-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":16,"accuracy":0.0627,"bits_per_value_char":4.671,"chance_bits":4.700,"state_bytes":1179648}
+{"model":"tfm","checkpoint":"tfm-a4-m256-nd1_bytes-h128-l2-s576-data_mqar_raw-seed1.bin","pairs":32,"accuracy":0.0511,"bits_per_value_char":4.687,"chance_bits":4.700,"state_bytes":1179648}

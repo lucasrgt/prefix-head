@@ -1,0 +1,9 @@
+[package]
+name = "retro"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+kern = { path = "../kern" }
+nn = { path = "../nn" }
+ruler = { path = "../ruler" }
