@@ -18,6 +18,7 @@ pub struct Tensor {
 
 pub const F32: u32 = 0;
 pub const F16: u32 = 1;
+pub const Q4_0: u32 = 2;
 pub const Q8_0: u32 = 8;
 
 pub struct Gguf {
@@ -109,6 +110,7 @@ impl Gguf {
             F32 => n * 4,
             F16 => n * 2,
             Q8_0 => n / 32 * 34,
+            Q4_0 => n / 32 * 18,
             k => panic!("tensor type {k}"),
         };
         (t, &self.data[self.base + t.off..self.base + t.off + bytes])

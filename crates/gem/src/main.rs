@@ -190,6 +190,9 @@ fn main() {
     let ctx = 2048;
     let mut m = Gemma::load(&g, ctx);
     drop(g);
+    let body_bits: u8 = arg(&args, "--body-bits", 8);
+    let head_bits: u8 = arg(&args, "--head-bits", 8);
+    m.requantize(body_bits == 4, head_bits == 4);
     let bos = 2u32;
     let mut full = Full::new(&m);
     let two_path = root.join("data/retro").join(&head2);
@@ -231,7 +234,7 @@ fn main() {
                 chars += utf8_chars(&pcs[toks[i + 1] as usize]);
             }
             let bpc = |x: f64| x / std::f64::consts::LN_2 / chars as f64;
-            println!("{n} tokens: full head ours {:.4} bpc vs llama.cpp {:.4} bpc, max |Δ| {maxd:.3} nats; two-level {:.4} bpc", bpc(ours), bpc(theirs), bpc(ours2));
+            println!("bits body {body_bits} head {head_bits}, {n} tokens: full head ours {:.4} bpc vs llama.cpp {:.4} bpc, max |Δ| {maxd:.3} nats; two-level {:.4} bpc", bpc(ours), bpc(theirs), bpc(ours2));
         }
         "bench" => {
             let toks = tokenize(&model_path, &test.chars().take(n_tok * 4 + 4000).collect::<String>());
@@ -268,7 +271,8 @@ fn main() {
                     _ => f64::NAN,
                 };
                 let line = format!(
-                    "{{\"model\":\"{tag}\",\"head\":\"{which}\",\"head2\":\"{head2}\",\"threads\":{threads},\"isa\":\"{}\",\"tokens\":{n},\"tok_per_s\":{:.1},\"body_us\":{:.1},\"head_us\":{:.1},\"head_share\":{:.3},\"uj_per_token\":{:.0},\"bpc\":{:.4},\"idle_w\":{:.1}}}",
+                    "{{\"model\":\"{tag}\",\"file\":\"{}\",\"head\":\"{which}\",\"head2\":\"{head2}\",\"body_bits\":{body_bits},\"head_bits\":{head_bits},\"threads\":{threads},\"isa\":\"{}\",\"tokens\":{n},\"tok_per_s\":{:.1},\"body_us\":{:.1},\"head_us\":{:.1},\"head_share\":{:.3},\"uj_per_token\":{:.0},\"bpc\":{:.4},\"idle_w\":{:.1}}}",
+                    model_path.file_name().unwrap().to_string_lossy(),
                     match isa {
                         Isa::Avx512 => "avx512",
                         Isa::Avx2 => "avx2",

@@ -23,6 +23,8 @@ pub struct SelOsc {
     bz: Vec<Param>,
     theta: Vec<Param>,
     rotate: bool,
+    slow: usize,
+    period: usize,
     pub head: Head,
 }
 
@@ -53,6 +55,7 @@ pub struct Scratch {
     bi: Vec<f32>,
     neg_hi: Vec<f32>,
     y: Vec<f32>,
+    pos: usize,
     head: HeadScratch,
 }
 
@@ -71,7 +74,7 @@ impl SelOsc {
         let bz = mk(n, 0.0, &mut rng);
         let theta = mk(n, 0.0, &mut rng);
         let head = Head::new(radix, h, &mut rng);
-        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, rotate: true, head };
+        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, rotate: true, slow: 0, period: 1, head };
         m.chrono(1024.0, seed);
         m
     }
@@ -96,6 +99,18 @@ impl SelOsc {
         }
     }
 
+    /// The last `slow` channels of every layer update only on positions divisible by `period` and hold
+    /// their state in between (Clockwork-style); their read-out is then constant and can be cached.
+    pub fn two_speed(&mut self, slow: usize, period: usize) {
+        assert!(slow <= self.n && period >= 1);
+        self.slow = slow;
+        self.period = period;
+    }
+
+    fn held(&self, j: usize, k: usize) -> bool {
+        j >= self.n - self.slow && k % self.period != 0
+    }
+
     /// Input embedding table, (vocab + 1) × h.
     pub fn embedding(&self) -> &[f32] {
         &self.emb.w
@@ -107,7 +122,7 @@ impl SelOsc {
     }
 
     pub fn macs_per_token(&self) -> usize {
-        self.layers * 5 * self.h * self.n + self.head.macs()
+        self.layers * 5 * self.h * ((self.n - self.slow) * self.period + self.slow) / self.period + self.head.macs()
     }
 
     pub fn state_bytes(&self) -> usize {
@@ -162,6 +177,11 @@ impl SelOsc {
                     let (mut pr, mut pi) = (bf.h0[l][s * 2 * n + j], bf.h0[l][s * 2 * n + n + j]);
                     for k in 0..t {
                         let i = (s * t + k) * n + j;
+                        if self.held(j, k) {
+                            bf.hr[l][i] = pr;
+                            bf.hi[l][i] = pi;
+                            continue;
+                        }
                         let (z, a) = (bf.z[l][i], 1.0 - bf.z[l][i]);
                         let hr = a * (ct * pr - st * pi) + z * bf.br[l][i];
                         let hi = a * (st * pr + ct * pi) + z * bf.bi[l][i];
@@ -248,6 +268,12 @@ impl SelOsc {
                         let i = (s * t + k) * n + j;
                         gr += bf.dhr[i];
                         gi += bf.dhi[i];
+                        if self.held(j, k) {
+                            bf.dz[i] = 0.0;
+                            bf.dhr[i] = 0.0;
+                            bf.dhi[i] = 0.0;
+                            continue;
+                        }
                         let (pr, pi) = if k > 0 { (bf.hr[l][i - n], bf.hi[l][i - n]) } else { (bf.h0[l][s * 2 * n + j], bf.h0[l][s * 2 * n + n + j]) };
                         let (rpr, rpi) = (ct * pr - st * pi, st * pr + ct * pi);
                         let (z, a) = (bf.z[l][i], 1.0 - bf.z[l][i]);
@@ -342,7 +368,7 @@ impl SelOsc {
 
     pub fn scratch(&self) -> Scratch {
         let (h, n) = (self.h, self.n);
-        Scratch { u: vec![0.0; h], z: vec![0.0; n], br: vec![0.0; n], bi: vec![0.0; n], neg_hi: vec![0.0; n], y: vec![0.0; h], head: self.head.scratch() }
+        Scratch { u: vec![0.0; h], z: vec![0.0; n], br: vec![0.0; n], bi: vec![0.0; n], neg_hi: vec![0.0; n], y: vec![0.0; h], pos: 0, head: self.head.scratch() }
     }
 
     pub fn advance(&self, id: u32, st: &mut State, s: &mut Scratch) {
@@ -357,6 +383,10 @@ impl SelOsc {
             gemv_rows(&s.u, &self.wz[l].w, n, &mut s.z);
             let (re, im) = st.0[l].split_at_mut(n);
             for j in 0..n {
+                if self.held(j, s.pos) {
+                    s.neg_hi[j] = -im[j];
+                    continue;
+                }
                 let (ct, sn) = (self.theta[l].w[j].cos(), self.theta[l].w[j].sin());
                 let z = 1.0 / (1.0 + (-s.z[j]).exp());
                 let a = 1.0 - z;
@@ -375,6 +405,7 @@ impl SelOsc {
                 s.u[c] += s.y[c].tanh();
             }
         }
+        s.pos += 1;
     }
 
     pub fn infer_step(&self, id: u32, st: &mut State, s: &mut Scratch, pick: impl FnMut(usize, &[f32], f32) -> u32, out: &mut [u32]) -> f32 {
@@ -400,9 +431,19 @@ mod tests {
 
     #[test]
     fn gradients_match_finite_differences() {
+        check_gradients(0, 1);
+    }
+
+    #[test]
+    fn two_speed_gradients_match_finite_differences() {
+        check_gradients(2, 2);
+    }
+
+    fn check_gradients(slow: usize, period: usize) {
         let radix = vec![3, 4];
         let (vocab, h, n, layers, b, t) = (12, 6, 4, 2, 2, 5);
         let mut m = SelOsc::new(vocab, radix.clone(), h, n, layers, 11);
+        m.two_speed(slow, period);
         for d in m.d.iter_mut() {
             d.w.iter_mut().for_each(|w| *w = 0.3);
         }

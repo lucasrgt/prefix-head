@@ -107,6 +107,9 @@ def ordering(kind, w, pcs, train_y, m, seed):
         return np.random.default_rng(seed).permutation(v)
     if kind == "sem":
         return semantic(w, m, seed)
+    if kind.startswith("cipher"):
+        perm = np.random.default_rng(int(kind[6:] or 1)).permutation(256).astype(np.uint8)
+        return np.array(sorted(range(v), key=lambda t: (bytes(perm[list(pcs[t])]), t)))
     if kind == "hyb":
         n = np.bincount(train_y.cpu().numpy(), minlength=v)
         start = [t for t in range(v) if pcs[t][:1] in (b" ", b"\n") or pcs[t].startswith("▁".encode())]

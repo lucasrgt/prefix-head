@@ -1,0 +1,18 @@
+{"model": "gemma270m", "scheme": "bvh", "variant": "prefix@128", "rows_read": 264192.0, "rows_cut": 1.0, "bytes_read": 338169856, "bytes_cut_vs_f16": 1.0, "note": "2048.0 of 2048 blocks visited"}
+{"model": "gemma270m", "scheme": "bvh", "variant": "random@128", "rows_read": 264192.0, "rows_cut": 1.0, "bytes_read": 338169856, "bytes_cut_vs_f16": 1.0, "note": "2048.0 of 2048 blocks visited"}
+{"model": "gemma270m", "scheme": "bvh", "variant": "semantic@128", "rows_read": 263354.5, "rows_cut": 1.0, "bytes_read": 337097867, "bytes_cut_vs_f16": 1.0, "note": "2041.5 of 2048 blocks visited"}
+{"model": "gemma270m", "scheme": "bvh", "variant": "prefix@512", "rows_read": 262656.0, "rows_cut": 1.0, "bytes_read": 336200704, "bytes_cut_vs_f16": 1.0, "note": "512.0 of 512 blocks visited"}
+{"model": "gemma270m", "scheme": "bvh", "variant": "random@512", "rows_read": 262656.0, "rows_cut": 1.0, "bytes_read": 336200704, "bytes_cut_vs_f16": 1.0, "note": "512.0 of 512 blocks visited"}
+{"model": "gemma270m", "scheme": "bvh", "variant": "semantic@512", "rows_read": 262136.8, "rows_cut": 1.0, "bytes_read": 335536071, "bytes_cut_vs_f16": 1.0, "note": "511.0 of 512 blocks visited"}
+{"model": "gemma270m", "scheme": "mipmap", "variant": "int2", "rows_read": 524288.0, "rows_cut": 0.5, "bytes_read": 387973120, "bytes_cut_vs_f16": 0.9, "note": "262144.0 rows refined"}
+{"model": "gemma270m", "scheme": "mipmap", "variant": "int3", "rows_read": 524288.0, "rows_cut": 0.5, "bytes_read": 408944640, "bytes_cut_vs_f16": 0.8, "note": "262144.0 rows refined"}
+{"model": "gemma270m", "scheme": "mipmap", "variant": "int4", "rows_read": 520646.0, "rows_cut": 0.5, "bytes_read": 425254439, "bytes_cut_vs_f16": 0.8, "note": "258502.0 rows refined"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "prefix@128", "rows_read": 152995.0, "rows_cut": 1.0, "bytes_read": 313336134, "bytes_cut_vs_f16": 1.0, "note": "1186.0 of 1187 blocks visited"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "random@128", "rows_read": 153123.0, "rows_cut": 1.0, "bytes_read": 313598278, "bytes_cut_vs_f16": 1.0, "note": "1187.0 of 1187 blocks visited"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "semantic@128", "rows_read": 153123.0, "rows_cut": 1.0, "bytes_read": 313598278, "bytes_cut_vs_f16": 1.0, "note": "1187.0 of 1187 blocks visited"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "prefix@512", "rows_read": 152361.0, "rows_cut": 1.0, "bytes_read": 312035922, "bytes_cut_vs_f16": 1.0, "note": "297.0 of 297 blocks visited"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "random@512", "rows_read": 152361.0, "rows_cut": 1.0, "bytes_read": 312035922, "bytes_cut_vs_f16": 1.0, "note": "297.0 of 297 blocks visited"}
+{"model": "qwen06b", "scheme": "bvh", "variant": "semantic@512", "rows_read": 152361.0, "rows_cut": 1.0, "bytes_read": 312035922, "bytes_cut_vs_f16": 1.0, "note": "297.0 of 297 blocks visited"}
+{"model": "qwen06b", "scheme": "mipmap", "variant": "int2", "rows_read": 303872.0, "rows_cut": 0.5, "bytes_read": 359784448, "bytes_cut_vs_f16": 0.9, "note": "151936.0 rows refined"}
+{"model": "qwen06b", "scheme": "mipmap", "variant": "int3", "rows_read": 303814.9, "rows_cut": 0.5, "bytes_read": 379115362, "bytes_cut_vs_f16": 0.8, "note": "151878.9 rows refined"}
+{"model": "qwen06b", "scheme": "mipmap", "variant": "int4", "rows_read": 235734.5, "rows_cut": 0.6, "bytes_read": 259134560, "bytes_cut_vs_f16": 1.2, "note": "83798.5 rows refined"}

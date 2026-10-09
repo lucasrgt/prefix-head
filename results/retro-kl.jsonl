@@ -81,3 +81,11 @@
 {"model": "gemma4e2b", "group": "hyb-s3", "classes": 512, "kl_bpc": 0.1849}
 {"model": "gemma4e2b", "group": "hyb-128-s3", "classes": 2048, "kl_bpc": 0.2336}
 {"model": "gptoss20b", "group": "hyb-s3", "classes": 448, "kl_bpc": 0.0193}
+{"model": "qwen06b", "group": "cipher1", "classes": 390, "kl_bpc": 0.0882}
+{"model": "qwen06b", "group": "cipher2", "classes": 390, "kl_bpc": 0.0958}
+{"model": "qwen06b", "group": "cipher3", "classes": 390, "kl_bpc": 0.0937}
+{"model": "gemma270mqat", "group": "prefix", "classes": 512, "kl_bpc": 0.1202}
+{"model": "gemma270mqat", "group": "prefix-128", "classes": 2048, "kl_bpc": 0.1004}
+{"model": "gemma1b", "group": "cipher1", "classes": 512, "kl_bpc": 0.0855}
+{"model": "gemma1b", "group": "cipher2", "classes": 512, "kl_bpc": 0.0885}
+{"model": "gemma1b", "group": "cipher3", "classes": 512, "kl_bpc": 0.0857}

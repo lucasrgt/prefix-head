@@ -2,7 +2,7 @@
 //! scaled embedding, RMSNorm with the +1 already folded into the GGUF weights, QK-norm, NeoX RoPE
 //! (10k on sliding-window layers, the model base on global ones), GELU-tanh gated FFN, post-norms.
 
-use crate::gguf::{Gguf, Q8_0};
+use crate::gguf::{F16, Gguf, Q4_0, Q8_0};
 use crate::pool::Pool;
 use crate::q8::{Act, Isa, Mat, matvec};
 use std::arch::x86_64::*;
@@ -56,8 +56,12 @@ pub struct Gemma {
 
 fn mat(g: &Gguf, name: &str) -> Mat {
     let (t, b) = g.tensor(name);
-    assert_eq!(t.kind, Q8_0, "{name} is not Q8_0");
-    Mat::from_q8_0(b, t.dims[1], t.dims[0])
+    match t.kind {
+        Q8_0 => Mat::from_q8_0(b, t.dims[1], t.dims[0]),
+        Q4_0 => Mat::from_q4_0(b, t.dims[1], t.dims[0]),
+        F16 => Mat::from_f16(b, t.dims[1], t.dims[0]),
+        k => panic!("{name}: unsupported tensor type {k}"),
+    }
 }
 
 fn rmsnorm(x: &[f32], w: &[f32], eps: f32, out: &mut [f32]) {
@@ -174,6 +178,19 @@ impl Gemma {
             ad: Act::new(d),
             aq: Act::new(nh * hd),
             aff: Act::new(ff),
+        }
+    }
+
+    pub fn requantize(&mut self, body4: bool, head4: bool) {
+        if body4 {
+            for l in &mut self.layers {
+                for m in [&mut l.q, &mut l.k, &mut l.v, &mut l.o, &mut l.gate, &mut l.up, &mut l.down] {
+                    *m = m.to_q4();
+                }
+            }
+        }
+        if head4 {
+            self.emb = self.emb.to_q4();
         }
     }
 
