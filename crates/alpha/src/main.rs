@@ -94,6 +94,10 @@ fn main() {
         recurrent::split(&a, &train, &test);
         return;
     }
+    if a.model == "recall" {
+        recurrent::recall(&a, &train);
+        return;
+    }
     if a.model == "score" {
         recurrent::score(&a, &train, &test, test_chars);
         return;

@@ -1,0 +1,8 @@
+[package]
+name = "gem"
+edition.workspace = true
+version.workspace = true
+
+[dependencies]
+nn = { path = "../nn" }
+ruler = { path = "../ruler" }

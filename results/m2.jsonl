@@ -1,0 +1,156 @@
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"cold (zero state)","bpc":2.1475,"bpc_capitals":2.2132,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 16 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 64 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 256 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 1024 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 4096 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"last 16384 tokens","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"whole book (moment)","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1472,"bpc_capitals":2.2133,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1473,"bpc_capitals":2.2132,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1474,"bpc_capitals":2.2132,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-seed1.bin","condition":"another book's moment","bpc":2.1474,"bpc_capitals":2.2132,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"cold (zero state)","bpc":2.1679,"bpc_capitals":2.1739,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 16 tokens","bpc":2.1677,"bpc_capitals":2.1722,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 64 tokens","bpc":2.1686,"bpc_capitals":2.1719,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 256 tokens","bpc":2.1722,"bpc_capitals":2.1703,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 1024 tokens","bpc":2.1800,"bpc_capitals":2.1723,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 4096 tokens","bpc":2.1845,"bpc_capitals":2.1727,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"last 16384 tokens","bpc":2.1848,"bpc_capitals":2.1722,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"whole book (moment)","bpc":2.1848,"bpc_capitals":2.1722,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1850,"bpc_capitals":2.1720,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1832,"bpc_capitals":2.1782,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1679,"bpc_capitals":2.1738,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"whole book, 1-bit state","bpc":2.2115,"bpc_capitals":2.1634,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin","condition":"another book's moment","bpc":2.1868,"bpc_capitals":2.1760,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"cold (zero state)","bpc":2.1439,"bpc_capitals":2.1751,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 16 tokens","bpc":2.1433,"bpc_capitals":2.1728,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 64 tokens","bpc":2.1434,"bpc_capitals":2.1728,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 256 tokens","bpc":2.1440,"bpc_capitals":2.1702,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 1024 tokens","bpc":2.1465,"bpc_capitals":2.1659,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 4096 tokens","bpc":2.1501,"bpc_capitals":2.1605,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"last 16384 tokens","bpc":2.1515,"bpc_capitals":2.1571,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"whole book (moment)","bpc":2.1515,"bpc_capitals":2.1570,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1515,"bpc_capitals":2.1569,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1515,"bpc_capitals":2.1599,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1437,"bpc_capitals":2.1746,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1861,"bpc_capitals":2.1565,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin","condition":"another book's moment","bpc":2.1549,"bpc_capitals":2.1681,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"cold (zero state)","bpc":2.1400,"bpc_capitals":2.1749,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 16 tokens","bpc":2.1386,"bpc_capitals":2.1733,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 64 tokens","bpc":2.1382,"bpc_capitals":2.1719,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 256 tokens","bpc":2.1377,"bpc_capitals":2.1703,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 1024 tokens","bpc":2.1373,"bpc_capitals":2.1689,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 4096 tokens","bpc":2.1372,"bpc_capitals":2.1681,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 16384 tokens","bpc":2.1373,"bpc_capitals":2.1680,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book (moment)","bpc":2.1373,"bpc_capitals":2.1680,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1373,"bpc_capitals":2.1680,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1380,"bpc_capitals":2.1713,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1395,"bpc_capitals":2.1746,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1438,"bpc_capitals":2.1660,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"another book's moment","bpc":2.1398,"bpc_capitals":2.1762,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"cold (zero state)","bpc":2.1448,"bpc_capitals":2.1766,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 16 tokens","bpc":2.1430,"bpc_capitals":2.1754,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 64 tokens","bpc":2.1422,"bpc_capitals":2.1745,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 256 tokens","bpc":2.1413,"bpc_capitals":2.1730,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 1024 tokens","bpc":2.1405,"bpc_capitals":2.1724,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 4096 tokens","bpc":2.1403,"bpc_capitals":2.1714,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 16384 tokens","bpc":2.1403,"bpc_capitals":2.1714,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book (moment)","bpc":2.1403,"bpc_capitals":2.1714,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1403,"bpc_capitals":2.1715,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1421,"bpc_capitals":2.1735,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1441,"bpc_capitals":2.1765,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1430,"bpc_capitals":2.1748,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"another book's moment","bpc":2.1434,"bpc_capitals":2.1824,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"cold (zero state)","bpc":2.1400,"bpc_capitals":2.1749,"bpc_first128":2.1707,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 16 tokens","bpc":2.1386,"bpc_capitals":2.1733,"bpc_first128":2.1553,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 64 tokens","bpc":2.1382,"bpc_capitals":2.1719,"bpc_first128":2.1507,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 256 tokens","bpc":2.1377,"bpc_capitals":2.1703,"bpc_first128":2.1468,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 1024 tokens","bpc":2.1373,"bpc_capitals":2.1689,"bpc_first128":2.1444,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 4096 tokens","bpc":2.1372,"bpc_capitals":2.1681,"bpc_first128":2.1443,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"last 16384 tokens","bpc":2.1373,"bpc_capitals":2.1680,"bpc_first128":2.1443,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book (moment)","bpc":2.1373,"bpc_capitals":2.1680,"bpc_first128":2.1443,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1373,"bpc_capitals":2.1680,"bpc_first128":2.1444,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1380,"bpc_capitals":2.1713,"bpc_first128":2.1511,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1395,"bpc_capitals":2.1746,"bpc_first128":2.1656,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1438,"bpc_capitals":2.1660,"bpc_first128":2.1820,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin","condition":"another book's moment","bpc":2.1398,"bpc_capitals":2.1762,"bpc_first128":2.1648,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"cold (zero state)","bpc":2.1448,"bpc_capitals":2.1766,"bpc_first128":2.1856,"state_bytes":0,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 16 tokens","bpc":2.1430,"bpc_capitals":2.1754,"bpc_first128":2.1657,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 64 tokens","bpc":2.1422,"bpc_capitals":2.1745,"bpc_first128":2.1570,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 256 tokens","bpc":2.1413,"bpc_capitals":2.1730,"bpc_first128":2.1508,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 1024 tokens","bpc":2.1405,"bpc_capitals":2.1724,"bpc_first128":2.1484,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 4096 tokens","bpc":2.1403,"bpc_capitals":2.1714,"bpc_first128":2.1475,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"last 16384 tokens","bpc":2.1403,"bpc_capitals":2.1714,"bpc_first128":2.1475,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book (moment)","bpc":2.1403,"bpc_capitals":2.1714,"bpc_first128":2.1475,"state_bytes":1024,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1403,"bpc_capitals":2.1715,"bpc_first128":2.1476,"state_bytes":256,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1421,"bpc_capitals":2.1735,"bpc_first128":2.1584,"state_bytes":128,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1441,"bpc_capitals":2.1765,"bpc_first128":2.1777,"state_bytes":64,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1430,"bpc_capitals":2.1748,"bpc_first128":2.1739,"state_bytes":32,"chars":77996}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin","condition":"another book's moment","bpc":2.1434,"bpc_capitals":2.1824,"bpc_first128":2.1700,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"cold (zero state)","bpc":2.1730,"bpc_capitals":2.2084,"bpc_first128":2.1964,"state_bytes":0,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16 tokens","bpc":2.1716,"bpc_capitals":2.2077,"bpc_first128":2.1790,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 64 tokens","bpc":2.1713,"bpc_capitals":2.2081,"bpc_first128":2.1752,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 256 tokens","bpc":2.1712,"bpc_capitals":2.2087,"bpc_first128":2.1744,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 1024 tokens","bpc":2.1713,"bpc_capitals":2.2088,"bpc_first128":2.1747,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 4096 tokens","bpc":2.1713,"bpc_capitals":2.2088,"bpc_first128":2.1746,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16384 tokens","bpc":2.1713,"bpc_capitals":2.2088,"bpc_first128":2.1746,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book (moment)","bpc":2.1713,"bpc_capitals":2.2088,"bpc_first128":2.1746,"state_bytes":1024,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1713,"bpc_capitals":2.2088,"bpc_first128":2.1746,"state_bytes":256,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1713,"bpc_capitals":2.2087,"bpc_first128":2.1745,"state_bytes":128,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1713,"bpc_capitals":2.2082,"bpc_first128":2.1749,"state_bytes":64,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1718,"bpc_capitals":2.2085,"bpc_first128":2.1811,"state_bytes":32,"chars":77996}
+{"model":"osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"another book's moment","bpc":2.1719,"bpc_capitals":2.2099,"bpc_first128":2.1838,"state_bytes":1024,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"cold (zero state)","bpc":2.1301,"bpc_capitals":2.1735,"bpc_first128":2.1460,"state_bytes":0,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16 tokens","bpc":2.1286,"bpc_capitals":2.1722,"bpc_first128":2.1283,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 64 tokens","bpc":2.1285,"bpc_capitals":2.1729,"bpc_first128":2.1269,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 256 tokens","bpc":2.1284,"bpc_capitals":2.1734,"bpc_first128":2.1264,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 1024 tokens","bpc":2.1284,"bpc_capitals":2.1735,"bpc_first128":2.1264,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 4096 tokens","bpc":2.1284,"bpc_capitals":2.1735,"bpc_first128":2.1264,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16384 tokens","bpc":2.1284,"bpc_capitals":2.1735,"bpc_first128":2.1264,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book (moment)","bpc":2.1284,"bpc_capitals":2.1735,"bpc_first128":2.1264,"state_bytes":816,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1284,"bpc_capitals":2.1735,"bpc_first128":2.1264,"state_bytes":204,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1285,"bpc_capitals":2.1737,"bpc_first128":2.1271,"state_bytes":102,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1293,"bpc_capitals":2.1733,"bpc_first128":2.1366,"state_bytes":51,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1288,"bpc_capitals":2.1739,"bpc_first128":2.1316,"state_bytes":25,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"another book's moment","bpc":2.1298,"bpc_capitals":2.1760,"bpc_first128":2.1425,"state_bytes":816,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"cold (zero state)","bpc":2.1514,"bpc_capitals":2.2089,"bpc_first128":2.1578,"state_bytes":0,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16 tokens","bpc":2.1510,"bpc_capitals":2.2083,"bpc_first128":2.1527,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 64 tokens","bpc":2.1509,"bpc_capitals":2.2082,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 256 tokens","bpc":2.1509,"bpc_capitals":2.2081,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 1024 tokens","bpc":2.1509,"bpc_capitals":2.2079,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 4096 tokens","bpc":2.1509,"bpc_capitals":2.2079,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"last 16384 tokens","bpc":2.1509,"bpc_capitals":2.2079,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book (moment)","bpc":2.1509,"bpc_capitals":2.2079,"bpc_first128":2.1514,"state_bytes":8192,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 8-bit state","bpc":2.1509,"bpc_capitals":2.2079,"bpc_first128":2.1514,"state_bytes":2048,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 4-bit state","bpc":2.1509,"bpc_capitals":2.2080,"bpc_first128":2.1522,"state_bytes":1024,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 2-bit state","bpc":2.1513,"bpc_capitals":2.2090,"bpc_first128":2.1561,"state_bytes":512,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"whole book, 1-bit state","bpc":2.1512,"bpc_capitals":2.2077,"bpc_first128":2.1538,"state_bytes":256,"chars":77996}
+{"model":"kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin","condition":"another book's moment","bpc":2.1516,"bpc_capitals":2.2089,"bpc_first128":2.1597,"state_bytes":8192,"chars":77996}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"cold (zero state)","bpc":1.9904,"bpc_capitals":2.5008,"bpc_first128":2.0679,"state_bytes":0,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 16 tokens","bpc":1.9883,"bpc_capitals":2.4980,"bpc_first128":2.0425,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 64 tokens","bpc":1.9881,"bpc_capitals":2.4976,"bpc_first128":2.0398,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 256 tokens","bpc":1.9880,"bpc_capitals":2.4967,"bpc_first128":2.0392,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 1024 tokens","bpc":1.9880,"bpc_capitals":2.4968,"bpc_first128":2.0394,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 4096 tokens","bpc":1.9880,"bpc_capitals":2.4968,"bpc_first128":2.0394,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 16384 tokens","bpc":1.9880,"bpc_capitals":2.4968,"bpc_first128":2.0394,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book (moment)","bpc":1.9880,"bpc_capitals":2.4968,"bpc_first128":2.0394,"state_bytes":816,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 8-bit state","bpc":1.9880,"bpc_capitals":2.4968,"bpc_first128":2.0394,"state_bytes":204,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 4-bit state","bpc":1.9880,"bpc_capitals":2.4973,"bpc_first128":2.0390,"state_bytes":102,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 2-bit state","bpc":1.9892,"bpc_capitals":2.5005,"bpc_first128":2.0529,"state_bytes":51,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 1-bit state","bpc":1.9900,"bpc_capitals":2.4984,"bpc_first128":2.0624,"state_bytes":25,"chars":75755}
+{"model":"sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin","condition":"another book's moment","bpc":1.9907,"bpc_capitals":2.4994,"bpc_first128":2.0712,"state_bytes":816,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"cold (zero state)","bpc":2.0062,"bpc_capitals":2.4743,"bpc_first128":2.0859,"state_bytes":0,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 16 tokens","bpc":2.0045,"bpc_capitals":2.4711,"bpc_first128":2.0657,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 64 tokens","bpc":2.0040,"bpc_capitals":2.4701,"bpc_first128":2.0605,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 256 tokens","bpc":2.0037,"bpc_capitals":2.4704,"bpc_first128":2.0582,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 1024 tokens","bpc":2.0037,"bpc_capitals":2.4703,"bpc_first128":2.0578,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 4096 tokens","bpc":2.0037,"bpc_capitals":2.4703,"bpc_first128":2.0578,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"last 16384 tokens","bpc":2.0037,"bpc_capitals":2.4703,"bpc_first128":2.0578,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book (moment)","bpc":2.0037,"bpc_capitals":2.4703,"bpc_first128":2.0578,"state_bytes":1024,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 8-bit state","bpc":2.0037,"bpc_capitals":2.4702,"bpc_first128":2.0579,"state_bytes":256,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 4-bit state","bpc":2.0047,"bpc_capitals":2.4754,"bpc_first128":2.0692,"state_bytes":128,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 2-bit state","bpc":2.0061,"bpc_capitals":2.4748,"bpc_first128":2.0846,"state_bytes":64,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"whole book, 1-bit state","bpc":2.0090,"bpc_capitals":2.4709,"bpc_first128":2.1199,"state_bytes":32,"chars":75755}
+{"model":"mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin","condition":"another book's moment","bpc":2.0066,"bpc_capitals":2.4774,"bpc_first128":2.0913,"state_bytes":1024,"chars":75755}

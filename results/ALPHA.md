@@ -141,7 +141,11 @@ M2 (primeiros 128 tokens): frio 2.1964 → livro inteiro 2.1746 (−1,0%); outro
 - **Positivo inesperado:** o estado de osciladores é muito mais robusto à quantização — 2 bits por número quase não perde (momento de 64 bytes).
 - Próximo natural: oscilador seletivo — porta dependente da entrada (minGRU) × rotação de fase (osc): h_t = (1−z_t)·e^{iθ}·h_{t−1} + z_t·c_t.
 
-# Oscilador seletivo (`--core sosc --n 51`) — 2026-10-08
+# Quartzo — oscilador seletivo (`--core sosc --n 51`) — 2026-10-08
+
+Nome: **Quartzo** (2026-10-08), pelo oscilador de cristal de quartzo dos relógios: cada canal é um ressonador com frequência e amortecimento próprios, e a porta seletiva decide quando o ressonador absorve a entrada. No código continua `sosc` (checkpoints e resultados usam esse nome).
+
+**Prior art (2026-10-08):** a recorrência é a mesma da HGRU (HGRN, Qin et al., NeurIPS 2023, Eq. 2). O Quartzo é uma reinvenção independente; o que é nosso é o entorno (chrono, treino stateful, cabeça por prefixo) e as medições de eficiência em escala minúscula.
 
 h_t = (1 − z_t)·e^{iθ}·h_{t−1} + z_t·c_t, z_t da entrada (minGRU) × rotação de fase aprendida (osc). 51 canais complexos/camada → 24.303 MACs/char, 2.217.472 parâmetros, **estado 816 B**.
 

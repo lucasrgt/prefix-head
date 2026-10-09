@@ -1,0 +1,2 @@
+grp-freq-91:bpe8192 word-initial: 527335 chars, class 1.0268 + within 0.9747 = 2.0016 bits/char
+grp-freq-91:bpe8192 continuation: 189476 chars, class 1.5420 + within 0.9588 = 2.5008 bits/char

@@ -29,6 +29,14 @@ pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usi
             }
             m
         }),
+        "sreal" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
+            let mut m = SelOsc::new(v, r, a.h, a.n, a.layers, a.rng_seed());
+            if a.chrono > 0.0 {
+                m.chrono(a.chrono, a.rng_seed());
+            }
+            m.without_rotation();
+            m
+        }),
         "kosc" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
             let mut m = KOsc::new(v, r, a.h, a.n, a.layers, a.rng_seed());
             if a.chrono > 0.0 {
@@ -297,7 +305,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
         "{{\"alpha\":\"{}\",\"corpus\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         a.corpus,
-        M::KIND,
+        a.core,
         a.n,
         a.seed,
         a.h,
@@ -343,7 +351,7 @@ pub fn checkpoint_name(a: &Args) -> String {
 pub fn score(a: &Args, train: &str, test: &str, test_chars: usize) {
     match a.core.as_str() {
         "osc" => score_core::<Osc>(a, train, test, test_chars),
-        "sosc" => score_core::<SelOsc>(a, train, test, test_chars),
+        "sosc" | "sreal" => score_core::<SelOsc>(a, train, test, test_chars),
         "kosc" => score_core::<KOsc>(a, train, test, test_chars),
         "tfm" => score_core::<Tfm>(a, train, test, test_chars),
         "mamba" => score_core::<Mamba>(a, train, test, test_chars),
@@ -445,5 +453,102 @@ fn split_core<M: Seq>(a: &Args, train: &str, test: &str) {
             bits[kind][1] / n,
             (bits[kind][0] + bits[kind][1]) / n
         );
+    }
+}
+
+/// Associative recall on fresh lines in the tools/mqar/gen.py format: greedy accuracy and bits on the
+/// value characters of the query half, per number of pairs, each line from a cold state.
+pub fn recall(a: &Args, train: &str) {
+    match a.core.as_str() {
+        "sosc" | "sreal" => recall_core::<SelOsc>(a, train),
+        "tfm" => recall_core::<Tfm>(a, train),
+        "mamba" => recall_core::<Mamba>(a, train),
+        _ => recall_core::<MinGru>(a, train),
+    }
+}
+
+fn recall_line(n: usize, rng: &mut kern::Rng) -> (String, Vec<bool>) {
+    let mut word = || (0..3).map(|_| (b'a' + (rng.next() % 26) as u8) as char).collect::<String>();
+    let mut keys: Vec<String> = Vec::new();
+    while keys.len() < n {
+        let k = word();
+        if !keys.contains(&k) {
+            keys.push(k);
+        }
+    }
+    let pairs: Vec<(String, String)> = keys.into_iter().map(|k| (k, word())).collect();
+    let mut order: Vec<usize> = (0..n).collect();
+    for i in (1..n).rev() {
+        order.swap(i, (rng.next() % (i as u64 + 1)) as usize);
+    }
+    let mut line = pairs.iter().map(|(k, v)| format!("{k}:{v}")).collect::<Vec<_>>().join(" ");
+    line.push_str(" ; ");
+    let mut mask = vec![false; line.len()];
+    for (j, &i) in order.iter().enumerate() {
+        if j > 0 {
+            line.push(' ');
+            mask.push(false);
+        }
+        line.push_str(&pairs[i].0);
+        line.push(':');
+        mask.extend([false; 4]);
+        line.push_str(&pairs[i].1);
+        mask.extend([true; 3]);
+    }
+    line.push('\n');
+    mask.push(false);
+    (line, mask)
+}
+
+fn recall_core<M: Seq>(a: &Args, train: &str) {
+    let fact = parse(&a.alpha, train);
+    let radix = fact.radix();
+    let f = radix.len();
+    let path = ruler::results::root().join("data/models").join(checkpoint_name(a));
+    let (m, _) = M::load(&path).unwrap_or_else(|e| panic!("{}: {e}", path.display()));
+    let bos = m.vocab() as u32;
+    let mut rng = kern::Rng::new(2026);
+    for n in [2usize, 4, 8, 16, 32] {
+        let (mut hit, mut total, mut nats) = (0usize, 0usize, 0f64);
+        for _ in 0..200 {
+            let (line, mask) = recall_line(n, &mut rng);
+            let te = fact.encode(&line);
+            let ids = from_digits(&te, &radix);
+            assert_eq!(ids.len(), mask.len(), "recall needs one token per character");
+            let (mut st, mut sc) = (m.state(), m.scratch());
+            let mut out = vec![0u32; f];
+            for k in 0..ids.len() {
+                let input = if k == 0 { bos } else { ids[k - 1] };
+                let mut ok = true;
+                let lp = m.infer_step(
+                    input,
+                    &mut st,
+                    &mut sc,
+                    |q, logits, _| {
+                        let target = te[k * f + q];
+                        let best = logits.iter().enumerate().fold(0, |b, (i, &x)| if x > logits[b] { i } else { b });
+                        ok &= best as u32 == target;
+                        target
+                    },
+                    &mut out,
+                );
+                if mask[k] {
+                    total += 1;
+                    hit += ok as usize;
+                    nats -= lp as f64;
+                }
+            }
+        }
+        let line = format!(
+            "{{\"model\":\"{}\",\"checkpoint\":\"{}\",\"pairs\":{n},\"accuracy\":{:.4},\"bits_per_value_char\":{:.3},\"chance_bits\":{:.3},\"state_bytes\":{}}}",
+            a.core,
+            checkpoint_name(a),
+            hit as f64 / total as f64,
+            nats / std::f64::consts::LN_2 / total as f64,
+            26f64.log2(),
+            m.state_bytes()
+        );
+        println!("{line}");
+        ruler::results::append("recall.jsonl", &line);
     }
 }
