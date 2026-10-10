@@ -24,7 +24,7 @@ At equal cost (2,048 classes of 128), prefix blocks deviate **27–33% less** th
 
 **End-to-end sequential scoring on a CPU** (Gemma 3 270M, Q8_0, batch 1, our Rust runtime, Ryzen 7 7700): 132 → 321 tokens/s with AVX-512 (**2.4×**), 119 → 256 with AVX2 only (**2.1×**).
 
-**With Google's 4-bit QAT release** of Gemma 3 270M (which keeps the 262k-token head in F16, 84% of the file): 98 → 430 tokens/s (**4.4×**), since head factorization and 4-bit weights compose.
+**With Google's 4-bit QAT release** of Gemma 3 270M (which keeps the 262k-token head in F16, 84% of the file): 98 → 430 tokens/s (**4.4×**), and **537 tokens/s** with the head requantized to 8 bits (no measurable loss, 393 → 235 MB), since head factorization and low-bit weights compose.
 
 **Why it works.** The class decision follows the generation direction; the gain concentrates on tokens that continue a word, which is also why alphabetical classes lost at the whole-word level in earlier work (Jiang et al., IJCAI 2017).
 
