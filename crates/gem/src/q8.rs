@@ -151,8 +151,13 @@ impl Act {
         Self { q: vec![0; n], s: vec![0.0; n / 32], x: vec![0.0; n] }
     }
 
-    pub fn quantize(&mut self, x: &[f32]) {
+    pub fn quantize(&mut self, x: &[f32], isa: Isa) {
         self.x.copy_from_slice(x);
+        match isa {
+            Isa::Avx512 => return unsafe { self.quantize_avx512(x) },
+            Isa::Avx2 => return unsafe { self.quantize_avx2(x) },
+            Isa::Scalar => {}
+        }
         for (b, chunk) in x.chunks_exact(32).enumerate() {
             let amax = chunk.iter().fold(0f32, |m, v| m.max(v.abs()));
             let d = amax / 127.0;
@@ -160,6 +165,48 @@ impl Act {
             self.s[b] = d;
             for (q, v) in self.q[b * 32..(b + 1) * 32].iter_mut().zip(chunk) {
                 *q = (v * inv).round() as i8;
+            }
+        }
+    }
+}
+
+impl Act {
+    #[target_feature(enable = "avx512f,avx512bw")]
+    unsafe fn quantize_avx512(&mut self, x: &[f32]) {
+        unsafe {
+            for b in 0..x.len() / 32 {
+                let lo = _mm512_loadu_ps(x.as_ptr().add(b * 32));
+                let hi = _mm512_loadu_ps(x.as_ptr().add(b * 32 + 16));
+                let amax = _mm512_reduce_max_ps(_mm512_max_ps(_mm512_abs_ps(lo), _mm512_abs_ps(hi)));
+                let d = amax / 127.0;
+                let inv = _mm512_set1_ps(if d > 0.0 { 1.0 / d } else { 0.0 });
+                *self.s.get_unchecked_mut(b) = d;
+                let out = self.q.as_mut_ptr().add(b * 32) as *mut __m128i;
+                _mm_storeu_si128(out, _mm512_cvtepi32_epi8(_mm512_cvtps_epi32(_mm512_mul_ps(lo, inv))));
+                _mm_storeu_si128(out.add(1), _mm512_cvtepi32_epi8(_mm512_cvtps_epi32(_mm512_mul_ps(hi, inv))));
+            }
+        }
+    }
+
+    #[target_feature(enable = "avx2")]
+    unsafe fn quantize_avx2(&mut self, x: &[f32]) {
+        unsafe {
+            let sign = _mm256_set1_ps(-0.0);
+            for b in 0..x.len() / 32 {
+                let v: [__m256; 4] = std::array::from_fn(|i| _mm256_loadu_ps(x.as_ptr().add(b * 32 + i * 8)));
+                let m = v.iter().fold(_mm256_setzero_ps(), |m, &a| _mm256_max_ps(m, _mm256_andnot_ps(sign, a)));
+                let mut lanes = [0f32; 8];
+                _mm256_storeu_ps(lanes.as_mut_ptr(), m);
+                let d = lanes.iter().fold(0f32, |a, &c| a.max(c)) / 127.0;
+                let inv = _mm256_set1_ps(if d > 0.0 { 1.0 / d } else { 0.0 });
+                *self.s.get_unchecked_mut(b) = d;
+                let mut ints = [0i32; 32];
+                for (i, &a) in v.iter().enumerate() {
+                    _mm256_storeu_si256(ints.as_mut_ptr().add(i * 8) as *mut __m256i, _mm256_cvtps_epi32(_mm256_mul_ps(a, inv)));
+                }
+                for (q, &i) in self.q[b * 32..(b + 1) * 32].iter_mut().zip(&ints) {
+                    *q = i as i8;
+                }
             }
         }
     }

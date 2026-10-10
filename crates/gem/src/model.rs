@@ -32,7 +32,6 @@ pub struct Gemma {
     hd: usize,
     eps: f32,
     window: usize,
-    base: f32,
     pub layers: Vec<Layer>,
     pub emb: Mat,
     out_norm: Vec<f32>,
@@ -52,6 +51,11 @@ pub struct Gemma {
     ad: Act,
     aq: Act,
     aff: Act,
+    pub prof: [f64; 6],
+    inv_freq: [Vec<f32>; 2],
+    rot: [Vec<(f32, f32)>; 2],
+    gt: Vec<f32>,
+    acc: Vec<f32>,
 }
 
 fn mat(g: &Gguf, name: &str) -> Mat {
@@ -80,19 +84,13 @@ fn rmsnorm_inplace(x: &mut [f32], w: &[f32], eps: f32) {
     }
 }
 
-fn rope(x: &mut [f32], pos: usize, base: f32) {
+fn rope(x: &mut [f32], table: &[(f32, f32)]) {
     let half = x.len() / 2;
-    for i in 0..half {
-        let theta = pos as f32 * base.powf(-2.0 * i as f32 / x.len() as f32);
-        let (s, c) = theta.sin_cos();
+    for (i, &(s, c)) in table.iter().enumerate() {
         let (a, b) = (x[i], x[i + half]);
         x[i] = a * c - b * s;
         x[i + half] = a * s + b * c;
     }
-}
-
-fn gelu(x: f32) -> f32 {
-    0.5 * x * (1.0 + (0.797_884_6 * (x + 0.044715 * x * x * x)).tanh())
 }
 
 #[target_feature(enable = "avx512f")]
@@ -108,6 +106,31 @@ unsafe fn dot512(a: &[f32], b: &[f32]) -> f32 {
             s += a[i] * b[i];
         }
         s
+    }
+}
+
+#[target_feature(enable = "avx512f")]
+unsafe fn axpy512(p: f32, x: &[f32], y: &mut [f32]) {
+    unsafe {
+        let pv = _mm512_set1_ps(p);
+        let n = x.len() / 16;
+        for i in 0..n {
+            let o = y.as_mut_ptr().add(i * 16);
+            _mm512_storeu_ps(o, _mm512_fmadd_ps(pv, _mm512_loadu_ps(x.as_ptr().add(i * 16)), _mm512_loadu_ps(o)));
+        }
+        for i in n * 16..x.len() {
+            y[i] += p * x[i];
+        }
+    }
+}
+
+fn axpy(p: f32, x: &[f32], y: &mut [f32], isa: Isa) {
+    if isa == Isa::Avx512 {
+        unsafe { axpy512(p, x, y) }
+    } else {
+        for (o, v) in y.iter_mut().zip(x) {
+            *o += p * v;
+        }
     }
 }
 
@@ -158,7 +181,6 @@ impl Gemma {
             hd,
             eps,
             window,
-            base,
             layers,
             emb,
             out_norm: g.f32s("output_norm.weight"),
@@ -178,6 +200,11 @@ impl Gemma {
             ad: Act::new(d),
             aq: Act::new(nh * hd),
             aff: Act::new(ff),
+            prof: [0.0; 6],
+            inv_freq: [10000.0f32, base].map(|b| (0..hd / 2).map(|i| b.powf(-2.0 * i as f32 / hd as f32)).collect()),
+            rot: [vec![(0.0, 1.0); hd / 2], vec![(0.0, 1.0); hd / 2]],
+            gt: vec![0.0; ff],
+            acc: Vec::new(),
         }
     }
 
@@ -214,78 +241,112 @@ impl Gemma {
         for (x, e) in self.x.iter_mut().zip(self.emb.row_f32(tok as usize)) {
             *x = e * scale;
         }
+        if self.acc.len() != pool.threads() * nh * hd {
+            self.acc = vec![0.0; pool.threads() * nh * hd];
+        }
+        for (rot, inv) in self.rot.iter_mut().zip(&self.inv_freq) {
+            for (r, f) in rot.iter_mut().zip(inv) {
+                *r = (pos as f32 * f).sin_cos();
+            }
+        }
         for l in 0..self.layers.len() {
             let ly = &self.layers[l];
             rmsnorm(&self.x, &ly.attn_norm, eps, &mut self.xn);
-            self.ad.quantize(&self.xn);
+            self.ad.quantize(&self.xn, isa);
+            let t0 = std::time::Instant::now();
             matvec(pool, isa, &ly.q, &self.ad, &mut self.q);
             matvec(pool, isa, &ly.k, &self.ad, &mut self.k);
             matvec(pool, isa, &ly.v, &self.ad, &mut self.v);
-            let base = if ly.swa { 10000.0 } else { self.base };
+            self.prof[0] += t0.elapsed().as_secs_f64();
+            let table = &self.rot[if ly.swa { 0 } else { 1 }];
             let qs = 1.0 / (hd as f32).sqrt();
             for h in 0..nh {
                 let qh = &mut self.q[h * hd..(h + 1) * hd];
                 rmsnorm_inplace(qh, &ly.q_norm, eps);
-                rope(qh, pos, base);
+                rope(qh, table);
                 qh.iter_mut().for_each(|v| *v *= qs);
             }
             for h in 0..nkv {
                 let kh = &mut self.k[h * hd..(h + 1) * hd];
                 rmsnorm_inplace(kh, &ly.k_norm, eps);
-                rope(kh, pos, base);
+                rope(kh, table);
             }
             let row = nkv * hd;
             self.kc[l][pos * row..(pos + 1) * row].copy_from_slice(&self.k);
             self.vc[l][pos * row..(pos + 1) * row].copy_from_slice(&self.v);
             let lo = if ly.swa { (pos + 1).saturating_sub(self.window) } else { 0 };
             let (kc, vc, q, ctx) = (&self.kc[l], &self.vc[l], &self.q, self.ctx);
-            let att = SendPtr(self.att.as_mut_ptr());
-            let sc = SendPtr(self.scores.as_mut_ptr());
+            let n_pos = pos + 1 - lo;
+            let threads = pool.threads();
+            let per = n_pos.div_ceil(threads);
             let group = nh / nkv;
-            let job = |t: usize| {
-                let (att, sc) = (&att, &sc);
-                let mut h = t;
-                while h < nh {
-                    let kvh = h / group;
-                    let qh = &q[h * hd..(h + 1) * hd];
-                    let s = unsafe { std::slice::from_raw_parts_mut(sc.0.add(h * ctx), pos + 1 - lo) };
-                    let mut mx = f32::NEG_INFINITY;
-                    for (i, j) in (lo..=pos).enumerate() {
-                        s[i] = dot(qh, &kc[j * row + kvh * hd..j * row + (kvh + 1) * hd], isa);
-                        mx = mx.max(s[i]);
+            let sc = SendPtr(self.scores.as_mut_ptr());
+            let t1 = std::time::Instant::now();
+            pool.run(&|t| {
+                let sc = &sc;
+                for i in (t * per).min(n_pos)..((t + 1) * per).min(n_pos) {
+                    let krow = &kc[(lo + i) * row..(lo + i + 1) * row];
+                    for h in 0..nh {
+                        let kvh = h / group;
+                        unsafe { *sc.0.add(h * ctx + i) = dot(&q[h * hd..(h + 1) * hd], &krow[kvh * hd..(kvh + 1) * hd], isa) };
                     }
-                    let mut sum = 0.0;
-                    for v in s.iter_mut() {
-                        *v = (*v - mx).exp();
-                        sum += *v;
-                    }
-                    let out = unsafe { std::slice::from_raw_parts_mut(att.0.add(h * hd), hd) };
-                    out.iter_mut().for_each(|o| *o = 0.0);
-                    for (i, j) in (lo..=pos).enumerate() {
-                        let p = s[i] / sum;
-                        for (o, v) in out.iter_mut().zip(&vc[j * row + kvh * hd..j * row + (kvh + 1) * hd]) {
-                            *o += p * v;
-                        }
-                    }
-                    h += pool.threads();
                 }
-            };
-            pool.run(&job);
-            self.aq.quantize(&self.att);
+            });
+            for h in 0..nh {
+                let s = &mut self.scores[h * ctx..h * ctx + n_pos];
+                let mx = s.iter().copied().fold(f32::NEG_INFINITY, f32::max);
+                s.iter_mut().for_each(|v| *v -= mx);
+                nn::fast::exp_inplace(s);
+                let inv = 1.0 / s.iter().sum::<f32>();
+                s.iter_mut().for_each(|v| *v *= inv);
+            }
+            let width = nh * hd;
+            self.acc.iter_mut().for_each(|v| *v = 0.0);
+            let acc = SendPtr(self.acc.as_mut_ptr());
+            let scores = &self.scores;
+            pool.run(&|t| {
+                let acc = &acc;
+                let out = unsafe { std::slice::from_raw_parts_mut(acc.0.add(t * width), width) };
+                for i in (t * per).min(n_pos)..((t + 1) * per).min(n_pos) {
+                    let vrow = &vc[(lo + i) * row..(lo + i + 1) * row];
+                    for h in 0..nh {
+                        let kvh = h / group;
+                        axpy(scores[h * ctx + i], &vrow[kvh * hd..(kvh + 1) * hd], &mut out[h * hd..(h + 1) * hd], isa);
+                    }
+                }
+            });
+            self.att.iter_mut().for_each(|v| *v = 0.0);
+            for t in 0..threads {
+                for (o, v) in self.att.iter_mut().zip(&self.acc[t * width..(t + 1) * width]) {
+                    *o += v;
+                }
+            }
+            self.prof[1] += t1.elapsed().as_secs_f64();
+            self.aq.quantize(&self.att, isa);
+            let t2 = std::time::Instant::now();
             matvec(pool, isa, &ly.o, &self.aq, &mut self.tmp);
+            self.prof[2] += t2.elapsed().as_secs_f64();
             rmsnorm_inplace(&mut self.tmp, &ly.post_attn, eps);
             for (x, t) in self.x.iter_mut().zip(&self.tmp) {
                 *x += t;
             }
             rmsnorm(&self.x, &ly.ffn_norm, eps, &mut self.xn);
-            self.ad.quantize(&self.xn);
+            self.ad.quantize(&self.xn, isa);
+            let t3 = std::time::Instant::now();
             matvec(pool, isa, &ly.gate, &self.ad, &mut self.g);
             matvec(pool, isa, &ly.up, &self.ad, &mut self.u);
-            for (g, u) in self.g.iter_mut().zip(&self.u) {
-                *g = gelu(*g) * u;
+            self.prof[3] += t3.elapsed().as_secs_f64();
+            for (t, &g) in self.gt.iter_mut().zip(&self.g) {
+                *t = 0.797_884_6 * (g + 0.044715 * g * g * g);
             }
-            self.aff.quantize(&self.g);
+            nn::fast::tanh_inplace(&mut self.gt);
+            for ((g, u), t) in self.g.iter_mut().zip(&self.u).zip(&self.gt) {
+                *g = 0.5 * *g * (1.0 + t) * u;
+            }
+            self.aff.quantize(&self.g, isa);
+            let t4 = std::time::Instant::now();
             matvec(pool, isa, &ly.down, &self.aff, &mut self.tmp);
+            self.prof[4] += t4.elapsed().as_secs_f64();
             rmsnorm_inplace(&mut self.tmp, &ly.post_ffw, eps);
             for (x, t) in self.x.iter_mut().zip(&self.tmp) {
                 *x += t;

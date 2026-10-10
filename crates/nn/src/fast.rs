@@ -100,6 +100,27 @@ unsafe fn tanh_avx2(v: &mut [f32]) {
     v.iter_mut().for_each(|a| *a = tanh_fast(*a));
 }
 
+/// v ← e^v, with the same runtime dispatch as `tanh_inplace`.
+pub fn exp_inplace(v: &mut [f32]) {
+    if is_x86_feature_detected!("avx512f") {
+        unsafe { exp_avx512(v) }
+    } else if is_x86_feature_detected!("avx2") && is_x86_feature_detected!("fma") {
+        unsafe { exp_avx2(v) }
+    } else {
+        v.iter_mut().for_each(|a| *a = exp_fast(*a));
+    }
+}
+
+#[target_feature(enable = "avx512f")]
+unsafe fn exp_avx512(v: &mut [f32]) {
+    v.iter_mut().for_each(|a| *a = exp_fast(*a));
+}
+
+#[target_feature(enable = "avx2,fma")]
+unsafe fn exp_avx2(v: &mut [f32]) {
+    v.iter_mut().for_each(|a| *a = exp_fast(*a));
+}
+
 /// e^x via 2^n · 2^f, n = round(x·log₂e), f ∈ [−½, ½], degree-6 Taylor for 2^f; relative error < 3e-7.
 #[inline(always)]
 fn exp_fast(x: f32) -> f32 {

@@ -4,6 +4,12 @@
 
 Inteligência por joule, CPU-only, em hardware doméstico. Hiperotimização de cada detalhe desde o dia 1.
 
+## Objetivo 1 (2026-10-10)
+
+Criar uma LLM capaz de executar tarefas úteis com **menos de 512 MB de RAM** e **mais de 100 tokens/s** no Ryzen 7 7700, **sem GPU**.
+
+Estado: Gemma 3 270M QAT (corpo Q4_0, cabeça por prefixo em 8 bits) roda a ~750–800 tok/s com 235 MB — RAM e velocidade sobram; falta capacidade. Plano: definir um conjunto objetivo de "tarefas úteis", depois gastar a folga num modelo maior que caiba (Qwen3-0.6B; Gemma 3 1B com vocabulário aparado + cabeça por prefixo).
+
 ## Plêiades (a visão)
 
 Muitos especialistas pequenos e baratos funcionando como um sistema, ligados por roteamento **grosso antes do fino, na ordem em que a saída é produzida**: dentro do token (cabeça por prefixos), entre camadas especialistas (MoE por prefixo), entre especialistas por pedido (sociedade) e entre modelos (rascunho barato, conferência cara). O estado minúsculo de cada núcleo (~1 KB) permite manter muitos prontos. Como as Plêiades: um aglomerado de estrelas pequenas que nasceram juntas e viajam juntas. Hoje só o primeiro nível está provado (PAPER.md); os outros estão em HYPOTHESES.md.

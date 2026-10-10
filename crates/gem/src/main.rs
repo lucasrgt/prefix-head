@@ -27,7 +27,7 @@ impl Full {
     }
 
     fn run(&mut self, m: &Gemma, h: &[f32], pool: &Pool, isa: Isa) {
-        self.act.quantize(h);
+        self.act.quantize(h, isa);
         matvec(pool, isa, &m.emb, &self.act, &mut self.logits);
     }
 
@@ -92,7 +92,7 @@ impl TwoLevel {
     }
 
     fn within(&mut self, c: usize, h: &[f32], pool: &Pool, isa: Isa) {
-        self.act.quantize(h);
+        self.act.quantize(h, isa);
         let n = self.blocks[c].rows;
         matvec(pool, isa, &self.blocks[c], &self.act, &mut self.inner[..n]);
     }
@@ -290,6 +290,12 @@ fn main() {
                     idle.unwrap_or(f64::NAN)
                 );
                 println!("{line}");
+                if std::env::var("GEM_PROFILE").is_ok() {
+                    let names = ["qkv", "attention", "attn_out", "gate+up", "down"];
+                    let parts: Vec<String> = names.iter().zip(m.prof).map(|(k, v)| format!("{k} {:.0}us", v / n as f64 * 1e6)).collect();
+                    eprintln!("{which}: body per token: {} | other {:.0}us", parts.join(", "), (tb - m.prof[..5].iter().sum::<f64>()) / n as f64 * 1e6);
+                    m.prof = [0.0; 6];
+                }
                 lines.push(line);
             }
             for l in lines {
