@@ -6,6 +6,7 @@
 //!   gem gen    --prompt "..." [--n N]    sample text with both heads, same seed
 
 mod gguf;
+mod lean;
 mod model;
 mod pool;
 mod q8;
@@ -28,7 +29,7 @@ impl Full {
 
     fn run(&mut self, m: &Gemma, h: &[f32], pool: &Pool, isa: Isa) {
         self.act.quantize(h, isa);
-        matvec(pool, isa, &m.emb, &self.act, &mut self.logits);
+        matvec(pool, isa, m.head(), &self.act, &mut self.logits);
     }
 
     fn logprob(&self, t: u32) -> f32 {
@@ -70,7 +71,7 @@ impl TwoLevel {
                 pos_of[t as usize] = p as u32;
             }
         }
-        let blocks = members.iter().map(|mem| m.emb.gather(mem)).collect();
+        let blocks = members.iter().map(|mem| m.head().gather(mem)).collect();
         Self { a, b, blocks, members, cls_of, pos_of, act: Act::new(m.d), cl: vec![0.0; k], inner: vec![0.0; per], d: m.d }
     }
 
@@ -140,8 +141,17 @@ fn draw(logits: &[f32], temp: f32, rng: &mut u64) -> usize {
 }
 
 fn tokenize(model: &Path, text: &str) -> Vec<u32> {
+    tokenize_with(model, text, false)
+}
+
+/// `special` parses control tokens such as chat-template markers instead of treating them as text.
+fn tokenize_with(model: &Path, text: &str, special: bool) -> Vec<u32> {
     use std::io::Write;
-    let mut child = std::process::Command::new(ruler::results::root().join(".tools/tok"))
+    let mut cmd = std::process::Command::new(ruler::results::root().join(".tools/tok"));
+    if special {
+        cmd.env("TOK_SPECIAL", "1");
+    }
+    let mut child = cmd
         .arg(model)
         .stdin(std::process::Stdio::piped())
         .stdout(std::process::Stdio::piped())
@@ -176,6 +186,10 @@ fn utf8_chars(p: &[u8]) -> usize {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mode = args.get(1).cloned().unwrap_or_else(|| "check".into());
+    if mode == "complete" {
+        lean::run(&args);
+        return;
+    }
     let root = ruler::results::root();
     let model_path: PathBuf = arg(&args, "--model", root.join("data/models/llm/gemma-3-270m-it-Q8_0.gguf"));
     let tag: String = arg(&args, "--tag", "gemma270m".to_string());
@@ -188,13 +202,14 @@ fn main() {
     let t0 = Instant::now();
     let g = gguf::Gguf::open(&model_path);
     let ctx = 2048;
-    let mut m = Gemma::load(&g, ctx);
+    let mut m = Gemma::load(&g, ctx, false);
     drop(g);
     let body_bits: u8 = arg(&args, "--body-bits", 8);
     let head_bits: u8 = arg(&args, "--head-bits", 0);
     m.requantize(body_bits == 4, false);
     m.requantize_head(head_bits);
-    let bos = 2u32;
+    let bos = m.bos;
+    let off = bos.is_some() as usize;
     let mut full = Full::new(&m);
     let two_path = root.join("data/retro").join(&head2);
     let mut two = two_path.with_extension("A").exists().then(|| TwoLevel::load(&m, &two_path));
@@ -204,7 +219,7 @@ fn main() {
         m.vocab,
         m.d,
         m.body_bytes() as f64 / 1e6,
-        m.emb.bytes() as f64 / 1e6,
+        m.head().bytes() as f64 / 1e6,
         two.as_ref().map_or("absent".to_string(), |t| format!("{:.2} MB", t.bytes() as f64 / 1e6)),
         match isa {
             Isa::Avx512 => "avx512",
@@ -220,10 +235,12 @@ fn main() {
             let toks = tokenize(&model_path, &test.chars().take(n_tok * 4).collect::<String>());
             let n = n_tok.min(toks.len() - 1);
             let reference: Vec<f32> = std::fs::read(root.join(format!("data/retro/{tag}-test.full"))).map(|b| b.chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()).unwrap_or_else(|_| vec![f32::NAN; n]);
-            m.forward(bos, 0, &pool, isa);
+            if let Some(b) = bos {
+                m.forward(b, 0, &pool, isa);
+            }
             let (mut ours, mut theirs, mut ours2, mut maxd, mut chars) = (0f64, 0f64, 0f64, 0f32, 0usize);
             for i in 0..n {
-                let h = m.forward(toks[i], i + 1, &pool, isa).to_vec();
+                let h = m.forward(toks[i], i + off, &pool, isa).to_vec();
                 full.run(&m, &h, &pool, isa);
                 let nats = -full.logprob(toks[i + 1]);
                 ours += nats as f64;
@@ -250,12 +267,14 @@ fn main() {
                     continue;
                 }
                 let (mut tb, mut th, mut nats, mut chars) = (0f64, 0f64, 0f64, 0usize);
-                m.forward(bos, 0, &pool, isa);
+                if let Some(b) = bos {
+                m.forward(b, 0, &pool, isa);
+            }
                 let e0 = rapl.as_ref().map(|r| r.read_uj());
                 let start = Instant::now();
                 for i in 0..n {
                     let a = Instant::now();
-                    let h = m.forward(toks[i], i + 1, &pool, isa).to_vec();
+                    let h = m.forward(toks[i], i + off, &pool, isa).to_vec();
                     let b = Instant::now();
                     let lp = if which == "full" {
                         full.run(&m, &h, &pool, isa);
@@ -313,9 +332,9 @@ fn main() {
                     continue;
                 }
                 let mut rng = seed | 1;
-                let mut h = m.forward(bos, 0, &pool, isa).to_vec();
+                let mut h = bos.map(|b| m.forward(b, 0, &pool, isa).to_vec()).unwrap_or_default();
                 for (i, &t) in ptoks.iter().enumerate() {
-                    h = m.forward(t, i + 1, &pool, isa).to_vec();
+                    h = m.forward(t, i + off, &pool, isa).to_vec();
                 }
                 let mut out = Vec::new();
                 let start = Instant::now();
@@ -330,7 +349,7 @@ fn main() {
                         break;
                     }
                     out.extend_from_slice(&pcs[t as usize]);
-                    h = m.forward(t, ptoks.len() + 1 + i, &pool, isa).to_vec();
+                    h = m.forward(t, ptoks.len() + off + i, &pool, isa).to_vec();
                 }
                 let secs = start.elapsed().as_secs_f64();
                 println!("--- {which} head ({:.1} tok/s) ---\n{prompt}{}\n", n as f64 / secs, String::from_utf8_lossy(&out));

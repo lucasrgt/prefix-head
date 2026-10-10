@@ -1,6 +1,8 @@
-//! Gemma 3 text decoder, one token at a time, mirroring llama.cpp's graph (src/models/gemma3.cpp):
-//! scaled embedding, RMSNorm with the +1 already folded into the GGUF weights, QK-norm, NeoX RoPE
-//! (10k on sliding-window layers, the model base on global ones), GELU-tanh gated FFN, post-norms.
+//! Text decoder, one token at a time, mirroring llama.cpp's graphs for two architectures.
+//! gemma3 (src/models/gemma3.cpp): scaled embedding, RMSNorm with the +1 already folded into the GGUF
+//! weights, QK-norm, NeoX RoPE (10k on sliding-window layers, the model base on global ones),
+//! GELU-tanh gated FFN, post-norms. qwen2 (src/models/qwen2.cpp): plain pre-norm blocks, biases on
+//! q/k/v, NeoX RoPE, SiLU gated FFN, and an output matrix stored separately from the embedding.
 
 use crate::gguf::{F16, Gguf, Q4_0, Q8_0};
 use crate::pool::Pool;
@@ -21,6 +23,9 @@ pub struct Layer {
     post_attn: Vec<f32>,
     ffn_norm: Vec<f32>,
     post_ffw: Vec<f32>,
+    bq: Vec<f32>,
+    bk: Vec<f32>,
+    bv: Vec<f32>,
     swa: bool,
 }
 
@@ -34,6 +39,11 @@ pub struct Gemma {
     window: usize,
     pub layers: Vec<Layer>,
     pub emb: Mat,
+    pub out: Option<Mat>,
+    row_of: Vec<u32>,
+    pub bos: Option<u32>,
+    embed_scale: f32,
+    silu: bool,
     out_norm: Vec<f32>,
     pub ctx: usize,
     kc: Vec<Vec<f32>>,
@@ -61,9 +71,9 @@ pub struct Gemma {
 fn mat(g: &Gguf, name: &str) -> Mat {
     let (t, b) = g.tensor(name);
     match t.kind {
-        Q8_0 => Mat::from_q8_0(b, t.dims[1], t.dims[0]),
-        Q4_0 => Mat::from_q4_0(b, t.dims[1], t.dims[0]),
-        F16 => Mat::from_f16(b, t.dims[1], t.dims[0]),
+        Q8_0 => Mat::from_q8_0(&b, t.dims[1], t.dims[0]),
+        Q4_0 => Mat::from_q4_0(&b, t.dims[1], t.dims[0]),
+        F16 => Mat::from_f16(&b, t.dims[1], t.dims[0]),
         k => panic!("{name}: unsupported tensor type {k}"),
     }
 }
@@ -139,16 +149,24 @@ pub fn dot(a: &[f32], b: &[f32], isa: Isa) -> f32 {
 }
 
 impl Gemma {
-    pub fn load(g: &Gguf, ctx: usize) -> Self {
-        let a = "gemma3";
+    /// With `tie`, a model that stores a separate `output.weight` also reads its input embeddings
+    /// from it and never loads `token_embd.weight` (the two are one tied matrix in the original).
+    pub fn load(g: &Gguf, ctx: usize, tie: bool) -> Self {
+        let out = g.has("output.weight").then(|| mat(g, "output.weight"));
+        let tied = tie && out.is_some();
+        let emb = if tied { Mat::empty() } else { mat(g, "token_embd.weight") };
+        let vocab = out.as_ref().map_or(emb.rows, |o| o.rows);
+        let a = g.text("general.architecture").to_string();
+        let gemma = a == "gemma3";
+        assert!(gemma || a == "qwen2", "unsupported architecture {a}");
         let d = g.u(&format!("{a}.embedding_length"));
         let nl = g.u(&format!("{a}.block_count"));
         let nh = g.u(&format!("{a}.attention.head_count"));
         let nkv = g.u(&format!("{a}.attention.head_count_kv"));
-        let hd = g.u(&format!("{a}.attention.key_length"));
+        let hd = g.u_or(&format!("{a}.attention.key_length"), d / nh);
         let ff = g.u(&format!("{a}.feed_forward_length"));
         let eps = g.f(&format!("{a}.attention.layer_norm_rms_epsilon"));
-        let window = g.u(&format!("{a}.attention.sliding_window"));
+        let window = g.u_or(&format!("{a}.attention.sliding_window"), 0);
         let base = g.f(&format!("{a}.rope.freq_base"));
         let layers = (0..nl)
             .map(|l| {
@@ -162,17 +180,18 @@ impl Gemma {
                     up: mat(g, &p("ffn_up.weight")),
                     down: mat(g, &p("ffn_down.weight")),
                     attn_norm: g.f32s(&p("attn_norm.weight")),
-                    q_norm: g.f32s(&p("attn_q_norm.weight")),
-                    k_norm: g.f32s(&p("attn_k_norm.weight")),
-                    post_attn: g.f32s(&p("post_attention_norm.weight")),
+                    q_norm: g.f32s_or_empty(&p("attn_q_norm.weight")),
+                    k_norm: g.f32s_or_empty(&p("attn_k_norm.weight")),
+                    post_attn: g.f32s_or_empty(&p("post_attention_norm.weight")),
                     ffn_norm: g.f32s(&p("ffn_norm.weight")),
-                    post_ffw: g.f32s(&p("post_ffw_norm.weight")),
-                    swa: l % 6 < 5,
+                    post_ffw: g.f32s_or_empty(&p("post_ffw_norm.weight")),
+                    bq: g.f32s_or_empty(&p("attn_q.bias")),
+                    bk: g.f32s_or_empty(&p("attn_k.bias")),
+                    bv: g.f32s_or_empty(&p("attn_v.bias")),
+                    swa: gemma && l % 6 < 5,
                 }
             })
             .collect();
-        let emb = mat(g, "token_embd.weight");
-        let vocab = emb.rows;
         Self {
             d,
             vocab,
@@ -183,6 +202,11 @@ impl Gemma {
             window,
             layers,
             emb,
+            out,
+            row_of: Vec::new(),
+            bos: g.flag("tokenizer.ggml.add_bos_token").then(|| g.u("tokenizer.ggml.bos_token_id") as u32),
+            embed_scale: if gemma { (d as f32).sqrt() } else { 1.0 },
+            silu: !gemma,
             out_norm: g.f32s("output_norm.weight"),
             ctx,
             kc: (0..nl).map(|_| vec![0.0; ctx * nkv * hd]).collect(),
@@ -208,12 +232,37 @@ impl Gemma {
         }
     }
 
+    /// The output matrix: `output.weight` when the file stores one, else the tied embedding.
+    pub fn head(&self) -> &Mat {
+        self.out.as_ref().unwrap_or(&self.emb)
+    }
+
+    /// Reorders the output rows in place so that row i holds token `order[i]`; class blocks become
+    /// contiguous row ranges.
+    pub fn permute_head(&mut self, order: &[u32]) {
+        let mut row_of = vec![0u32; self.vocab];
+        for (r, &t) in order.iter().enumerate() {
+            row_of[t as usize] = r as u32;
+        }
+        if self.out.is_some() { self.out.as_mut().unwrap().permute_rows(order) } else { self.emb.permute_rows(order) }
+        self.row_of = row_of;
+    }
+
+    pub fn row_of(&self, tok: u32) -> usize {
+        if self.row_of.is_empty() { tok as usize } else { self.row_of[tok as usize] as usize }
+    }
+
+    fn embedding(&self, tok: u32) -> Vec<f32> {
+        if self.emb.rows == 0 { self.head().row_f32(self.row_of(tok)) } else if self.out.is_none() { self.emb.row_f32(self.row_of(tok)) } else { self.emb.row_f32(tok as usize) }
+    }
+
     pub fn requantize_head(&mut self, bits: u8) {
-        self.emb = match bits {
-            8 => self.emb.to_q8(),
-            4 => self.emb.to_q4(),
+        let head = match bits {
+            8 => self.head().to_q8(),
+            4 => self.head().to_q4(),
             _ => return,
         };
+        if self.out.is_some() { self.out = Some(head) } else { self.emb = head }
     }
 
     pub fn requantize(&mut self, body4: bool, head4: bool) {
@@ -236,9 +285,10 @@ impl Gemma {
     /// Runs token `tok` at position `pos`; returns the final-norm hidden state.
     pub fn forward(&mut self, tok: u32, pos: usize, pool: &Pool, isa: Isa) -> &[f32] {
         assert!(pos < self.ctx);
-        let (d, hd, nh, nkv, eps) = (self.d, self.hd, self.nh, self.nkv, self.eps);
-        let scale = (d as f32).sqrt();
-        for (x, e) in self.x.iter_mut().zip(self.emb.row_f32(tok as usize)) {
+        let (hd, nh, nkv, eps) = (self.hd, self.nh, self.nkv, self.eps);
+        let scale = self.embed_scale;
+        let row = self.embedding(tok);
+        for (x, e) in self.x.iter_mut().zip(row) {
             *x = e * scale;
         }
         if self.acc.len() != pool.threads() * nh * hd {
@@ -258,17 +308,26 @@ impl Gemma {
             matvec(pool, isa, &ly.k, &self.ad, &mut self.k);
             matvec(pool, isa, &ly.v, &self.ad, &mut self.v);
             self.prof[0] += t0.elapsed().as_secs_f64();
+            for (dst, bias) in [(&mut self.q, &ly.bq), (&mut self.k, &ly.bk), (&mut self.v, &ly.bv)] {
+                for (x, b) in dst.iter_mut().zip(bias) {
+                    *x += b;
+                }
+            }
             let table = &self.rot[if ly.swa { 0 } else { 1 }];
             let qs = 1.0 / (hd as f32).sqrt();
             for h in 0..nh {
                 let qh = &mut self.q[h * hd..(h + 1) * hd];
-                rmsnorm_inplace(qh, &ly.q_norm, eps);
+                if !ly.q_norm.is_empty() {
+                    rmsnorm_inplace(qh, &ly.q_norm, eps);
+                }
                 rope(qh, table);
                 qh.iter_mut().for_each(|v| *v *= qs);
             }
             for h in 0..nkv {
                 let kh = &mut self.k[h * hd..(h + 1) * hd];
-                rmsnorm_inplace(kh, &ly.k_norm, eps);
+                if !ly.k_norm.is_empty() {
+                    rmsnorm_inplace(kh, &ly.k_norm, eps);
+                }
                 rope(kh, table);
             }
             let row = nkv * hd;
@@ -326,7 +385,9 @@ impl Gemma {
             let t2 = std::time::Instant::now();
             matvec(pool, isa, &ly.o, &self.aq, &mut self.tmp);
             self.prof[2] += t2.elapsed().as_secs_f64();
-            rmsnorm_inplace(&mut self.tmp, &ly.post_attn, eps);
+            if !ly.post_attn.is_empty() {
+                rmsnorm_inplace(&mut self.tmp, &ly.post_attn, eps);
+            }
             for (x, t) in self.x.iter_mut().zip(&self.tmp) {
                 *x += t;
             }
@@ -336,18 +397,30 @@ impl Gemma {
             matvec(pool, isa, &ly.gate, &self.ad, &mut self.g);
             matvec(pool, isa, &ly.up, &self.ad, &mut self.u);
             self.prof[3] += t3.elapsed().as_secs_f64();
-            for (t, &g) in self.gt.iter_mut().zip(&self.g) {
-                *t = 0.797_884_6 * (g + 0.044715 * g * g * g);
-            }
-            nn::fast::tanh_inplace(&mut self.gt);
-            for ((g, u), t) in self.g.iter_mut().zip(&self.u).zip(&self.gt) {
-                *g = 0.5 * *g * (1.0 + t) * u;
+            if self.silu {
+                for (t, &g) in self.gt.iter_mut().zip(&self.g) {
+                    *t = -g;
+                }
+                nn::fast::exp_inplace(&mut self.gt);
+                for ((g, u), t) in self.g.iter_mut().zip(&self.u).zip(&self.gt) {
+                    *g = *g / (1.0 + t) * u;
+                }
+            } else {
+                for (t, &g) in self.gt.iter_mut().zip(&self.g) {
+                    *t = 0.797_884_6 * (g + 0.044715 * g * g * g);
+                }
+                nn::fast::tanh_inplace(&mut self.gt);
+                for ((g, u), t) in self.g.iter_mut().zip(&self.u).zip(&self.gt) {
+                    *g = 0.5 * *g * (1.0 + t) * u;
+                }
             }
             self.aff.quantize(&self.g, isa);
             let t4 = std::time::Instant::now();
             matvec(pool, isa, &ly.down, &self.aff, &mut self.tmp);
             self.prof[4] += t4.elapsed().as_secs_f64();
-            rmsnorm_inplace(&mut self.tmp, &ly.post_ffw, eps);
+            if !ly.post_ffw.is_empty() {
+                rmsnorm_inplace(&mut self.tmp, &ly.post_ffw, eps);
+            }
             for (x, t) in self.x.iter_mut().zip(&self.tmp) {
                 *x += t;
             }

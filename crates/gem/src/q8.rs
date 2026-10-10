@@ -57,6 +57,39 @@ impl Mat {
         Self { q: raw.iter().map(|&b| b as i8).collect(), s: Vec::new(), rows, cols, bits: 16 }
     }
 
+    pub fn empty() -> Self {
+        Self { q: Vec::new(), s: Vec::new(), rows: 0, cols: 0, bits: 8 }
+    }
+
+    /// In place: row i becomes the old row `order[i]`, following permutation cycles with one spare row.
+    pub fn permute_rows(&mut self, order: &[u32]) {
+        assert_eq!(order.len(), self.rows);
+        let (c, b) = (self.row_bytes(), if self.s.is_empty() { 0 } else { self.cols / 32 });
+        let mut done = vec![false; self.rows];
+        let (mut tq, mut ts) = (vec![0i8; c], vec![0f32; b]);
+        for start in 0..self.rows {
+            if done[start] || order[start] as usize == start {
+                done[start] = true;
+                continue;
+            }
+            tq.copy_from_slice(&self.q[start * c..(start + 1) * c]);
+            ts.copy_from_slice(&self.s[start * b..(start + 1) * b]);
+            let mut i = start;
+            loop {
+                done[i] = true;
+                let src = order[i] as usize;
+                if src == start {
+                    self.q[i * c..(i + 1) * c].copy_from_slice(&tq);
+                    self.s[i * b..(i + 1) * b].copy_from_slice(&ts);
+                    break;
+                }
+                self.q.copy_within(src * c..(src + 1) * c, i * c);
+                self.s.copy_within(src * b..(src + 1) * b, i * b);
+                i = src;
+            }
+        }
+    }
+
     /// Rows `ids` gathered into a new matrix, in that order.
     pub fn gather(&self, ids: &[u32]) -> Self {
         let (c, b) = (self.row_bytes(), self.cols / 32);
@@ -405,18 +438,24 @@ unsafe impl Sync for SendPtr {}
 /// y = M·x over the pool; rows split into one contiguous range per thread.
 pub fn matvec(pool: &Pool, isa: Isa, m: &Mat, a: &Act, y: &mut [f32]) {
     assert_eq!(y.len(), m.rows);
-    let n = pool.threads();
-    if n == 1 || m.rows < 64 {
-        rows(m, a, isa, 0, y);
+    matvec_rows(pool, isa, m, 0, a, y);
+}
+
+/// y = M[first..first + y.len()]·x.
+pub fn matvec_rows(pool: &Pool, isa: Isa, m: &Mat, first: usize, a: &Act, y: &mut [f32]) {
+    let (n, count) = (pool.threads(), y.len());
+    assert!(first + count <= m.rows);
+    if n == 1 || count < 64 {
+        rows(m, a, isa, first, y);
         return;
     }
-    let per = m.rows.div_ceil(n);
+    let per = count.div_ceil(n);
     let out = SendPtr(y.as_mut_ptr());
     pool.run(&|t| {
-        let r0 = (t * per).min(m.rows);
-        let r1 = ((t + 1) * per).min(m.rows);
+        let r0 = (t * per).min(count);
+        let r1 = ((t + 1) * per).min(count);
         let o = &out;
         let part = unsafe { std::slice::from_raw_parts_mut(o.0.add(r0), r1 - r0) };
-        rows(m, a, isa, r0, part);
+        rows(m, a, isa, first + r0, part);
     });
 }
