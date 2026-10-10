@@ -189,7 +189,7 @@ pub fn run(args: &[String]) {
         std::fs::write(dump.with_extension("json"), format!("{{\"model\":\"{}\",\"d\":{},\"vocab\":{},\"rows\":{},\"chars\":{dump_chars},\"ctx\":{ctx},\"every\":1,\"tokens\":{}}}\n", model_path.display(), m.d, m.vocab, dump_y.len() / 4, dump_y.len() / 4)).unwrap();
     }
     println!(
-        "{{\"file\":\"{}\",\"head\":\"{}\",\"classes_tried\":{top},\"fallback\":{min_confidence},\"fallback_share\":{:.4},\"threads\":{threads},\"ctx\":{ctx},\"prompts\":{},\"gen_tokens\":{gen_tokens},\"tok_per_s\":{:.1},\"prompt_tok_per_s\":{:.1},\"peak_rss_mb\":{},\"rss_mb\":{}}}",
+        "{{\"file\":\"{}\",\"head\":\"{}\",\"classes_tried\":{top},\"fallback\":{min_confidence},\"fallback_share\":{:.4},\"threads\":{threads},\"ctx\":{ctx},\"prompts\":{},\"gen_tokens\":{gen_tokens},\"tok_per_s\":{:.1},\"prompt_tok_per_s\":{:.1},\"peak_rss_mb\":{},\"rss_mb\":{},\"rss_anon_mb\":{},\"rss_file_mb\":{}}}",
         model_path.file_name().unwrap().to_string_lossy(),
         if full { "full".to_string() } else { head2 },
         fallbacks as f64 / gen_tokens.max(1) as f64,
@@ -197,6 +197,8 @@ pub fn run(args: &[String]) {
         gen_tokens as f64 / gen_secs,
         prompt_tokens as f64 / prompt_secs,
         status_mb("VmHWM"),
-        status_mb("VmRSS")
+        status_mb("VmRSS"),
+        status_mb("RssAnon"),
+        status_mb("RssFile")
     );
 }
