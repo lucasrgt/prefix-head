@@ -6,11 +6,13 @@ inside bubblewrap: no network, read-only filesystem, a throwaway /tmp, 10 s limi
 
 Usage: python3 tools/eval/humaneval.py <model.gguf> [--threads 8] [--limit N] [--tag name] [--gem <gem complete flags>]
 """
+import ast
 import json
 import re
 import subprocess
 import sys
 import tempfile
+import textwrap
 import time
 import urllib.request
 from pathlib import Path
@@ -37,6 +39,26 @@ def solution(problem, reply):
     if f"def {problem['entry_point']}" in code:
         return code
     return problem["prompt"] + code
+
+
+def lenient(problem, reply):
+    """Like `solution`, but when the reply has no fenced block it keeps the code-looking part: from
+    the first def/import/class line, dedented, minus trailing lines that do not parse."""
+    if re.search(r"```(?:python)?\n.*?```", reply, re.S):
+        return solution(problem, reply)
+    lines = reply.splitlines()
+    start = next((i for i, l in enumerate(lines) if re.match(r"\s*(def |import |from |class |@)", l)), None)
+    if start is None:
+        return solution(problem, reply)
+    body = textwrap.dedent("\n".join(lines[start:])).splitlines()
+    while body:
+        try:
+            ast.parse("\n".join(body))
+            break
+        except SyntaxError:
+            body.pop()
+    code = "\n".join(body)
+    return code if f"def {problem['entry_point']}" in code else problem["prompt"] + code
 
 
 def passes(problem, code):
@@ -72,8 +94,14 @@ def run_gem(model, problems, tag, threads):
             (Path(d) / f"{i:04d}.txt").write_text(CHATML.format(instruction(p)))
         cmd = [str(root / "target/release/gem"), "complete", "--model", str(model), "--prompts", d, "--threads", threads] + extra
         stats = json.loads(subprocess.run(cmd, capture_output=True, text=True, check=True).stdout.strip().splitlines()[-1])
-        ok = sum(passes(p, solution(p, (Path(d) / f"{i:04d}.out").read_text(errors="replace"))) for i, p in enumerate(problems))
-    line = {"model": tag, "file": model.name, "problems": len(problems), "pass_at_1": round(ok / len(problems), 4), "tok_per_s": stats["tok_per_s"], "peak_rss_mb": stats["peak_rss_mb"], "threads": int(threads), "runtime": "gem", "head": stats["head"], "classes_tried": stats["classes_tried"], "ctx": stats["ctx"]}
+        replies = [(Path(d) / f"{i:04d}.out").read_text(errors="replace") for i in range(len(problems))]
+    keep = root / "results/humaneval-out"
+    keep.mkdir(exist_ok=True)
+    (keep / f"{tag}.jsonl").write_text("".join(json.dumps({"task": p["task_id"], "reply": r}) + "\n" for p, r in zip(problems, replies)))
+    ok = sum(passes(p, solution(p, r)) for p, r in zip(problems, replies))
+    ok_lenient = sum(passes(p, lenient(p, r)) for p, r in zip(problems, replies))
+    fenced = sum("```" in r for r in replies)
+    line = {"model": tag, "file": model.name, "problems": len(problems), "pass_at_1": round(ok / len(problems), 4), "pass_lenient": round(ok_lenient / len(problems), 4), "fenced_replies": fenced, "tok_per_s": stats["tok_per_s"], "peak_rss_mb": stats["peak_rss_mb"], "threads": int(threads), "runtime": "gem", "head": stats["head"], "classes_tried": stats["classes_tried"], "fallback": stats.get("fallback", 0), "fallback_share": stats.get("fallback_share", 0), "ctx": stats["ctx"]}
     print(json.dumps(line))
     with open(root / "results/humaneval.jsonl", "a") as f:
         f.write(json.dumps(line) + "\n")

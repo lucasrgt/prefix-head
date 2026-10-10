@@ -8,7 +8,9 @@ Inteligência por joule, CPU-only, em hardware doméstico. Hiperotimização de 
 
 Criar uma LLM capaz de executar tarefas úteis com **menos de 512 MB de RAM** e **mais de 100 tokens/s** no Ryzen 7 7700, **sem GPU**.
 
-Estado: Gemma 3 270M QAT (corpo Q4_0, cabeça por prefixo em 8 bits) roda a ~750–800 tok/s com 235 MB — RAM e velocidade sobram; falta capacidade. Plano: definir um conjunto objetivo de "tarefas úteis", depois gastar a folga num modelo maior que caiba (Qwen3-0.6B; Gemma 3 1B com vocabulário aparado + cabeça por prefixo).
+**Cumprido em 2026-10-10 (tarefa útil = programar, medida pelo HumanEval, 164 problemas):** Qwen2.5-Coder-0.5B-Instruct Q4_0 no runtime próprio (`gem complete`) — cabeça cheia: 53,7% pass@1, 122 tok/s, 410 MB de pico; cabeça por prefixo com triagem de 64 classes: 53,7%, 189 tok/s, 409 MB; 32 classes: 53,0%, 200 tok/s. llama.cpp no mesmo modelo: 52,4%, 125 tok/s, 1.472 MB (contexto 4096; comparação com o mesmo contexto pendente). A inteligência é do modelo da Alibaba; a contribuição é RAM e velocidade.
+
+Estado anterior: Gemma 3 270M QAT (corpo Q4_0, cabeça por prefixo em 8 bits) roda a ~750–800 tok/s com 235 MB — RAM e velocidade sobram; falta capacidade. Plano: definir um conjunto objetivo de "tarefas úteis", depois gastar a folga num modelo maior que caiba (Qwen3-0.6B; Gemma 3 1B com vocabulário aparado + cabeça por prefixo).
 
 ## Plêiades (a visão)
 

@@ -99,3 +99,13 @@
 {"model": "bitnet2b", "group": "random", "classes": 358, "kl_bpc": 0.2643}
 {"model": "bitnet2b", "group": "id", "classes": 358, "kl_bpc": 0.224}
 {"model": "bitnet2b", "group": "hyb", "classes": 358, "kl_bpc": 0.1101}
+{"model": "qwencoder", "group": "prefix", "classes": 390, "kl_bpc": 0.147}
+{"model": "qwencoder", "group": "hyb", "classes": 390, "kl_bpc": 0.1702}
+{"model": "qwencoder", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.1398}
+{"model": "qwencoder", "group": "freq", "classes": 390, "kl_bpc": 0.3795}
+{"model": "qwencoder", "group": "sem", "classes": 390, "kl_bpc": 0.3593}
+{"model": "qwencoder", "group": "random", "classes": 390, "kl_bpc": 0.4679}
+{"model": "qwenchat", "group": "prefix", "classes": 390, "kl_bpc": 0.0757}
+{"model": "qwenchat", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.0745}
+{"model": "qwenchat", "group": "hyb", "classes": 390, "kl_bpc": 0.0978}
+{"model": "qwenchat", "group": "sem", "classes": 390, "kl_bpc": 0.1893}
