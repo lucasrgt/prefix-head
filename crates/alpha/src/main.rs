@@ -29,6 +29,7 @@ pub struct Args {
     pub di: usize,
     pub slow: usize,
     pub period: usize,
+    pub periods: String,
 }
 
 impl Args {
@@ -40,7 +41,7 @@ impl Args {
 }
 
 fn args() -> Args {
-    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into(), di: 0, slow: 0, period: 1 };
+    let mut a = Args { alpha: "bytes".into(), ctx_chars: 16.0, h: 256, epochs: 1.0, batch: 512, lr: 2e-3, seed: 1, model: "mlp".into(), layers: 2, seq: 64, chrono: 0.0, stateful: 0, core: "mingru".into(), n: 64, extra: false, select: "all".into(), policy: "uniform".into(), heads: 4, mlp: 256, corpus: "data/raw".into(), di: 0, slow: 0, period: 1, periods: String::new() };
     let v: Vec<String> = std::env::args().skip(1).collect();
     for p in v.chunks(2) {
         let val = &p[1];
@@ -68,6 +69,7 @@ fn args() -> Args {
             "--di" => a.di = val.parse().unwrap(),
             "--slow" => a.slow = val.parse().unwrap(),
             "--period" => a.period = val.parse().unwrap(),
+            "--periods" => a.periods = val.clone(),
             k => panic!("unknown flag {k}"),
         }
     }

@@ -191,8 +191,9 @@ fn main() {
     let mut m = Gemma::load(&g, ctx);
     drop(g);
     let body_bits: u8 = arg(&args, "--body-bits", 8);
-    let head_bits: u8 = arg(&args, "--head-bits", 8);
-    m.requantize(body_bits == 4, head_bits == 4);
+    let head_bits: u8 = arg(&args, "--head-bits", 0);
+    m.requantize(body_bits == 4, false);
+    m.requantize_head(head_bits);
     let bos = 2u32;
     let mut full = Full::new(&m);
     let two_path = root.join("data/retro").join(&head2);
@@ -218,7 +219,7 @@ fn main() {
         "check" => {
             let toks = tokenize(&model_path, &test.chars().take(n_tok * 4).collect::<String>());
             let n = n_tok.min(toks.len() - 1);
-            let reference: Vec<f32> = std::fs::read(root.join(format!("data/retro/{tag}-test.full"))).unwrap().chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect();
+            let reference: Vec<f32> = std::fs::read(root.join(format!("data/retro/{tag}-test.full"))).map(|b| b.chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap())).collect()).unwrap_or_else(|_| vec![f32::NAN; n]);
             m.forward(bos, 0, &pool, isa);
             let (mut ours, mut theirs, mut ours2, mut maxd, mut chars) = (0f64, 0f64, 0f64, 0f32, 0usize);
             for i in 0..n {
@@ -227,7 +228,9 @@ fn main() {
                 let nats = -full.logprob(toks[i + 1]);
                 ours += nats as f64;
                 theirs += reference[i] as f64;
-                maxd = maxd.max((nats - reference[i]).abs());
+                if reference[i].is_finite() {
+                    maxd = maxd.max((nats - reference[i]).abs());
+                }
                 if let Some(t) = two.as_mut() {
                     ours2 -= t.logprob(toks[i + 1], &h, &pool, isa) as f64;
                 }

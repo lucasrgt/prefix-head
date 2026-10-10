@@ -92,8 +92,30 @@ impl Mat {
         (nib as i32 - 8) as f32 * scale
     }
 
+    /// F16 weights at 8 bits: per 32 weights, scale = max |w| / 127.
+    pub fn to_q8(&self) -> Self {
+        if self.bits == 8 {
+            return Self { q: self.q.clone(), s: self.s.clone(), rows: self.rows, cols: self.cols, bits: 8 };
+        }
+        assert_eq!(self.bits, 16);
+        let mut q = Vec::with_capacity(self.rows * self.cols);
+        let mut s = Vec::with_capacity(self.rows * self.cols / 32);
+        for blk in self.q.chunks_exact(64) {
+            let w: Vec<f32> = blk.chunks_exact(2).map(|b| f16(u16::from_le_bytes([b[0] as u8, b[1] as u8]))).collect();
+            let amax = w.iter().fold(0f32, |m, v| m.max(v.abs()));
+            let d = amax / 127.0;
+            let inv = if d > 0.0 { 1.0 / d } else { 0.0 };
+            q.extend(w.iter().map(|v| (v * inv).round() as i8));
+            s.push(d);
+        }
+        Self { q, s, rows: self.rows, cols: self.cols, bits: 8 }
+    }
+
     /// The same weights at 4 bits: per 32 weights, scale = max |w| / 7 and round(w / scale) in [-8, 7].
     pub fn to_q4(&self) -> Self {
+        if self.bits == 16 {
+            return self.to_q8().to_q4();
+        }
         assert_eq!(self.bits, 8);
         let mut q = Vec::with_capacity(self.q.len() / 2);
         let mut s = Vec::with_capacity(self.s.len());

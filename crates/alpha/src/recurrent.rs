@@ -28,6 +28,9 @@ pub fn run(a: &Args, train: &str, books: &[String], test: &str, train_chars: usi
                 m.chrono(a.chrono, a.rng_seed());
             }
             m.two_speed(a.slow, a.period);
+            if !a.periods.is_empty() {
+                m.multi_speed(&a.periods.split(',').map(|p| p.parse().unwrap()).collect::<Vec<usize>>());
+            }
             m
         }),
         "sreal" => train_core(a, train, books, test, train_chars, test_chars, |v, r| {
@@ -303,7 +306,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
     let sample = fact.decode(&seq);
 
     let line = format!(
-        "{{\"alpha\":\"{}\",\"corpus\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"slow\":{},\"period\":{},\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
+        "{{\"alpha\":\"{}\",\"corpus\":\"{}\",\"model\":\"{}\",\"n\":{},\"seed\":{},\"radix\":\"{radix_s}\",\"h\":{},\"layers\":{},\"seq\":{t},\"chrono\":{},\"stateful\":{},\"slow\":{},\"period\":{},\"periods\":\"{}\",\"select\":\"{}\",\"policy\":\"{}\",\"tokens_read\":{},\"params\":{},\"state_bytes\":{},\"epochs\":{},\"steps\":{steps},\"train_secs\":{train_secs:.1},\"sym_per_char\":{te_tpc:.4},\"test_bpc\":{test_bpc:.4},\"bpc_factors\":[{factors_s}],\"bpc_reset\":{bpc_reset:.4},\"us_per_char\":{us_per_char:.3},\"macs_per_char\":{macs_per_char:.0},\"train_chars\":{train_chars},\"test_chars\":{test_chars}}}",
         a.alpha,
         a.corpus,
         a.core,
@@ -315,6 +318,7 @@ fn train_core<M: Seq>(a: &Args, train: &str, books: &[String], test: &str, train
         a.stateful,
         a.slow,
         a.period,
+        a.periods,
         a.select,
         a.policy,
         steps * b * t,
@@ -345,6 +349,7 @@ pub fn checkpoint_name(a: &Args) -> String {
         c => format!("{c}-n{}", a.n),
     };
     let core = if a.slow > 0 { format!("{core}-slow{}p{}", a.slow, a.period) } else { core };
+    let core = if a.periods.is_empty() { core } else { format!("{core}-per{}", a.periods.replace(',', "_")) };
     let extra = if a.extra { format!("-extra-{}-{}-e{}", a.select, a.policy, a.epochs) } else { String::new() };
     let extra = if a.corpus == "data/raw" { extra } else { format!("{extra}-{}", a.corpus.replace('/', "_")) };
     format!("{core}-{}-h{}-l{}-s{}{chrono}{stateful}{extra}-seed{}.bin", a.alpha.replace(':', "_"), a.h, a.layers, a.seq, a.seed)

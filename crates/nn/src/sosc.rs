@@ -23,8 +23,7 @@ pub struct SelOsc {
     bz: Vec<Param>,
     theta: Vec<Param>,
     rotate: bool,
-    slow: usize,
-    period: usize,
+    period: Vec<usize>,
     pub head: Head,
 }
 
@@ -74,7 +73,7 @@ impl SelOsc {
         let bz = mk(n, 0.0, &mut rng);
         let theta = mk(n, 0.0, &mut rng);
         let head = Head::new(radix, h, &mut rng);
-        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, rotate: true, slow: 0, period: 1, head };
+        let mut m = Self { vocab, h, n, layers, emb, bre, bim, cre, cim, d, wz, bz, theta, rotate: true, period: vec![1; n], head };
         m.chrono(1024.0, seed);
         m
     }
@@ -103,12 +102,21 @@ impl SelOsc {
     /// their state in between (Clockwork-style); their read-out is then constant and can be cached.
     pub fn two_speed(&mut self, slow: usize, period: usize) {
         assert!(slow <= self.n && period >= 1);
-        self.slow = slow;
-        self.period = period;
+        for j in self.n - slow..self.n {
+            self.period[j] = period;
+        }
+    }
+
+    /// Channels split into equal contiguous groups, group g updating every `periods[g]` positions.
+    pub fn multi_speed(&mut self, periods: &[usize]) {
+        let g = periods.len();
+        for j in 0..self.n {
+            self.period[j] = periods[j * g / self.n];
+        }
     }
 
     fn held(&self, j: usize, k: usize) -> bool {
-        j >= self.n - self.slow && k % self.period != 0
+        k % self.period[j] != 0
     }
 
     /// Input embedding table, (vocab + 1) × h.
@@ -122,7 +130,8 @@ impl SelOsc {
     }
 
     pub fn macs_per_token(&self) -> usize {
-        self.layers * 5 * self.h * ((self.n - self.slow) * self.period + self.slow) / self.period + self.head.macs()
+        let per_layer: f64 = self.period.iter().map(|&p| 1.0 / p as f64).sum();
+        (self.layers as f64 * 5.0 * self.h as f64 * per_layer) as usize + self.head.macs()
     }
 
     pub fn state_bytes(&self) -> usize {

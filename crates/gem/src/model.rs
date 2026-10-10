@@ -181,6 +181,14 @@ impl Gemma {
         }
     }
 
+    pub fn requantize_head(&mut self, bits: u8) {
+        self.emb = match bits {
+            8 => self.emb.to_q8(),
+            4 => self.emb.to_q4(),
+            _ => return,
+        };
+    }
+
     pub fn requantize(&mut self, body4: bool, head4: bool) {
         if body4 {
             for l in &mut self.layers {
