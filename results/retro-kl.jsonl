@@ -89,3 +89,13 @@
 {"model": "gemma1b", "group": "cipher1", "classes": 512, "kl_bpc": 0.0855}
 {"model": "gemma1b", "group": "cipher2", "classes": 512, "kl_bpc": 0.0885}
 {"model": "gemma1b", "group": "cipher3", "classes": 512, "kl_bpc": 0.0857}
+{"model": "bitnet2b", "group": "prefix", "classes": 358, "kl_bpc": 0.1218}
+{"model": "bitnet2b", "group": "sem", "classes": 358, "kl_bpc": 0.2143}
+{"model": "bitnet2b", "group": "prefix-s2", "classes": 358, "kl_bpc": 0.1219}
+{"model": "bitnet2b", "group": "sem-s2", "classes": 358, "kl_bpc": 0.2021}
+{"model": "bitnet2b", "group": "prefix-s3", "classes": 358, "kl_bpc": 0.1217}
+{"model": "bitnet2b", "group": "sem-s3", "classes": 358, "kl_bpc": 0.2022}
+{"model": "bitnet2b", "group": "freq", "classes": 358, "kl_bpc": 0.1245}
+{"model": "bitnet2b", "group": "random", "classes": 358, "kl_bpc": 0.2643}
+{"model": "bitnet2b", "group": "id", "classes": 358, "kl_bpc": 0.224}
+{"model": "bitnet2b", "group": "hyb", "classes": 358, "kl_bpc": 0.1101}

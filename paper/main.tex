@@ -168,6 +168,8 @@ AVX2, 1 & 58.2 & 120.5 & 2.1$\times$ & 52\% \\
 
 \paragraph{With 4-bit weights.} Google's quantization-aware-trained release of Gemma~3 270M in Q4\_0 keeps the tied $262\text{k}\times640$ embedding/head in F16: 335\,MB of a 399\,MB file. Our runtime reads Q4\_0 and F16 natively. With the full F16 head, the head takes 71\% of each token's time (98 tokens/s, AVX-512, 8 threads); with the prefix head (512 classes of 512, class predictor trained on the QAT model's own states) throughput rises to 430 tokens/s (4.4$\times$; run-to-run range 381--483), 3.4$\times$ the Q8\_0 model with its full head (126 tokens/s in the same session). KL to the QAT model's own head is 0.120 bits/char (0.100 with 128-token blocks), comparable to the Q8 model. Weight quantization and head factorization compose. Naively requantizing the non-QAT Q8 model to 4 bits instead costs 10\% in bpc for the body alone, which is why we use the QAT release.
 
+\paragraph{A 1.58-bit model.} BitNet b1.58 2B4T \citep{bitnet2025} is trained with ternary weights, yet its tied $128\text{k}\times2560$ embedding/head is stored in F16: 657\,MB against 523\,MB for the whole ternary body in the released GGUF, 56\% of the bytes read per token. We extracted its final hidden states with the reference implementation (online ternarization, \texttt{tools/gpu/hidden\_hf.py}) and swapped the head as in Section~\ref{sec:retrofit} (358 classes). KL to the full head: prefix $0.1218\pm0.0001$ (3 seeds), frequency 0.125, token id 0.224, semantic $0.206\pm0.007$, random 0.264, and the word-start/continuation hybrid 0.110; bits per character 2.169 (full) $\to$ 2.193 (prefix). Reading only the class matrix and one block cuts per-token reads from about 1.18\,GB to 0.53\,GB, an upper bound of about $2.2\times$ for memory-bound decoding; our runtime does not implement the BitNet architecture, so this is not measured end to end.
+
 \section{Variations}\label{sec:variations}
 
 All numbers in this section are KL to the original model (bits/char, self setting, Section~\ref{sec:retrofit}); prefix and hybrid rows are means over 3 seeds (s.d.\ $\le$0.0003), the rest single runs (\texttt{tools/gpu/explore.py}, \texttt{results/explore.jsonl}).
@@ -237,6 +239,7 @@ Thanks to Gabriel Ribeiro for many ideas along the way, and to Claude (Anthropic
 \bibitem[Arora et~al.(2023)]{arora2023zoology} S.~Arora et~al. Zoology: measuring and improving recall in efficient language models. arXiv:2312.04927, 2023.
 \bibitem[Jelassi et~al.(2024)]{jelassi2024repeat} S.~Jelassi, D.~Brandfonbrener, S.~M.~Kakade, E.~Malach. Repeat after me: Transformers are better than state space models at copying. arXiv:2402.01032, 2024.
 \bibitem[Leviathan et~al.(2023)]{leviathan2023spec} Y.~Leviathan, M.~Kalman, Y.~Matias. Fast inference from Transformers via speculative decoding. ICML, 2023.
+\bibitem[Ma et~al.(2025)]{bitnet2025} S.~Ma, H.~Wang et~al. BitNet b1.58 2B4T technical report. arXiv:2504.12285, 2025.
 \bibitem[Qin et~al.(2023)]{qin2023hgrn} Z.~Qin, S.~Yang, Y.~Zhong. Hierarchically gated recurrent neural network for sequence modeling. NeurIPS, 2023.
 \end{thebibliography}
 
