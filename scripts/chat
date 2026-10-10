@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+# Interactive chat with the coding model in the lean runtime (prefix head, 64 classes).
+exec "$(dirname "$0")/../target/release/gem" chat "$@"

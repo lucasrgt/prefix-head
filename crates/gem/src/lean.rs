@@ -4,8 +4,9 @@
 //!
 //!   gem complete --model m.gguf --tag qwencoder --prompts dir [--head2 qwencoder-prefix-self | --full]
 //!                [--ctx 1024] [--max-tokens 512] [--classes 1] [--threads 8]
+//!   gem chat     [same flags]   interactive ChatML conversation on the terminal
 //!
-//! Reads `dir/<n>.txt`, writes `dir/<n>.out`, prints one JSON line with tokens/s and peak RSS.
+//! `complete` reads `dir/<n>.txt`, writes `dir/<n>.out`, prints one JSON line with tokens/s and peak RSS.
 
 use crate::gguf::Gguf;
 use crate::model::{Gemma, dot};
@@ -88,20 +89,38 @@ fn to_f16(f: f32) -> u16 {
     (sign | (exp as u32) << 10 | mant >> 13) as u16 + ((mant >> 12) & 1) as u16
 }
 
+#[allow(clippy::too_many_arguments)]
+fn next_token(classes: &mut Option<Classes>, m: &Gemma, h: &[f32], act: &mut Act, logits: &mut [f32], fallbacks: &mut usize, pool: &Pool, isa: Isa) -> u32 {
+    if let Some(Some(t)) = classes.as_mut().map(|c| c.next(m, h, act, pool, isa)) {
+        return t;
+    }
+    act.quantize(h, isa);
+    matvec(pool, isa, m.head(), act, logits);
+    let row = argmax(logits);
+    match classes.as_ref() {
+        Some(c) => {
+            *fallbacks += 1;
+            c.order[row]
+        }
+        None => row as u32,
+    }
+}
+
 fn status_mb(key: &str) -> u64 {
     std::fs::read_to_string("/proc/self/status").unwrap().lines().find(|l| l.starts_with(key)).and_then(|l| l.split_whitespace().nth(1)?.parse::<u64>().ok()).unwrap_or(0) / 1024
 }
 
 pub fn run(args: &[String]) {
     let root = ruler::results::root();
-    let model_path: PathBuf = arg(args, "--model", PathBuf::new());
-    let tag: String = arg(args, "--tag", String::new());
-    let head2: String = arg(args, "--head2", format!("{tag}-prefix-self"));
+    let chat = args.get(1).is_some_and(|a| a == "chat");
+    let model_path: PathBuf = arg(args, "--model", root.join("data/models/llm/qwen2.5-coder-0.5b-instruct-q4_0.gguf"));
+    let tag: String = arg(args, "--tag", "qwencoder".to_string());
+    let head2: String = arg(args, "--head2", if chat { "qwenchat-prefix-self".to_string() } else { format!("{tag}-prefix-self") });
     let full = args.iter().any(|a| a == "--full");
     let threads: usize = arg(args, "--threads", 8);
-    let ctx: usize = arg(args, "--ctx", 1024);
-    let max_tokens: usize = arg(args, "--max-tokens", 512);
-    let top: usize = arg(args, "--classes", 1);
+    let ctx: usize = arg(args, "--ctx", if chat { 2048 } else { 1024 });
+    let max_tokens: usize = arg(args, "--max-tokens", if chat { 1024 } else { 512 });
+    let top: usize = arg(args, "--classes", if chat { 64 } else { 1 });
     let min_confidence: f32 = arg(args, "--fallback", 0.0);
     let dir: PathBuf = arg(args, "--prompts", PathBuf::new());
     let isa = crate::q8::detect();
@@ -132,6 +151,56 @@ pub fn run(args: &[String]) {
     let mut fallbacks = 0usize;
     let off = m.bos.is_some() as usize;
 
+    if chat {
+        use std::io::{BufRead, Write};
+        let system = "<|im_start|>system\nYou are Qwen, created by Alibaba Cloud. You are a helpful assistant.<|im_end|>\n";
+        eprintln!("{} | {} | {} MB | /novo recomeça, /sair encerra", model_path.file_name().unwrap().to_string_lossy(), if full { "cabeça cheia".to_string() } else { format!("cabeça por prefixo, {top} classes") }, status_mb("VmRSS"));
+        let (mut pos, mut fresh) = (0usize, true);
+        let stdin = std::io::stdin();
+        loop {
+            eprint!("\n> ");
+            let mut line = String::new();
+            if stdin.lock().read_line(&mut line).unwrap() == 0 || line.trim() == "/sair" {
+                break;
+            }
+            let msg = line.trim();
+            if msg.is_empty() {
+                continue;
+            }
+            if msg == "/novo" {
+                (pos, fresh) = (0, true);
+                continue;
+            }
+            let turn = format!("{}<|im_start|>user\n{msg}<|im_end|>\n<|im_start|>assistant\n", if fresh { system } else { "<|im_end|>\n" });
+            let toks = tokenize_with(&model_path, &turn, true);
+            if pos + toks.len() + 64 > ctx {
+                eprintln!("(contexto cheio: comece outra conversa com /novo)");
+                continue;
+            }
+            fresh = false;
+            let mut h = Vec::new();
+            for &t in &toks {
+                h = m.forward(t, pos, &pool, isa).to_vec();
+                pos += 1;
+            }
+            let (t0, mut n) = (Instant::now(), 0usize);
+            let mut out = std::io::stdout().lock();
+            while n < max_tokens && pos < ctx {
+                let t = next_token(&mut classes, &m, &h, &mut act, &mut logits, &mut fallbacks, &pool, isa);
+                n += 1;
+                if stops.contains(&t) {
+                    break;
+                }
+                out.write_all(&pcs[t as usize]).unwrap();
+                out.flush().unwrap();
+                h = m.forward(t, pos, &pool, isa).to_vec();
+                pos += 1;
+            }
+            eprintln!("\n({n} tokens, {:.0} tokens/s, {} MB)", n as f64 / t0.elapsed().as_secs_f64(), status_mb("VmRSS"));
+        }
+        return;
+    }
+
     let mut files: Vec<PathBuf> = std::fs::read_dir(&dir).unwrap().map(|e| e.unwrap().path()).filter(|p| p.extension().is_some_and(|e| e == "txt")).collect();
     files.sort();
     let dump: PathBuf = arg(args, "--dump", PathBuf::new());
@@ -153,21 +222,7 @@ pub fn run(args: &[String]) {
         let t1 = Instant::now();
         let mut out = Vec::new();
         for i in 0..max_tokens.min(ctx - start) {
-            let t = match classes.as_mut().map(|c| c.next(&m, &h, &mut act, &pool, isa)) {
-                Some(Some(t)) => t,
-                routed => {
-                    act.quantize(&h, isa);
-                    matvec(&pool, isa, m.head(), &act, &mut logits);
-                    let row = argmax(&logits);
-                    match (routed, classes.as_ref()) {
-                        (Some(None), Some(c)) => {
-                            fallbacks += 1;
-                            c.order[row]
-                        }
-                        _ => row as u32,
-                    }
-                }
-            };
+            let t = next_token(&mut classes, &m, &h, &mut act, &mut logits, &mut fallbacks, &pool, isa);
             gen_tokens += 1;
             if dump.as_os_str().len() > 0 {
                 dump_h.extend(h.iter().flat_map(|&v| to_f16(v).to_le_bytes()));

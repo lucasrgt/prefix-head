@@ -186,7 +186,7 @@ fn utf8_chars(p: &[u8]) -> usize {
 fn main() {
     let args: Vec<String> = std::env::args().collect();
     let mode = args.get(1).cloned().unwrap_or_else(|| "check".into());
-    if mode == "complete" {
+    if mode == "complete" || mode == "chat" {
         lean::run(&args);
         return;
     }
