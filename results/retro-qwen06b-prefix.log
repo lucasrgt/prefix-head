@@ -1,0 +1,11 @@
+qwen06b prefix: vocab 151936, d 1024, 390 classes of <= 390, train 706560 rows, test 233472 rows
+  step 414/4140 class loss 3.1904 nats/token  2s
+  step 828/4140 class loss 3.0824 nats/token  4s
+  step 1242/4140 class loss 2.9980 nats/token  6s
+  step 1656/4140 class loss 2.8593 nats/token  8s
+  step 2070/4140 class loss 2.8028 nats/token  10s
+  step 2484/4140 class loss 2.7474 nats/token  12s
+  step 2898/4140 class loss 2.6638 nats/token  14s
+  step 3312/4140 class loss 2.5688 nats/token  16s
+  step 3726/4140 class loss 2.5295 nats/token  18s
+  step 4140/4140 class loss 2.4958 nats/token  20s

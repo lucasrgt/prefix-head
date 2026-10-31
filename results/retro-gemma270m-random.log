@@ -1,0 +1,11 @@
+gemma270m random: vocab 262144, d 640, 512 classes of <= 512, train 649605 rows, test 213807 rows
+  step 380/3806 class loss 5.1188 nats/token  2s
+  step 760/3806 class loss 4.8726 nats/token  4s
+  step 1140/3806 class loss 4.7066 nats/token  5s
+  step 1520/3806 class loss 4.4080 nats/token  7s
+  step 1900/3806 class loss 4.2637 nats/token  9s
+  step 2280/3806 class loss 4.1715 nats/token  10s
+  step 2660/3806 class loss 3.9801 nats/token  12s
+  step 3040/3806 class loss 3.7842 nats/token  14s
+  step 3420/3806 class loss 3.7095 nats/token  15s
+  step 3800/3806 class loss 3.6288 nats/token  17s

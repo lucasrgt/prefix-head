@@ -1,0 +1,30 @@
+sosc grp-first-181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 27947399 tok
+  step 0/27293 train ~3.648 bpc  |g| 0.33  0s
+  step 1364/27293 train ~2.257 bpc  |g| 0.46  50s
+  step 2728/27293 train ~2.089 bpc  |g| 0.50  101s
+  step 4092/27293 train ~2.079 bpc  |g| 0.49  152s
+  step 5456/27293 train ~2.039 bpc  |g| 0.56  202s
+  step 6820/27293 train ~1.934 bpc  |g| 0.51  252s
+  step 8184/27293 train ~1.891 bpc  |g| 0.69  304s
+  step 9548/27293 train ~1.951 bpc  |g| 0.60  355s
+  step 10912/27293 train ~1.930 bpc  |g| 0.61  406s
+  step 12276/27293 train ~1.924 bpc  |g| 0.58  456s
+  step 13640/27293 train ~1.870 bpc  |g| 0.61  506s
+  step 15004/27293 train ~1.918 bpc  |g| 0.68  556s
+  step 16368/27293 train ~1.822 bpc  |g| 0.74  606s
+  step 17732/27293 train ~1.918 bpc  |g| 0.63  656s
+  step 19096/27293 train ~1.934 bpc  |g| 0.64  706s
+  step 20460/27293 train ~1.892 bpc  |g| 0.74  756s
+  step 21824/27293 train ~1.911 bpc  |g| 0.59  806s
+  step 23188/27293 train ~1.849 bpc  |g| 0.62  857s
+  step 24552/27293 train ~1.880 bpc  |g| 0.74  907s
+  step 25916/27293 train ~1.812 bpc  |g| 0.75  958s
+  step 27280/27293 train ~1.871 bpc  |g| 0.64  1008s
+sample: le findára n'um murmurio, eu, 
+
+Sobre o epilotylos e benignes, mas um mez está á luz da volta em revinha
+a estrada a um salto, a Gra, e a cabeça o sol de aguerar, mas é, no rubor
+de si agradecendo a noutraira nas calas das linhas para cada
+vezdas por tudo, em que os milas parávam que
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-181_bpe32768-h128-l2-s64-stateful64-extra-all-uniform-e1-seed2.bin

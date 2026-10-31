@@ -8,6 +8,7 @@ use kern::Rng;
 pub struct Head {
     pub radix: Vec<usize>,
     pub h: usize,
+    pub tied: bool,
     cond: Vec<Param>,
     w2: Vec<Param>,
     b2: Vec<Param>,
@@ -32,7 +33,23 @@ impl Head {
         let cond = radix[..f - 1].iter().map(|&v| Param::new(v * h, 0.1, rng)).collect();
         let w2 = (0..f).map(|q| Param::new(Self::prefixes_of(&radix, q) * h * radix[q], 1.0 / (h as f32).sqrt(), rng)).collect();
         let b2 = (0..f).map(|q| Param::new(Self::prefixes_of(&radix, q) * radix[q], 0.0, rng)).collect();
-        Self { radix, h, cond, w2, b2 }
+        Self { radix, h, tied: false, cond, w2, b2 }
+    }
+
+    /// One output matrix per level instead of one per prefix: the prefix reaches factor q only
+    /// through the summed conditioning embeddings, so parameters stop growing with the vocabulary.
+    pub fn tie(&mut self, seed: u64) {
+        let mut rng = Rng::new(seed ^ 0x71ed);
+        let h = self.h;
+        for q in 1..self.f() {
+            self.w2[q] = Param::new(h * self.radix[q], 1.0 / (h as f32).sqrt(), &mut rng);
+            self.b2[q] = Param::new(self.radix[q], 0.0, &mut rng);
+        }
+        self.tied = true;
+    }
+
+    fn slot(&self, tok: &[u32], q: usize) -> usize {
+        if self.tied { 0 } else { self.prefix(tok, q) }
     }
 
     fn prefixes_of(radix: &[usize], q: usize) -> usize {
@@ -87,14 +104,14 @@ impl Head {
                 for a in hq.iter_mut() {
                     *a = a.tanh();
                 }
-                let p = self.prefix(&tgt[i * f..(i + 1) * f], q);
+                let p = self.slot(&tgt[i * f..(i + 1) * f], q);
                 b.zs[q][i * v..(i + 1) * v].copy_from_slice(&self.b2[q].w[p * v..(p + 1) * v]);
             }
             if q == 0 {
                 gemm(n, h, v, &b.hs[q][..n * h], false, &self.w2[q].w, false, 1.0, &mut b.zs[q][..n * v]);
             } else {
                 for i in 0..n {
-                    let p = self.prefix(&tgt[i * f..(i + 1) * f], q);
+                    let p = self.slot(&tgt[i * f..(i + 1) * f], q);
                     let w = &self.w2[q].w[p * h * v..(p + 1) * h * v];
                     let z = &mut b.zs[q][i * v..(i + 1) * v];
                     for (r, &hv) in b.hs[q][i * h..(i + 1) * h].iter().enumerate() {
@@ -130,7 +147,7 @@ impl Head {
                     *z = z.exp() * scale;
                 }
                 row[tgt[i * f + q] as usize] -= scale;
-                let p = self.prefix(&tgt[i * f..(i + 1) * f], q);
+                let p = self.slot(&tgt[i * f..(i + 1) * f], q);
                 for (g, &dz) in self.b2[q].g[p * v..(p + 1) * v].iter_mut().zip(row.iter()) {
                     *g += dz;
                 }
@@ -139,7 +156,7 @@ impl Head {
                 gemm(h, n, v, &b.hs[q][..n * h], true, &b.zs[q][..n * v], false, 1.0, &mut self.w2[q].g);
                 gemm(n, v, h, &b.zs[q][..n * v], false, &self.w2[q].w, true, 0.0, &mut b.dh[..n * h]);
             } else {
-                let prefixes: Vec<usize> = (0..n).map(|i| self.prefix(&tgt[i * f..(i + 1) * f], q)).collect();
+                let prefixes: Vec<usize> = (0..n).map(|i| self.slot(&tgt[i * f..(i + 1) * f], q)).collect();
                 let param = &mut self.w2[q];
                 for (i, &p) in prefixes.iter().enumerate() {
                     let dz = &b.zs[q][i * v..(i + 1) * v];
@@ -192,7 +209,7 @@ impl Head {
                 }
             }
             tanh_inplace(&mut s.hq);
-            let p = self.prefix(out, q);
+            let p = self.slot(out, q);
             let logits = &mut s.logits[..v];
             logits.copy_from_slice(&self.b2[q].w[p * v..(p + 1) * v]);
             gemv_rows(&s.hq, &self.w2[q].w[p * h * v..(p + 1) * h * v], v, logits);

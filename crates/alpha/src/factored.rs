@@ -10,6 +10,7 @@ pub(crate) enum Fact {
     Syl(Syllables),
     Digits(Alphabet, Vec<usize>),
     Grouped(Alphabet, Grouping),
+    Ranked(Alphabet, Grouping, Vec<usize>),
 }
 
 impl Fact {
@@ -18,6 +19,7 @@ impl Fact {
             Fact::Syl(s) => s.radix(),
             Fact::Digits(_, r) => r.clone(),
             Fact::Grouped(_, g) => vec![g.classes, g.m],
+            Fact::Ranked(_, _, r) => r.clone(),
         }
     }
 
@@ -26,6 +28,7 @@ impl Fact {
             Fact::Syl(s) => s.encode(text),
             Fact::Digits(a, r) => to_digits(&a.encode(text), r),
             Fact::Grouped(a, g) => to_digits(&g.encode(&a.encode(text)), &[g.classes, g.m]),
+            Fact::Ranked(a, g, r) => to_digits(&g.encode(&a.encode(text)), r),
         }
     }
 
@@ -34,6 +37,7 @@ impl Fact {
             Fact::Syl(s) => s.decode(syms),
             Fact::Digits(a, r) => a.decode(&from_digits(syms, r)),
             Fact::Grouped(a, g) => a.decode(&g.decode(&from_digits(syms, &[g.classes, g.m]))),
+            Fact::Ranked(a, g, r) => a.decode(&g.decode(&from_digits(syms, r))),
         }
     }
 }
@@ -189,7 +193,24 @@ fn trie_or_random(name: &str, train: &str) -> Fact {
     Fact::Grouped(alpha, g)
 }
 
+/// `pfx-<radix>:<alphabet>`: tokens sorted by spelling, and each token's rank written as mixed-radix
+/// digits, so every level of the head splits the spelling-ordered vocabulary into equal blocks
+/// (`pfx-91x91` is `grp-first-91`; `pfx-2x2x…` is a binary prefix tree).
+fn ranked(name: &str, train: &str) -> Fact {
+    let (spec, inner) = name.strip_prefix("pfx-").and_then(|s| s.split_once(':')).expect("pfx-<radix>:<alphabet>");
+    let radix: Vec<usize> = spec.split('x').map(|r| r.parse().unwrap()).collect();
+    let alpha = tok::by_name(inner, train);
+    let all = alpha.pieces().expect("ranking needs an alphabet of strings");
+    let below: usize = radix[1..].iter().product();
+    assert!(radix[0] * below >= all.len(), "radix {radix:?} too small for {inner}");
+    let g = Grouping::build(all, below);
+    Fact::Ranked(alpha, g, radix)
+}
+
 pub(crate) fn parse(name: &str, train: &str) -> Fact {
+    if name.starts_with("pfx-") {
+        return ranked(name, train);
+    }
     if name.starts_with("grp-trie-") || name.starts_with("grp-random-") {
         return trie_or_random(name, train);
     }

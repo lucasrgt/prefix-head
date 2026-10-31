@@ -1,0 +1,62 @@
+1/164 pass 02/164 pass 03/164 pass 14/164 pass 25/164 pass 36/164 pass 47/164 pass 58/164 pass 69/164 pass 710/164 pass 711/164 pass 712/164 pass 813/164 pass 914/164 pass 1015/164 pass 1116/164 pass 1217/164 pass 1318/164 pass 1419/164 pass 1520/164 pass 1621/164 pass 1722/164 pass 1823/164 pass 1924/164 pass 2025/164 pass 2126/164 pass 2227/164 pass 2228/164 pass 2329/164 pass 2430/164 pass 2531/164 pass 2632/164 pass 2733/164 pass 2734/164 pass 2735/164 pass 2836/164 pass 2937/164 pass 3038/164 pass 3039/164 pass 3040/164 pass 3041/164 pass 3142/164 pass 3243/164 pass 3344/164 pass 3445/164 pass 3546/164 pass 3647/164 pass 3648/164 pass 3749/164 pass 3850/164 pass 3951/164 pass 3952/164 pass 4053/164 pass 4154/164 pass 4255/164 pass 4356/164 pass 4457/164 pass 4558/164 pass 4659/164 pass 4760/164 pass 4861/164 pass 4962/164 pass 5063/164 pass 5064/164 pass 5065/164 pass 5066/164 pass 5067/164 pass 5168/164 pass 5269/164 pass 5270/164 pass 5371/164 pass 5472/164 pass 5573/164 pass 5574/164 pass 5675/164 pass 5676/164 pass 5677/164 pass 5678/164 pass 5679/164 pass 5780/164 pass 5881/164 pass 5882/164 pass 5883/164 pass 5984/164 pass 5985/164 pass 5986/164 pass 6087/164 pass 6088/164 pass 6089/164 pass 6190/164 pass 6191/164 pass 6292/164 pass 6293/164 pass 6394/164 pass 6395/164 pass 6396/164 pass 6397/164 pass 6398/164 pass 6499/164 pass 64100/164 pass 64101/164 pass 64102/164 pass 64103/164 pass 64104/164 pass 64105/164 pass 64106/164 pass 64107/164 pass 65108/164 pass 66109/164 pass 66110/164 pass 66111/164 pass 67112/164 pass 67113/164 pass 68114/164 pass 68115/164 pass 69116/164 pass 69117/164 pass 70118/164 pass 70119/164 pass 70120/164 pass 70121/164 pass 70122/164 pass 71123/164 pass 72124/164 pass 72125/164 pass 72126/164 pass 72127/164 pass 72128/164 pass 72129/164 pass 72130/164 pass 72131/164 pass 72132/164 pass 73133/164 pass 73134/164 pass 74135/164 pass 74136/164 pass 74137/164 pass 75138/164 pass 75139/164 pass 75140/164 pass 75141/164 pass 75142/164 pass 75143/164 pass 76144/164 pass 77145/164 pass 78146/164 pass 78147/164 pass 78148/164 pass 79149/164 pass 79150/164 pass 80151/164 pass 81152/164 pass 81153/164 pass 82154/164 pass 83155/164 pass 84156/164 pass 84157/164 pass 84158/164 pass 84159/164 pass 84160/164 pass 85161/164 pass 85162/164 pass 85163/164 pass 86164/164 pass 86Traceback (most recent call last):
+  File "/usr/lib/python3.14/urllib/request.py", line 1320, in do_open
+    h.request(req.get_method(), req.selector, req.data, headers,
+    ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+              encode_chunked=req.has_header('Transfer-encoding'))
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/http/client.py", line 1386, in request
+    self._send_request(method, url, body, headers, encode_chunked)
+    ~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/http/client.py", line 1432, in _send_request
+    self.endheaders(body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/http/client.py", line 1381, in endheaders
+    self._send_output(message_body, encode_chunked=encode_chunked)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/http/client.py", line 1141, in _send_output
+    self.send(msg)
+    ~~~~~~~~~^^^^^
+  File "/usr/lib/python3.14/http/client.py", line 1085, in send
+    self.connect()
+    ~~~~~~~~~~~~^^
+  File "/usr/lib/python3.14/http/client.py", line 1051, in connect
+    self.sock = self._create_connection(
+                ~~~~~~~~~~~~~~~~~~~~~~~^
+        (self.host,self.port), self.timeout, self.source_address)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/socket.py", line 874, in create_connection
+    raise exceptions[0]
+  File "/usr/lib/python3.14/socket.py", line 859, in create_connection
+    sock.connect(sa)
+    ~~~~~~~~~~~~^^^^
+ConnectionRefusedError: [Errno 111] Connection refused
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/home/lucasrgt/Work/frugal/tools/eval/humaneval.py", line 164, in <module>
+    main()
+    ~~~~^^
+  File "/home/lucasrgt/Work/frugal/tools/eval/humaneval.py", line 150, in main
+    reply, timings, usage = chat(p["ask"])
+                            ~~~~^^^^^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/eval/humaneval.py", line 36, in chat
+    out = json.load(urllib.request.urlopen(req, timeout=300))
+                    ~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 187, in urlopen
+    return opener.open(url, data, timeout)
+           ~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 487, in open
+    response = self._open(req, data)
+  File "/usr/lib/python3.14/urllib/request.py", line 504, in _open
+    result = self._call_chain(self.handle_open, protocol, protocol +
+                              '_open', req)
+  File "/usr/lib/python3.14/urllib/request.py", line 464, in _call_chain
+    result = func(*args)
+  File "/usr/lib/python3.14/urllib/request.py", line 1349, in http_open
+    return self.do_open(http.client.HTTPConnection, req)
+           ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.14/urllib/request.py", line 1323, in do_open
+    raise URLError(err)
+urllib.error.URLError: <urlopen error [Errno 111] Connection refused>
+1/100 pass 02/100 pass 03/100 pass 14/100 pass 15/100 pass 16/100 pass 17/100 pass 18/100 pass 19/100 pass 210/100 pass 211/100 pass 212/100 pass 313/100 pass 414/100 pass 415/100 pass 516/100 pass 517/100 pass 618/100 pass 619/100 pass 720/100 pass 821/100 pass 822/100 pass 923/100 pass 1024/100 pass 1025/100 pass 1026/100 pass 1127/100 pass 1128/100 pass 1129/100 pass 1130/100 pass 1231/100 pass 1232/100 pass 1233/100 pass 1234/100 pass 1235/100 pass 1236/100 pass 1237/100 pass 1338/100 pass 1339/100 pass 1440/100 pass 1441/100 pass 1442/100 pass 1543/100 pass 1544/100 pass 1545/100 pass 1646/100 pass 1647/100 pass 1748/100 pass 1849/100 pass 1850/100 pass 1951/100 pass 2052/100 pass 2053/100 pass 2054/100 pass 2055/100 pass 2056/100 pass 2157/100 pass 2258/100 pass 2259/100 pass 2360/100 pass 2361/100 pass 2462/100 pass 2463/100 pass 2464/100 pass 2465/100 pass 2466/100 pass 2467/100 pass 2468/100 pass 2469/100 pass 2470/100 pass 2471/100 pass 2572/100 pass 2673/100 pass 2774/100 pass 2875/100 pass 2876/100 pass 2977/100 pass 2978/100 pass 2979/100 pass 2980/100 pass 3081/100 pass 3082/100 pass 3083/100 pass 3084/100 pass 3185/100 pass 3286/100 pass 3287/100 pass 3288/100 pass 3389/100 pass 3390/100 pass 3491/100 pass 3492/100 pass 3593/100 pass 3594/100 pass 3595/100 pass 3596/100 pass 3697/100 pass 3698/100 pass 3799/100 pass 37100/100 pass 37

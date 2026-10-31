@@ -1,0 +1,28 @@
+sosc grp-first-181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 27947399 tok
+  step 0/27293 train ~3.629 bpc  |g| 0.85  0s
+  step 1364/27293 train ~2.174 bpc  |g| 0.42  50s
+  step 2728/27293 train ~2.195 bpc  |g| 0.46  101s
+  step 4092/27293 train ~2.128 bpc  |g| 0.51  153s
+  step 5456/27293 train ~1.915 bpc  |g| 0.50  205s
+  step 6820/27293 train ~2.025 bpc  |g| 0.53  256s
+  step 8184/27293 train ~1.997 bpc  |g| 0.59  308s
+  step 9548/27293 train ~1.958 bpc  |g| 0.65  358s
+  step 10912/27293 train ~1.929 bpc  |g| 0.63  408s
+  step 12276/27293 train ~1.902 bpc  |g| 0.63  460s
+  step 13640/27293 train ~1.907 bpc  |g| 0.64  513s
+  step 15004/27293 train ~1.872 bpc  |g| 0.58  566s
+  step 16368/27293 train ~1.885 bpc  |g| 0.68  619s
+  step 17732/27293 train ~1.848 bpc  |g| 0.63  673s
+  step 19096/27293 train ~1.870 bpc  |g| 0.69  726s
+  step 20460/27293 train ~1.903 bpc  |g| 0.71  779s
+  step 21824/27293 train ~1.824 bpc  |g| 0.68  832s
+  step 23188/27293 train ~1.787 bpc  |g| 0.83  886s
+  step 24552/27293 train ~1.873 bpc  |g| 0.57  939s
+  step 25916/27293 train ~1.832 bpc  |g| 0.56  992s
+  step 27280/27293 train ~1.766 bpc  |g| 0.63  1046s
+sample: le findára n'um murmurio, eu, 
+    Céro o desagrado pensára o raço,
+    Havia um amigo de Alves. Com a Correre
+                                       
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-181_bpe32768-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin

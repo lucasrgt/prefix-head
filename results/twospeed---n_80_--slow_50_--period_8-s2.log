@@ -1,0 +1,30 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2254708, state 1280 B, train 1698884 tok
+  step 0/4978 train ~3.453 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.973 bpc  |g| 0.40  5s
+  step 496/4978 train ~2.592 bpc  |g| 0.39  10s
+  step 744/4978 train ~2.400 bpc  |g| 0.43  15s
+  step 992/4978 train ~2.283 bpc  |g| 0.42  19s
+  step 1240/4978 train ~2.222 bpc  |g| 0.42  24s
+  step 1488/4978 train ~2.162 bpc  |g| 0.51  29s
+  step 1736/4978 train ~2.122 bpc  |g| 0.48  34s
+  step 1984/4978 train ~2.088 bpc  |g| 0.47  39s
+  step 2232/4978 train ~2.066 bpc  |g| 0.48  44s
+  step 2480/4978 train ~2.045 bpc  |g| 0.49  49s
+  step 2728/4978 train ~2.037 bpc  |g| 0.48  54s
+  step 2976/4978 train ~2.018 bpc  |g| 0.48  59s
+  step 3224/4978 train ~1.997 bpc  |g| 0.48  63s
+  step 3472/4978 train ~2.003 bpc  |g| 0.48  68s
+  step 3720/4978 train ~1.978 bpc  |g| 0.53  73s
+  step 3968/4978 train ~1.956 bpc  |g| 0.51  78s
+  step 4216/4978 train ~1.960 bpc  |g| 0.50  83s
+  step 4464/4978 train ~1.996 bpc  |g| 0.48  88s
+  step 4712/4978 train ~1.981 bpc  |g| 0.52  92s
+  step 4960/4978 train ~1.968 bpc  |g| 0.51  97s
+sample: le findára n'um murmurio, eu, 
+     Presta, depois de novo; lhe produzs nos
+livro! O snr.
+
+
+                                                   Faante e a sua me cabia
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n80-slow50p8-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

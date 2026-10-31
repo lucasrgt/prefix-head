@@ -1,0 +1,29 @@
+tfm grp-first-91:bpe8192: radix 91x91, h 128, layers 1, seq 64, params 2250804, state 65536 B, train 1698884 tok
+  step 0/4978 train ~3.488 bpc  |g| 0.44  0s
+  step 248/4978 train ~2.935 bpc  |g| 0.40  6s
+  step 496/4978 train ~2.566 bpc  |g| 0.54  13s
+  step 744/4978 train ~2.388 bpc  |g| 0.52  19s
+  step 992/4978 train ~2.286 bpc  |g| 0.55  26s
+  step 1240/4978 train ~2.224 bpc  |g| 0.58  32s
+  step 1488/4978 train ~2.182 bpc  |g| 0.60  38s
+  step 1736/4978 train ~2.154 bpc  |g| 0.58  44s
+  step 1984/4978 train ~2.124 bpc  |g| 0.59  50s
+  step 2232/4978 train ~2.101 bpc  |g| 0.59  56s
+  step 2480/4978 train ~2.086 bpc  |g| 0.63  62s
+  step 2728/4978 train ~2.073 bpc  |g| 0.64  68s
+  step 2976/4978 train ~2.055 bpc  |g| 0.60  74s
+  step 3224/4978 train ~2.038 bpc  |g| 0.63  80s
+  step 3472/4978 train ~2.036 bpc  |g| 0.67  86s
+  step 3720/4978 train ~2.018 bpc  |g| 0.63  92s
+  step 3968/4978 train ~2.021 bpc  |g| 0.64  98s
+  step 4216/4978 train ~2.011 bpc  |g| 0.67  104s
+  step 4464/4978 train ~2.005 bpc  |g| 0.64  110s
+  step 4712/4978 train ~2.008 bpc  |g| 0.65  116s
+  step 4960/4978 train ~2.004 bpc  |g| 0.66  122s
+sample: le findára n'um murmurio, eu, 
+                 Naturalmente tentar (J. Revisivel Deus que lembrava comnosco, preparando a
+rosaes de enfundeste D. Male e morta. Mas o Ega ao ceu não se democraticular--acudiu o pensamento e o mesmo surgira. Nos sobre a
+Jé de Lafato do
+Flas
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/tfm-a4-m128-grp-first-91_bpe8192-h128-l1-s64-seed1.bin

@@ -1,0 +1,11 @@
+qwen06b freq: vocab 151936, d 1024, 390 classes of <= 390, train 706560 rows, test 233472 rows
+  step 414/4140 class loss 1.3480 nats/token  2s
+  step 828/4140 class loss 1.3345 nats/token  4s
+  step 1242/4140 class loss 1.3163 nats/token  6s
+  step 1656/4140 class loss 1.2848 nats/token  7s
+  step 2070/4140 class loss 1.2777 nats/token  9s
+  step 2484/4140 class loss 1.2686 nats/token  11s
+  step 2898/4140 class loss 1.2408 nats/token  13s
+  step 3312/4140 class loss 1.2240 nats/token  15s
+  step 3726/4140 class loss 1.2182 nats/token  17s
+  step 4140/4140 class loss 1.2095 nats/token  19s

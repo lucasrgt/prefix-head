@@ -1,0 +1,31 @@
+sosc grp-random-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.457 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.996 bpc  |g| 0.37  7s
+  step 496/4978 train ~2.655 bpc  |g| 0.40  12s
+  step 744/4978 train ~2.455 bpc  |g| 0.42  19s
+  step 992/4978 train ~2.349 bpc  |g| 0.41  24s
+  step 1240/4978 train ~2.287 bpc  |g| 0.42  30s
+  step 1488/4978 train ~2.247 bpc  |g| 0.43  36s
+  step 1736/4978 train ~2.202 bpc  |g| 0.47  41s
+  step 1984/4978 train ~2.185 bpc  |g| 0.44  46s
+  step 2232/4978 train ~2.143 bpc  |g| 0.44  52s
+  step 2480/4978 train ~2.142 bpc  |g| 0.47  56s
+  step 2728/4978 train ~2.123 bpc  |g| 0.48  61s
+  step 2976/4978 train ~2.101 bpc  |g| 0.44  66s
+  step 3224/4978 train ~2.087 bpc  |g| 0.45  70s
+  step 3472/4978 train ~2.097 bpc  |g| 0.44  75s
+  step 3720/4978 train ~2.070 bpc  |g| 0.49  81s
+  step 3968/4978 train ~2.079 bpc  |g| 0.45  86s
+  step 4216/4978 train ~2.075 bpc  |g| 0.45  92s
+  step 4464/4978 train ~2.045 bpc  |g| 0.46  97s
+  step 4712/4978 train ~2.060 bpc  |g| 0.51  102s
+  step 4960/4978 train ~2.038 bpc  |g| 0.58  108s
+sample: le findára n'um murmurio, eu,  (reneinava algumas pedas de a face
+aos seus logares de plumgas caí de rosa. Até foi tão abandois cá nada.
+
+Amaro teve uma ponta de rentolhadas, a pilharam. É ser texidebiltada!
+
+--Váu a esposa, Joel-o, mas não não a estata
+daz Os criado! Não lhe offereciam. Então desemba Free
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-random-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

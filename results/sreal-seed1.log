@@ -1,0 +1,35 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.460 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.966 bpc  |g| 0.39  6s
+  step 496/4978 train ~2.591 bpc  |g| 0.39  13s
+  step 744/4978 train ~2.398 bpc  |g| 0.43  18s
+  step 992/4978 train ~2.285 bpc  |g| 0.41  24s
+  step 1240/4978 train ~2.216 bpc  |g| 0.43  31s
+  step 1488/4978 train ~2.172 bpc  |g| 0.44  35s
+  step 1736/4978 train ~2.125 bpc  |g| 0.46  40s
+  step 1984/4978 train ~2.104 bpc  |g| 0.46  45s
+  step 2232/4978 train ~2.062 bpc  |g| 0.44  49s
+  step 2480/4978 train ~2.060 bpc  |g| 0.46  54s
+  step 2728/4978 train ~2.041 bpc  |g| 0.49  58s
+  step 2976/4978 train ~2.018 bpc  |g| 0.46  63s
+  step 3224/4978 train ~2.005 bpc  |g| 0.46  68s
+  step 3472/4978 train ~2.013 bpc  |g| 0.46  72s
+  step 3720/4978 train ~1.986 bpc  |g| 0.47  77s
+  step 3968/4978 train ~1.997 bpc  |g| 0.51  81s
+  step 4216/4978 train ~1.990 bpc  |g| 0.46  86s
+  step 4464/4978 train ~1.959 bpc  |g| 0.45  91s
+  step 4712/4978 train ~1.972 bpc  |g| 0.50  95s
+  step 4960/4978 train ~1.953 bpc  |g| 0.59  100s
+sample: le findára n'um murmurio, eu, 
+                 Disso. Não acompanharros!
+
+
+Amelia grande chucopata desesperada!
+
+Eras no seu "rcando
+estragirrio. Era a Torre o inverno que era
+meu só uma perna e escorra. E estalla á sala intervada,
+após e as alvalas
+do seu
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sreal-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

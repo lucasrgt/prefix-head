@@ -1,0 +1,37 @@
+osc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.460 bpc  |g| 0.33  0s
+  step 248/4978 train ~2.986 bpc  |g| 0.39  4s
+  step 496/4978 train ~2.656 bpc  |g| 0.41  9s
+  step 744/4978 train ~2.467 bpc  |g| 0.39  13s
+  step 992/4978 train ~2.359 bpc  |g| 0.43  17s
+  step 1240/4978 train ~2.275 bpc  |g| 0.42  22s
+  step 1488/4978 train ~2.224 bpc  |g| 0.45  27s
+  step 1736/4978 train ~2.183 bpc  |g| 0.44  31s
+  step 1984/4978 train ~2.149 bpc  |g| 0.45  35s
+  step 2232/4978 train ~2.120 bpc  |g| 0.45  40s
+  step 2480/4978 train ~2.096 bpc  |g| 0.45  45s
+  step 2728/4978 train ~2.083 bpc  |g| 0.46  50s
+  step 2976/4978 train ~2.064 bpc  |g| 0.46  54s
+  step 3224/4978 train ~2.048 bpc  |g| 0.46  59s
+  step 3472/4978 train ~2.047 bpc  |g| 0.48  63s
+  step 3720/4978 train ~2.030 bpc  |g| 0.47  67s
+  step 3968/4978 train ~2.029 bpc  |g| 0.48  72s
+  step 4216/4978 train ~2.020 bpc  |g| 0.47  76s
+  step 4464/4978 train ~2.013 bpc  |g| 0.47  81s
+  step 4712/4978 train ~2.010 bpc  |g| 0.47  86s
+  step 4960/4978 train ~2.014 bpc  |g| 0.50  90s
+sample: le findára n'um murmurio, eu, 
+
+O enorme de pipas marcava de milhões á orelha. Uma espada
+profustro; por
+a sala
+deviamos a Carlos, muito entraram como as primeiras sobre aquella
+fundez com os velhos
+querem
+os propria, explicar o peccado mais bem com luos, na
+sua
+coragem muitas sincerida falha repsta, sinos, que se só chega a voz bem
+susptivo,
+amo
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/osc-n64-grp-first-91_bpe8192-h128-l2-s64-seed2.bin

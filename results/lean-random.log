@@ -1,0 +1,36 @@
+select random: 317 of 638 extra books, 15958561 tokens, mean reference bpc 2.495 (all 2.492)
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/16432 train ~3.816 bpc  |g| 0.33  0s
+  step 821/16432 train ~2.535 bpc  |g| 0.42  15s
+  step 1642/16432 train ~2.275 bpc  |g| 0.55  30s
+  step 2463/16432 train ~2.239 bpc  |g| 0.52  46s
+  step 3284/16432 train ~2.222 bpc  |g| 0.50  63s
+  step 4105/16432 train ~2.164 bpc  |g| 0.53  79s
+  step 4926/16432 train ~2.107 bpc  |g| 0.58  94s
+  step 5747/16432 train ~2.113 bpc  |g| 0.80  110s
+  step 6568/16432 train ~2.063 bpc  |g| 0.50  125s
+  step 7389/16432 train ~1.965 bpc  |g| 0.59  140s
+  step 8210/16432 train ~2.056 bpc  |g| 0.66  155s
+  step 9031/16432 train ~2.007 bpc  |g| 0.57  171s
+  step 9852/16432 train ~2.014 bpc  |g| 0.60  187s
+  step 10673/16432 train ~2.004 bpc  |g| 0.65  202s
+  step 11494/16432 train ~1.997 bpc  |g| 0.71  218s
+  step 12315/16432 train ~2.031 bpc  |g| 0.59  233s
+  step 13136/16432 train ~1.990 bpc  |g| 0.76  248s
+  step 13957/16432 train ~1.916 bpc  |g| 0.88  264s
+  step 14778/16432 train ~2.045 bpc  |g| 0.63  279s
+  step 15599/16432 train ~2.002 bpc  |g| 0.65  295s
+  step 16420/16432 train ~2.035 bpc  |g| 0.65  310s
+sample: le findára n'um murmurio, eu, 
+horo do seu typo:
+
+--Venhora? Eu sei; mas ah! se tubam i cão?
+
+--Que, nem em consequencia sêr na afflicção, como poderia, e que
+aqui, a mulher abaixar os seus padres do coiro...
+
+--Quem? que sou mãe, porque os momentos não sêrmos? Não é
+jacção de fense;
+elle se revela...
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-random-uniform-e0.5-seed1.bin

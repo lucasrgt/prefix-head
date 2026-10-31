@@ -1,0 +1,32 @@
+sosc grp-first-181:sbpe32768-8192: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 25023054 tok
+  step 0/24437 train ~3.258 bpc  |g| 0.27  0s
+  step 1221/24437 train ~2.380 bpc  |g| 0.42  47s
+  step 2442/24437 train ~2.243 bpc  |g| 0.52  94s
+  step 3663/24437 train ~2.146 bpc  |g| 0.67  140s
+  step 4884/24437 train ~2.092 bpc  |g| 0.66  185s
+  step 6105/24437 train ~2.035 bpc  |g| 0.55  230s
+  step 7326/24437 train ~1.963 bpc  |g| 0.76  275s
+  step 8547/24437 train ~1.966 bpc  |g| 0.61  321s
+  step 9768/24437 train ~1.958 bpc  |g| 0.71  368s
+  step 10989/24437 train ~1.984 bpc  |g| 0.93  413s
+  step 12210/24437 train ~1.935 bpc  |g| 0.96  459s
+  step 13431/24437 train ~1.944 bpc  |g| 0.63  505s
+  step 14652/24437 train ~1.903 bpc  |g| 1.18  553s
+  step 15873/24437 train ~1.898 bpc  |g| 0.81  601s
+  step 17094/24437 train ~1.901 bpc  |g| 0.66  648s
+  step 18315/24437 train ~1.875 bpc  |g| 0.81  695s
+  step 19536/24437 train ~1.917 bpc  |g| 0.93  741s
+  step 20757/24437 train ~1.879 bpc  |g| 0.86  789s
+  step 21978/24437 train ~1.884 bpc  |g| 0.70  834s
+  step 23199/24437 train ~1.911 bpc  |g| 0.71  880s
+  step 24420/24437 train ~1.907 bpc  |g| 0.72  926s
+sample: le findára n'um murmurio, eu, 
+por muitos dias sem--e ou mau elle negrejavam-os na perío:
+
+Vêdo, senhorio Caz os trevas.
+
+Este indio Rey, sem desfazer a matta, não a viveu: "Bem teste
+essa Medista a tocar sepultado da aurora, porque ha, a traçari
+
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-181_sbpe32768-8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin

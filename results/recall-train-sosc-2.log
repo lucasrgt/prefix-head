@@ -1,0 +1,3 @@
+sosc nd1:bytes: radix 256, h 128, layers 2, seq 576, params 131660, state 816 B, train 1800913 tok
+  step 0/5863 train ~8.080 bpc  |g| 0.41  0s
+  step 293/5863 train ~4.035 bpc  |g| 0.16  27s

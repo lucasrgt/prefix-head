@@ -1,0 +1,34 @@
+sosc nd21x21x19:bpe8192: radix 21x21x19, h 128, layers 2, seq 64, params 2284245, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.469 bpc  |g| 0.51  0s
+  step 248/4978 train ~2.958 bpc  |g| 0.53  7s
+  step 496/4978 train ~2.635 bpc  |g| 0.46  15s
+  step 744/4978 train ~2.447 bpc  |g| 0.48  23s
+  step 992/4978 train ~2.352 bpc  |g| 0.48  30s
+  step 1240/4978 train ~2.293 bpc  |g| 0.46  37s
+  step 1488/4978 train ~2.258 bpc  |g| 0.48  44s
+  step 1736/4978 train ~2.218 bpc  |g| 0.49  50s
+  step 1984/4978 train ~2.199 bpc  |g| 0.48  56s
+  step 2232/4978 train ~2.162 bpc  |g| 0.52  63s
+  step 2480/4978 train ~2.161 bpc  |g| 0.51  69s
+  step 2728/4978 train ~2.143 bpc  |g| 0.50  75s
+  step 2976/4978 train ~2.121 bpc  |g| 0.49  82s
+  step 3224/4978 train ~2.107 bpc  |g| 0.52  88s
+  step 3472/4978 train ~2.116 bpc  |g| 0.50  95s
+  step 3720/4978 train ~2.089 bpc  |g| 0.51  101s
+  step 3968/4978 train ~2.100 bpc  |g| 0.51  107s
+  step 4216/4978 train ~2.096 bpc  |g| 0.51  113s
+  step 4464/4978 train ~2.067 bpc  |g| 0.48  119s
+  step 4712/4978 train ~2.080 bpc  |g| 0.53  125s
+  step 4960/4978 train ~2.059 bpc  |g| 0.61  130s
+sample: le findára n'um murmurio, eu, ia o seu bom assomboso que Capitú?... Como esta alli fômos as peddores; não porem os beijos:
+
+--Escida, Major? duvida a injução, um rue de Buscas, que te parece, Eu não seria...
+
+Pourgava! O que lh...
+
+--Hosiegativenas, nós?...
+
+--Mas agarrando por lá dentro que espera, com effeito
+replica
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-nd21x21x19_bpe8192-h128-l2-s64-stateful64-seed1.bin

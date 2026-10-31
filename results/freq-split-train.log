@@ -1,0 +1,30 @@
+sosc grp-freq-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.459 bpc  |g| 0.45  0s
+  step 248/4978 train ~2.948 bpc  |g| 0.38  5s
+  step 496/4978 train ~2.623 bpc  |g| 0.41  10s
+  step 744/4978 train ~2.427 bpc  |g| 0.43  15s
+  step 992/4978 train ~2.321 bpc  |g| 0.45  21s
+  step 1240/4978 train ~2.256 bpc  |g| 0.44  27s
+  step 1488/4978 train ~2.216 bpc  |g| 0.44  32s
+  step 1736/4978 train ~2.171 bpc  |g| 0.46  38s
+  step 1984/4978 train ~2.152 bpc  |g| 0.46  44s
+  step 2232/4978 train ~2.114 bpc  |g| 0.48  49s
+  step 2480/4978 train ~2.112 bpc  |g| 0.49  55s
+  step 2728/4978 train ~2.093 bpc  |g| 0.48  60s
+  step 2976/4978 train ~2.070 bpc  |g| 0.45  66s
+  step 3224/4978 train ~2.057 bpc  |g| 0.49  71s
+  step 3472/4978 train ~2.067 bpc  |g| 0.49  77s
+  step 3720/4978 train ~2.040 bpc  |g| 0.51  82s
+  step 3968/4978 train ~2.050 bpc  |g| 0.53  88s
+  step 4216/4978 train ~2.046 bpc  |g| 0.48  93s
+  step 4464/4978 train ~2.015 bpc  |g| 0.48  99s
+  step 4712/4978 train ~2.030 bpc  |g| 0.54  105s
+  step 4960/4978 train ~2.008 bpc  |g| 0.59  110s
+sample: le findára n'um murmurio, eu,   Nem uma voz dor d'ouro
+e moda.
+
+Atraz da vespera soltou uma para casa... Depois appareceu que, na saia ficára
+d'elejo de
+estores. Então o opera uma historia escarlate uma pincna, a espava que o justilhado ao mesmo o amar, do seu charuto, risou, e com os annos da porta, veiu logo um deliintado de rheria; e nós a suaves,
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-freq-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

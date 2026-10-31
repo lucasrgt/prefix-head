@@ -1,0 +1,29 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.459 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.986 bpc  |g| 0.37  5s
+  step 496/4978 train ~2.610 bpc  |g| 0.41  9s
+  step 744/4978 train ~2.421 bpc  |g| 0.42  14s
+  step 992/4978 train ~2.314 bpc  |g| 0.42  19s
+  step 1240/4978 train ~2.231 bpc  |g| 0.44  24s
+  step 1488/4978 train ~2.182 bpc  |g| 0.46  28s
+  step 1736/4978 train ~2.144 bpc  |g| 0.45  33s
+  step 1984/4978 train ~2.113 bpc  |g| 0.45  37s
+  step 2232/4978 train ~2.083 bpc  |g| 0.44  42s
+  step 2480/4978 train ~2.059 bpc  |g| 0.45  46s
+  step 2728/4978 train ~2.048 bpc  |g| 0.45  51s
+  step 2976/4978 train ~2.030 bpc  |g| 0.45  56s
+  step 3224/4978 train ~2.013 bpc  |g| 0.46  60s
+  step 3472/4978 train ~2.013 bpc  |g| 0.47  65s
+  step 3720/4978 train ~1.997 bpc  |g| 0.48  70s
+  step 3968/4978 train ~1.995 bpc  |g| 0.47  74s
+  step 4216/4978 train ~1.987 bpc  |g| 0.47  79s
+  step 4464/4978 train ~1.980 bpc  |g| 0.47  84s
+  step 4712/4978 train ~1.977 bpc  |g| 0.47  88s
+  step 4960/4978 train ~1.980 bpc  |g| 0.50  93s
+sample: le findára n'um murmurio, eu, 
+    Dôres, os madureisos e os versos e Sêm. Hrava Gracinha de
+roxando Affonso, muito excitação de que tias caminharam ao lado, venturado
+de rabemos a mulher. Eu tudo porque a cia, ficou na capitadão o olho do
+posso. Estava o singo que se tinha bebê, com a sua campanha,
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-seed2.bin

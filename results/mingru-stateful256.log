@@ -1,0 +1,34 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.455 bpc  |g| 0.29  0s
+  step 248/4978 train ~2.962 bpc  |g| 0.36  4s
+  step 496/4978 train ~2.592 bpc  |g| 0.32  9s
+  step 744/4978 train ~2.385 bpc  |g| 0.35  23s
+  step 992/4978 train ~2.267 bpc  |g| 0.35  30s
+  step 1240/4978 train ~2.224 bpc  |g| 0.35  35s
+  step 1488/4978 train ~2.152 bpc  |g| 0.36  39s
+  step 1736/4978 train ~2.085 bpc  |g| 0.36  43s
+  step 1984/4978 train ~2.077 bpc  |g| 0.37  48s
+  step 2232/4978 train ~2.046 bpc  |g| 0.37  52s
+  step 2480/4978 train ~2.044 bpc  |g| 0.38  57s
+  step 2728/4978 train ~2.026 bpc  |g| 0.38  62s
+  step 2976/4978 train ~1.990 bpc  |g| 0.39  66s
+  step 3224/4978 train ~2.029 bpc  |g| 0.39  70s
+  step 3472/4978 train ~1.981 bpc  |g| 0.39  75s
+  step 3720/4978 train ~1.987 bpc  |g| 0.39  79s
+  step 3968/4978 train ~1.969 bpc  |g| 0.40  83s
+  step 4216/4978 train ~1.988 bpc  |g| 0.38  88s
+  step 4464/4978 train ~1.975 bpc  |g| 0.38  92s
+  step 4712/4978 train ~1.975 bpc  |g| 0.40  97s
+  step 4960/4978 train ~1.984 bpc  |g| 0.38  101s
+sample: le findára n'um murmurio, eu, 
+     E vai lá dilignou á mãi, que é o Gavam, que tinha
+esco monteinho!
+
+--O senhor padre Amaro, bateu tambem um canto, arrendo o meu-ferera,
+segundo
+n'esse
+fleque, toda e aquecer na loja do Rio
+com zás, posto mais muito menos ou que nascaras que se sabe a
+Lisboos de assignadreccaca (os
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful256-seed1.bin

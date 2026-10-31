@@ -1,0 +1,32 @@
+sosc pfx-91x91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 1160962, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.463 bpc  |g| 0.29  0s
+  step 248/4978 train ~3.231 bpc  |g| 0.39  5s
+  step 496/4978 train ~2.752 bpc  |g| 0.36  11s
+  step 744/4978 train ~2.573 bpc  |g| 0.41  16s
+  step 992/4978 train ~2.500 bpc  |g| 0.46  21s
+  step 1240/4978 train ~2.452 bpc  |g| 0.45  26s
+  step 1488/4978 train ~2.411 bpc  |g| 0.51  32s
+  step 1736/4978 train ~2.379 bpc  |g| 0.50  37s
+  step 1984/4978 train ~2.360 bpc  |g| 0.51  43s
+  step 2232/4978 train ~2.349 bpc  |g| 0.61  48s
+  step 2480/4978 train ~2.330 bpc  |g| 0.52  53s
+  step 2728/4978 train ~2.322 bpc  |g| 0.51  58s
+  step 2976/4978 train ~2.309 bpc  |g| 0.52  64s
+  step 3224/4978 train ~2.296 bpc  |g| 0.51  69s
+  step 3472/4978 train ~2.300 bpc  |g| 0.54  74s
+  step 3720/4978 train ~2.276 bpc  |g| 0.57  80s
+  step 3968/4978 train ~2.261 bpc  |g| 0.59  85s
+  step 4216/4978 train ~2.261 bpc  |g| 0.56  90s
+  step 4464/4978 train ~2.284 bpc  |g| 0.53  96s
+  step 4712/4978 train ~2.276 bpc  |g| 0.56  101s
+  step 4960/4978 train ~2.269 bpc  |g| 0.55  106s
+sample: le findára n'um murmurio, eu, 
+     Oh, occasião de Macário forretideira, é muito,
+pêntes, reconheceu-lhe Aceira D. Meta de Agora que mas embebrava-lhe
+o Maria Ouplações. Elle tracorsa bradou a mostrou-o-se nos
+madomercio; e a tudo via--disse ao meu palavras summar-se voltara pelo João Desceram
+amão:
+
+--Danoos, n'uma ago,
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-91x91_bpe8192-h128-l2-s64-stateful64-seed2.bin

@@ -1,0 +1,31 @@
+select easy: 283 of 638 extra books, 16068905 tokens, mean reference bpc 2.253 (all 2.492)
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/16432 train ~3.807 bpc  |g| 0.28  0s
+  step 821/16432 train ~2.547 bpc  |g| 0.46  15s
+  step 1642/16432 train ~2.348 bpc  |g| 0.45  31s
+  step 2463/16432 train ~2.249 bpc  |g| 0.48  46s
+  step 3284/16432 train ~2.228 bpc  |g| 0.54  61s
+  step 4105/16432 train ~2.141 bpc  |g| 0.59  76s
+  step 4926/16432 train ~2.145 bpc  |g| 0.60  90s
+  step 5747/16432 train ~2.121 bpc  |g| 0.61  105s
+  step 6568/16432 train ~2.089 bpc  |g| 0.60  120s
+  step 7389/16432 train ~1.982 bpc  |g| 0.58  136s
+  step 8210/16432 train ~2.018 bpc  |g| 0.56  152s
+  step 9031/16432 train ~2.019 bpc  |g| 0.59  168s
+  step 9852/16432 train ~2.051 bpc  |g| 0.57  184s
+  step 10673/16432 train ~2.041 bpc  |g| 0.67  199s
+  step 11494/16432 train ~2.046 bpc  |g| 0.62  214s
+  step 12315/16432 train ~2.011 bpc  |g| 0.84  230s
+  step 13136/16432 train ~2.036 bpc  |g| 0.71  246s
+  step 13957/16432 train ~2.012 bpc  |g| 0.62  261s
+  step 14778/16432 train ~1.962 bpc  |g| 0.57  277s
+  step 15599/16432 train ~2.040 bpc  |g| 0.63  292s
+  step 16420/16432 train ~1.990 bpc  |g| 0.59  308s
+sample: le findára n'um murmurio, eu, 
+razão de um typo menino na côrte de Tristão, porém, á lareira, voltou-se com grande
+ambas a um rochedo, a perigar, com que subindo a paz de pedrarias, como em
+Eroas, examentando o papel. As cartas crescer um olhar de 1820, se
+rodeavam os lavradores, humorico ou se tornaram a vista de as
+prons e os rediti
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-easy-uniform-e0.5-seed1.bin

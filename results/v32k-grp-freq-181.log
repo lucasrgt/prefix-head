@@ -1,0 +1,32 @@
+sosc grp-freq-181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 1378432 tok
+  step 0/4039 train ~3.235 bpc  |g| 0.53  0s
+  step 201/4039 train ~2.721 bpc  |g| 0.79  9s
+  step 402/4039 train ~2.439 bpc  |g| 0.46  18s
+  step 603/4039 train ~2.309 bpc  |g| 0.41  27s
+  step 804/4039 train ~2.230 bpc  |g| 0.43  36s
+  step 1005/4039 train ~2.171 bpc  |g| 0.48  46s
+  step 1206/4039 train ~2.095 bpc  |g| 0.40  54s
+  step 1407/4039 train ~2.055 bpc  |g| 0.43  65s
+  step 1608/4039 train ~2.038 bpc  |g| 0.43  75s
+  step 1809/4039 train ~1.998 bpc  |g| 0.49  86s
+  step 2010/4039 train ~1.972 bpc  |g| 0.48  100s
+  step 2211/4039 train ~1.941 bpc  |g| 0.46  110s
+  step 2412/4039 train ~1.930 bpc  |g| 0.47  121s
+  step 2613/4039 train ~1.875 bpc  |g| 0.44  133s
+  step 2814/4039 train ~1.893 bpc  |g| 0.45  143s
+  step 3015/4039 train ~1.899 bpc  |g| 0.50  154s
+  step 3216/4039 train ~1.894 bpc  |g| 0.45  164s
+  step 3417/4039 train ~1.894 bpc  |g| 0.48  173s
+  step 3618/4039 train ~1.855 bpc  |g| 0.46  182s
+  step 3819/4039 train ~1.883 bpc  |g| 0.48  191s
+  step 4020/4039 train ~1.847 bpc  |g| 0.46  200s
+sample: le findára n'um murmurio, eu,       Na
+roicara, com uma docil:
+
+--Viva   guardando
+
+Luiza fumando, em casa a fazeção do meu amigo.
+
+E o plano reteve o que elle era uma vibração na piletada, a noite foi o menino frio das suas grandes guisantes, com uma chicara de estrangulada e solram no braço, abri
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-freq-181_bpe32768-h128-l2-s64-stateful64-seed1.bin

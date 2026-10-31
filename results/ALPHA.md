@@ -186,3 +186,19 @@ Mesma forma (91×91), mesmos parâmetros e MACs. "Significado" = k-means balance
 - O prefixo vence por 10–20× a variação entre sementes, nas duas arquiteturas. O agrupamento semântico fica pior até que o arbitrário por ordem de fusão (MLP 2,248).
 - Leitura: agrupar por significado põe na mesma classe tokens intercambiáveis, e a decisão dentro da classe vira a mais difícil; por prefixo, a primeira decisão segue a direção do texto e a segunda separa tokens que o contexto distingue com facilidade.
 - Contradiz a premissa do TDLM (arXiv 2604.03537) de que hierarquias de vocabulário não se alinham com a geração esquerda→direita. Observação: as duas sementes semânticas do MLP coincidiram em 2.2577 (modelos distintos — curvas e amostras diferem).
+
+# H-fractal — fractal de prefixos (profundidade da cabeça) — 2026-10-17
+
+`scripts/fractal.sh`: Quartzo (`--core sosc --n 51`, h128, 2 camadas, stateful 64, 3 épocas), 2 sementes. `pfx-<radix>:bpe8192` = tokens ordenados pela grafia, posto em dígitos de base mista; `pfx-91x91` reproduz `grp-first-91` bit a bit (2,0614, mesmos fatores). `--tied 1` = uma matriz de saída por nível em vez de uma por prefixo. Controle `nd…` = mesma forma em ordem de ID do BPE.
+
+| profundidade | radix | prefixo (s1 / s2 → média) | ordem de ID | tied (média) | MACs/char | parâmetros (tied) |
+|---|---|---|---|---|---|---|
+| 2 | 91×91 | 2,0614 / 2,0665 → **2,0640** | 2,1575 (aleatória, 2 sementes) | 2,3198 | 24.303 | 2,22M (1,16M) |
+| 3 | 21×21×19 | 2,0694 / 2,0713 → **2,0703** | 2,1816 | 2,4438 | 20.053 | 2,28M (1,15M) |
+| 4 | 10×10×10×9 | 2,0764 / 2,0801 → 2,0782 | — | 2,5010 | 19.281 | 2,53M (1,23M) |
+| 13 | 2¹³ | 2,0933 / 2,0953 → 2,0943 | 2,2312 | 2,6389 | 18.824 | 3,23M (1,12M) |
+
+- **Profundidade com prefixo é barata:** 3 níveis = +0,3% bpc por −17% MACs/char; árvore binária completa = +1,5%. Com ordem de ID, a profundidade custa mais (2,1816 → 2,2312, +2,3%, contra +1,2% com prefixo) e a vantagem do prefixo cresce com a profundidade (4,5% → 5,4% → 6,5%).
+- **Mas não compensa neste tamanho:** abaixo de 3 níveis a cabeça já é pequena perto do núcleo (MACs quase não caem) e as matrizes por prefixo dos níveis de baixo aumentam os parâmetros.
+- **Negativo — pesos compartilhados (`tied`):** +12% a +28%, piorando com a profundidade. O 1º nível fica igual; a perda está nos níveis de baixo: o prefixo só chega como soma de embeddings + tanh, fraco demais para uma matriz compartilhada.
+- Próximo, se retomar: vocabulário grande (32k/262k), onde a cabeça 2D ainda domina o custo; condicionamento rico do prefixo (camada por nível) para o tied.

@@ -1,0 +1,11 @@
+gemma270m sem: vocab 262144, d 640, 512 classes of <= 512, train 649605 rows, test 213807 rows
+  step 380/3806 class loss 3.1316 nats/token  1s
+  step 760/3806 class loss 2.9968 nats/token  3s
+  step 1140/3806 class loss 2.9170 nats/token  4s
+  step 1520/3806 class loss 2.7655 nats/token  6s
+  step 1900/3806 class loss 2.6715 nats/token  7s
+  step 2280/3806 class loss 2.6211 nats/token  9s
+  step 2660/3806 class loss 2.5192 nats/token  11s
+  step 3040/3806 class loss 2.4160 nats/token  12s
+  step 3420/3806 class loss 2.3704 nats/token  14s
+  step 3800/3806 class loss 2.3244 nats/token  15s

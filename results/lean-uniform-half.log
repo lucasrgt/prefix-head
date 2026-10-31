@@ -1,0 +1,30 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/16432 train ~3.821 bpc  |g| 0.43  0s
+  step 821/16432 train ~2.471 bpc  |g| 0.43  14s
+  step 1642/16432 train ~2.365 bpc  |g| 0.54  29s
+  step 2463/16432 train ~2.260 bpc  |g| 0.48  43s
+  step 3284/16432 train ~2.118 bpc  |g| 0.52  57s
+  step 4105/16432 train ~2.181 bpc  |g| 0.55  72s
+  step 4926/16432 train ~2.140 bpc  |g| 0.54  86s
+  step 5747/16432 train ~2.115 bpc  |g| 0.75  101s
+  step 6568/16432 train ~2.069 bpc  |g| 0.67  115s
+  step 7389/16432 train ~2.081 bpc  |g| 0.63  130s
+  step 8210/16432 train ~2.061 bpc  |g| 0.52  144s
+  step 9031/16432 train ~2.060 bpc  |g| 0.58  160s
+  step 9852/16432 train ~2.005 bpc  |g| 0.56  176s
+  step 10673/16432 train ~2.036 bpc  |g| 0.61  192s
+  step 11494/16432 train ~2.035 bpc  |g| 0.65  209s
+  step 12315/16432 train ~2.031 bpc  |g| 0.89  225s
+  step 13136/16432 train ~1.981 bpc  |g| 0.71  242s
+  step 13957/16432 train ~2.018 bpc  |g| 0.61  261s
+  step 14778/16432 train ~2.024 bpc  |g| 0.57  278s
+  step 15599/16432 train ~2.043 bpc  |g| 0.67  295s
+  step 16420/16432 train ~1.996 bpc  |g| 0.62  310s
+sample: le findára n'um murmurio, eu, 
+    Seus seja morpada maldade, terno!--se o amoro são, que
+    Se a Militare de alterrand da natureza.
+                                    VIII.
+
+       
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e0.5-seed1.bin

@@ -1,0 +1,1 @@
+{"file":"qwen2.5-coder-0.5b-instruct-q4_0.gguf","head":"full","classes_tried":1,"threads":8,"ctx":1024,"prompts":874,"gen_tokens":114815,"tok_per_s":107.7,"prompt_tok_per_s":173.5,"peak_rss_mb":604,"rss_mb":604}

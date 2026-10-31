@@ -1,0 +1,33 @@
+sosc pfx-10x10x10x9:bpe8192: radix 10x10x10x9, h 128, layers 2, seq 64, params 2525898, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.509 bpc  |g| 0.42  0s
+  step 248/4978 train ~2.945 bpc  |g| 0.50  9s
+  step 496/4978 train ~2.547 bpc  |g| 0.53  19s
+  step 744/4978 train ~2.369 bpc  |g| 0.56  26s
+  step 992/4978 train ~2.267 bpc  |g| 0.57  32s
+  step 1240/4978 train ~2.206 bpc  |g| 0.55  38s
+  step 1488/4978 train ~2.165 bpc  |g| 0.56  45s
+  step 1736/4978 train ~2.118 bpc  |g| 0.54  52s
+  step 1984/4978 train ~2.097 bpc  |g| 0.60  79s
+  step 2232/4978 train ~2.057 bpc  |g| 0.56  102s
+  step 2480/4978 train ~2.053 bpc  |g| 0.59  132s
+  step 2728/4978 train ~2.033 bpc  |g| 0.57  164s
+  step 2976/4978 train ~2.010 bpc  |g| 0.57  203s
+  step 3224/4978 train ~1.997 bpc  |g| 0.63  254s
+  step 3472/4978 train ~2.004 bpc  |g| 0.61  323s
+  step 3720/4978 train ~1.977 bpc  |g| 0.56  354s
+  step 3968/4978 train ~1.987 bpc  |g| 0.58  385s
+  step 4216/4978 train ~1.981 bpc  |g| 0.62  416s
+  step 4464/4978 train ~1.950 bpc  |g| 0.56  436s
+  step 4712/4978 train ~1.963 bpc  |g| 0.61  459s
+  step 4960/4978 train ~1.944 bpc  |g| 0.69  482s
+sample: le findára n'um murmurio, eu,  37185: o Alvopo, d'entre.
+
+Deixei costumes familia, isso a D. Annema, com o cavalogo e dos
+Trara, costado da serra ao mar, que n'um tivesse no ultimo deliciogo para
+aquillo em Bemfica... Tinha indignação uma mulher de o mesmo amando, enertamntes
+inveja...
+
+
+     
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-pfx-10x10x10x9_bpe8192-h128-l2-s64-stateful64-seed1.bin

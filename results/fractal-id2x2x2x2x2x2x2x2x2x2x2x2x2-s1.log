@@ -1,0 +1,36 @@
+sosc nd2x2x2x2x2x2x2x2x2x2x2x2x2:bpe8192: radix 2x2x2x2x2x2x2x2x2x2x2x2x2, h 128, layers 2, seq 64, params 3230794, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.528 bpc  |g| 1.20  0s
+  step 248/4978 train ~2.942 bpc  |g| 0.50  9s
+  step 496/4978 train ~2.632 bpc  |g| 0.53  20s
+  step 744/4978 train ~2.467 bpc  |g| 0.58  30s
+  step 992/4978 train ~2.383 bpc  |g| 0.54  40s
+  step 1240/4978 train ~2.329 bpc  |g| 0.57  50s
+  step 1488/4978 train ~2.299 bpc  |g| 0.57  60s
+  step 1736/4978 train ~2.259 bpc  |g| 0.59  69s
+  step 1984/4978 train ~2.243 bpc  |g| 0.57  79s
+  step 2232/4978 train ~2.206 bpc  |g| 0.60  89s
+  step 2480/4978 train ~2.204 bpc  |g| 0.59  98s
+  step 2728/4978 train ~2.184 bpc  |g| 0.60  108s
+  step 2976/4978 train ~2.164 bpc  |g| 0.60  118s
+  step 3224/4978 train ~2.148 bpc  |g| 0.60  128s
+  step 3472/4978 train ~2.157 bpc  |g| 0.58  138s
+  step 3720/4978 train ~2.130 bpc  |g| 0.60  148s
+  step 3968/4978 train ~2.142 bpc  |g| 0.60  158s
+  step 4216/4978 train ~2.136 bpc  |g| 0.61  168s
+  step 4464/4978 train ~2.106 bpc  |g| 0.60  178s
+  step 4712/4978 train ~2.120 bpc  |g| 0.62  188s
+  step 4960/4978 train ~2.096 bpc  |g| 0.77  199s
+sample: le findára n'um murmurio, eu, 'elicou, berrando a
+banta.
+
+--Devento; restos sucdeu o enfandismo, de
+pciedade. deitar
+taduzia ternura e o
+coração como em 185, ou ella tinha abatoleza:
+
+--Ha, a bominha, por o Gonçalo, não contou d'elles. Mvopp-esa Cidade!
+
+--Que vá ouvou os seus cabellos
+cóologei ao seu
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-nd2x2x2x2x2x2x2x2x2x2x2x2x2_bpe8192-h128-l2-s64-stateful64-seed1.bin

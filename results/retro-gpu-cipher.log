@@ -1,0 +1,8 @@
+qwen06b: adapt-full nan (0s)
+  cipher1 done in 86s
+  cipher2 done in 122s
+  cipher3 done in 174s
+gemma1b: adapt-full nan (0s)
+  cipher1 done in 244s
+  cipher2 done in 139s
+  cipher3 done in 136s

@@ -1,0 +1,32 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 2823543 tok
+  step 0/8273 train ~3.195 bpc  |g| 0.49  0s
+  step 413/8273 train ~2.352 bpc  |g| 0.43  7s
+  step 826/8273 train ~2.074 bpc  |g| 0.44  15s
+  step 1239/8273 train ~1.984 bpc  |g| 0.60  22s
+  step 1652/8273 train ~1.906 bpc  |g| 0.48  29s
+  step 2065/8273 train ~1.884 bpc  |g| 0.50  36s
+  step 2478/8273 train ~1.841 bpc  |g| 0.47  43s
+  step 2891/8273 train ~1.814 bpc  |g| 0.56  51s
+  step 3304/8273 train ~1.773 bpc  |g| 0.54  58s
+  step 3717/8273 train ~1.770 bpc  |g| 0.56  66s
+  step 4130/8273 train ~1.764 bpc  |g| 0.54  73s
+  step 4543/8273 train ~1.724 bpc  |g| 0.58  80s
+  step 4956/8273 train ~1.736 bpc  |g| 0.54  88s
+  step 5369/8273 train ~1.710 bpc  |g| 0.51  95s
+  step 5782/8273 train ~1.679 bpc  |g| 0.61  103s
+  step 6195/8273 train ~1.693 bpc  |g| 0.55  110s
+  step 6608/8273 train ~1.689 bpc  |g| 0.52  117s
+  step 7021/8273 train ~1.694 bpc  |g| 0.56  124s
+  step 7434/8273 train ~1.680 bpc  |g| 0.66  132s
+  step 7847/8273 train ~1.679 bpc  |g| 0.51  139s
+  step 8260/8273 train ~1.675 bpc  |g| 0.61  147s
+sample: " he said ere long;
+"one of wh
+ancher, to you, hence, Pip."
+
+Liddy, who had anchority which I had a very slang , beauty,
+to be so uncomfortable as I presided out.-They and see Gou of making him that it
+was a hamical hard at the table: he sat looking at the life-fross. My life
+had
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-data_en_raw-seed1.bin

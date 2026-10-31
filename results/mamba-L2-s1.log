@@ -1,0 +1,37 @@
+mamba grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2261388, state 20224 B, train 1698884 tok
+  step 0/4978 train ~3.456 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.946 bpc  |g| 0.55  9s
+  step 496/4978 train ~2.526 bpc  |g| 0.57  17s
+  step 744/4978 train ~2.353 bpc  |g| 0.62  26s
+  step 992/4978 train ~2.260 bpc  |g| 0.60  35s
+  step 1240/4978 train ~2.207 bpc  |g| 0.60  43s
+  step 1488/4978 train ~2.170 bpc  |g| 0.60  52s
+  step 1736/4978 train ~2.126 bpc  |g| 0.62  60s
+  step 1984/4978 train ~2.108 bpc  |g| 0.61  69s
+  step 2232/4978 train ~2.067 bpc  |g| 0.61  77s
+  step 2480/4978 train ~2.067 bpc  |g| 0.63  86s
+  step 2728/4978 train ~2.048 bpc  |g| 0.66  94s
+  step 2976/4978 train ~2.024 bpc  |g| 0.63  102s
+  step 3224/4978 train ~2.010 bpc  |g| 0.66  111s
+  step 3472/4978 train ~2.017 bpc  |g| 0.69  119s
+  step 3720/4978 train ~1.988 bpc  |g| 0.66  127s
+  step 3968/4978 train ~1.998 bpc  |g| 0.65  136s
+  step 4216/4978 train ~1.992 bpc  |g| 0.68  144s
+  step 4464/4978 train ~1.958 bpc  |g| 0.67  153s
+  step 4712/4978 train ~1.971 bpc  |g| 0.74  161s
+  step 4960/4978 train ~1.953 bpc  |g| 0.93  170s
+sample: le findára n'um murmurio, eu, 
+
+O cavouqueiro um trabalho mal o centro, estriram-se que o vieram eu atal. Ole,
+estava com
+aquelle zás,
+processiva monta e o sobrinha, no ar foi?! Ando D. Pedro Anna.
+
+Affonslados, acclamam de
+maryrico volta do gato, e o mesmo suspiro, que se sentia ainda
+além claro.
+
+N'essa
+estabele
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mamba-a4-n16-di0-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

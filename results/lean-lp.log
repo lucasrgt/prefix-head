@@ -1,0 +1,32 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/16432 train ~3.813 bpc  |g| 0.41  0s
+  step 821/16432 train ~2.460 bpc  |g| 0.48  20s
+  step 1642/16432 train ~2.311 bpc  |g| 0.49  40s
+  step 2463/16432 train ~2.241 bpc  |g| 0.54  60s
+  step 3284/16432 train ~2.230 bpc  |g| 0.51  80s
+  step 4105/16432 train ~2.184 bpc  |g| 0.53  100s
+  step 4926/16432 train ~2.128 bpc  |g| 0.63  121s
+  step 5747/16432 train ~2.094 bpc  |g| 0.58  141s
+  step 6568/16432 train ~2.047 bpc  |g| 0.62  161s
+  step 7389/16432 train ~2.067 bpc  |g| 0.70  181s
+  step 8210/16432 train ~2.120 bpc  |g| 0.60  201s
+  step 9031/16432 train ~2.082 bpc  |g| 0.54  221s
+  step 9852/16432 train ~2.004 bpc  |g| 0.64  242s
+  step 10673/16432 train ~2.018 bpc  |g| 0.56  262s
+  step 11494/16432 train ~2.016 bpc  |g| 0.64  281s
+  step 12315/16432 train ~2.040 bpc  |g| 0.64  301s
+  step 13136/16432 train ~2.040 bpc  |g| 0.55  321s
+  step 13957/16432 train ~2.040 bpc  |g| 0.76  341s
+  step 14778/16432 train ~2.012 bpc  |g| 0.62  360s
+  step 15599/16432 train ~2.046 bpc  |g| 0.62  380s
+  step 16420/16432 train ~2.006 bpc  |g| 0.62  400s
+sample: le findára n'um murmurio, eu, 
+    que venestas na escola impitou-lhe repetidas gargalras...
+      Panta Filosopente côro...
+
+    Rontem, Cavalleiros,  que a mulher produziu:
+
+      Não tenho questões inflexivel,
+      O enxaça, atira a sua macaia paresinhos
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-lp-e0.5-seed1.bin

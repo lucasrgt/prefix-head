@@ -1,0 +1,29 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.459 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.970 bpc  |g| 0.40  4s
+  step 496/4978 train ~2.584 bpc  |g| 0.41  9s
+  step 744/4978 train ~2.392 bpc  |g| 0.43  13s
+  step 992/4978 train ~2.275 bpc  |g| 0.50  18s
+  step 1240/4978 train ~2.213 bpc  |g| 0.43  22s
+  step 1488/4978 train ~2.152 bpc  |g| 0.55  26s
+  step 1736/4978 train ~2.111 bpc  |g| 0.49  31s
+  step 1984/4978 train ~2.077 bpc  |g| 0.48  35s
+  step 2232/4978 train ~2.055 bpc  |g| 0.62  39s
+  step 2480/4978 train ~2.035 bpc  |g| 0.51  44s
+  step 2728/4978 train ~2.025 bpc  |g| 0.49  48s
+  step 2976/4978 train ~2.005 bpc  |g| 0.51  53s
+  step 3224/4978 train ~1.985 bpc  |g| 0.49  57s
+  step 3472/4978 train ~1.989 bpc  |g| 0.49  61s
+  step 3720/4978 train ~1.963 bpc  |g| 0.54  66s
+  step 3968/4978 train ~1.943 bpc  |g| 0.53  70s
+  step 4216/4978 train ~1.948 bpc  |g| 0.56  75s
+  step 4464/4978 train ~1.984 bpc  |g| 0.51  79s
+  step 4712/4978 train ~1.968 bpc  |g| 0.53  83s
+  step 4960/4978 train ~1.955 bpc  |g| 0.50  88s
+sample: le findára n'um murmurio, eu, 
+joelhos, e sahiu:--Vedinhindoia uma portador e avente; se
+esconcára, sobre a Casa maior do admiro, sob a agudea janonia e percorrera,
+dejo a negra mauste com a faia do almoço, alhante esperava, com o austo. E
+seram á sala na uma carta aquilibliotheca, por o Castello
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed3.bin

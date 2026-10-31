@@ -1,0 +1,33 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.459 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.976 bpc  |g| 0.40  5s
+  step 496/4978 train ~2.603 bpc  |g| 0.39  9s
+  step 744/4978 train ~2.402 bpc  |g| 0.42  14s
+  step 992/4978 train ~2.285 bpc  |g| 0.41  18s
+  step 1240/4978 train ~2.223 bpc  |g| 0.42  23s
+  step 1488/4978 train ~2.162 bpc  |g| 0.42  28s
+  step 1736/4978 train ~2.122 bpc  |g| 0.45  32s
+  step 1984/4978 train ~2.089 bpc  |g| 0.47  42s
+  step 2232/4978 train ~2.069 bpc  |g| 0.46  47s
+  step 2480/4978 train ~2.048 bpc  |g| 0.46  52s
+  step 2728/4978 train ~2.038 bpc  |g| 0.45  57s
+  step 2976/4978 train ~2.019 bpc  |g| 0.45  62s
+  step 3224/4978 train ~1.997 bpc  |g| 0.47  67s
+  step 3472/4978 train ~2.004 bpc  |g| 0.47  71s
+  step 3720/4978 train ~1.978 bpc  |g| 0.49  76s
+  step 3968/4978 train ~1.958 bpc  |g| 0.52  81s
+  step 4216/4978 train ~1.962 bpc  |g| 0.47  86s
+  step 4464/4978 train ~1.998 bpc  |g| 0.47  90s
+  step 4712/4978 train ~1.982 bpc  |g| 0.48  95s
+  step 4960/4978 train ~1.969 bpc  |g| 0.46  100s
+sample: le findára n'um murmurio, eu, 
+risoceram. Vlinas e mettido-se já que vinha esbervam, se tinha
+mais de
+batidado, ao
+quarto da cadeira, com restaudades bosques de manhã? Era uma
+desmebeda adormecente pela sua mão alto,
+na quarta á fodeira. O rapaz! E o governo o immerinho se vêrasse ao
+Bêco, de Jorge, que não
+estava para
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sreal-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

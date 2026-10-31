@@ -1,0 +1,29 @@
+sosc grp-trie-91:bpe8192: radix 106x91, h 128, layers 2, seq 64, params 2572132, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.513 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.977 bpc  |g| 0.40  5s
+  step 496/4978 train ~2.565 bpc  |g| 0.41  11s
+  step 744/4978 train ~2.372 bpc  |g| 0.46  18s
+  step 992/4978 train ~2.263 bpc  |g| 0.48  24s
+  step 1240/4978 train ~2.195 bpc  |g| 0.47  30s
+  step 1488/4978 train ~2.149 bpc  |g| 0.47  35s
+  step 1736/4978 train ~2.101 bpc  |g| 0.49  42s
+  step 1984/4978 train ~2.080 bpc  |g| 0.54  49s
+  step 2232/4978 train ~2.038 bpc  |g| 0.49  55s
+  step 2480/4978 train ~2.035 bpc  |g| 0.58  61s
+  step 2728/4978 train ~2.015 bpc  |g| 0.54  66s
+  step 2976/4978 train ~1.992 bpc  |g| 0.49  72s
+  step 3224/4978 train ~1.977 bpc  |g| 0.50  78s
+  step 3472/4978 train ~1.986 bpc  |g| 0.51  84s
+  step 3720/4978 train ~1.960 bpc  |g| 0.58  90s
+  step 3968/4978 train ~1.970 bpc  |g| 0.54  95s
+  step 4216/4978 train ~1.965 bpc  |g| 0.54  101s
+  step 4464/4978 train ~1.932 bpc  |g| 0.51  106s
+  step 4712/4978 train ~1.946 bpc  |g| 0.60  112s
+  step 4960/4978 train ~1.925 bpc  |g| 0.65  118s
+sample: le findára n'um murmurio, eu, 
+    8000 (antes, um intenço, é possivel de visto, resolvi (J'umada carta ... Sebemos bem que tu faz a mim
+sabeçar os seus amigos quando Flo lêr'os", antes de Cincola;
+ainda um saber que lhe gritasse!" Mas não ter um rapazes, pesado,
+aza da cabeça de que não a ref
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-trie-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

@@ -1,0 +1,14 @@
+gemma1b: adapt-full nan (0s)
+[W1008 20:43:12.040471134 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 830865408, total: 8196849664).
+  prefix done in 137s
+[W1008 20:45:27.314338632 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 415760384, total: 8196849664).
+  freq done in 130s
+[W1008 20:47:37.332880075 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 401997824, total: 8196849664).
+  id done in 129s
+[W1008 20:49:46.487951638 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 458227712, total: 8196849664).
+  random done in 134s
+  sem done in 134s
+[W1008 20:54:13.362258513 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 420216832, total: 8196849664).
+  g4 done in 135s
+[W1008 20:56:29.376160148 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1207959552 bytes (free: 434110464, total: 8196849664).
+  prefix done in 134s

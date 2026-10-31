@@ -1,0 +1,34 @@
+sosc grp-random-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.464 bpc  |g| 0.27  0s
+  step 248/4978 train ~3.006 bpc  |g| 0.39  6s
+  step 496/4978 train ~2.675 bpc  |g| 0.39  13s
+  step 744/4978 train ~2.464 bpc  |g| 0.39  18s
+  step 992/4978 train ~2.354 bpc  |g| 0.40  24s
+  step 1240/4978 train ~2.297 bpc  |g| 0.41  30s
+  step 1488/4978 train ~2.242 bpc  |g| 0.45  37s
+  step 1736/4978 train ~2.202 bpc  |g| 0.42  42s
+  step 1984/4978 train ~2.173 bpc  |g| 0.42  48s
+  step 2232/4978 train ~2.154 bpc  |g| 0.46  53s
+  step 2480/4978 train ~2.132 bpc  |g| 0.45  59s
+  step 2728/4978 train ~2.122 bpc  |g| 0.44  64s
+  step 2976/4978 train ~2.104 bpc  |g| 0.46  70s
+  step 3224/4978 train ~2.084 bpc  |g| 0.45  75s
+  step 3472/4978 train ~2.090 bpc  |g| 0.45  80s
+  step 3720/4978 train ~2.064 bpc  |g| 0.50  86s
+  step 3968/4978 train ~2.045 bpc  |g| 0.50  91s
+  step 4216/4978 train ~2.051 bpc  |g| 0.47  96s
+  step 4464/4978 train ~2.082 bpc  |g| 0.46  101s
+  step 4712/4978 train ~2.070 bpc  |g| 0.58  107s
+  step 4960/4978 train ~2.055 bpc  |g| 0.46  113s
+sample: le findára n'um murmurio, eu, es de Côrtos...
+
+Alexandre, a mamãe do canto da cama, observadava o seu filho, um
+homem sómente que te nada.
+
+Linguem parece que o Brimorou-se na estrada, sent nos campella de quando elle
+era a terra que partiram sobre a porta do marido. Boossta immediatamente a não haver d'aquelle rasço, murer
+als dias quando tudo
+voloou o
+Cavallebine
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-random-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

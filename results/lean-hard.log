@@ -1,0 +1,31 @@
+select hard: 356 of 638 extra books, 15995470 tokens, mean reference bpc 2.682 (all 2.492)
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/16432 train ~3.810 bpc  |g| 0.30  0s
+  step 821/16432 train ~2.584 bpc  |g| 0.60  16s
+  step 1642/16432 train ~2.205 bpc  |g| 0.46  31s
+  step 2463/16432 train ~2.212 bpc  |g| 0.58  47s
+  step 3284/16432 train ~2.218 bpc  |g| 0.52  63s
+  step 4105/16432 train ~2.189 bpc  |g| 0.50  79s
+  step 4926/16432 train ~2.087 bpc  |g| 0.62  94s
+  step 5747/16432 train ~2.117 bpc  |g| 0.54  109s
+  step 6568/16432 train ~2.086 bpc  |g| 0.70  125s
+  step 7389/16432 train ~2.080 bpc  |g| 0.62  141s
+  step 8210/16432 train ~2.021 bpc  |g| 0.55  156s
+  step 9031/16432 train ~2.021 bpc  |g| 0.64  172s
+  step 9852/16432 train ~2.017 bpc  |g| 0.58  188s
+  step 10673/16432 train ~2.051 bpc  |g| 0.66  203s
+  step 11494/16432 train ~1.948 bpc  |g| 0.67  218s
+  step 12315/16432 train ~1.998 bpc  |g| 0.60  234s
+  step 13136/16432 train ~2.017 bpc  |g| 0.63  249s
+  step 13957/16432 train ~2.016 bpc  |g| 0.65  264s
+  step 14778/16432 train ~1.987 bpc  |g| 0.58  279s
+  step 15599/16432 train ~2.019 bpc  |g| 0.67  294s
+  step 16420/16432 train ~1.973 bpc  |g| 0.59  309s
+sample: le findára n'um murmurio, eu, 
+    Purta ilho, minha luzia era renunciada.
+    O Conselhante á sua amante
+      Santa Cari, o arrependimento?
+                                
+           
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-hard-uniform-e0.5-seed1.bin

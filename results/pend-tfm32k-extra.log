@@ -1,0 +1,30 @@
+tfm grp-first-181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8776420, state 131072 B, train 27947399 tok
+  step 0/27293 train ~3.685 bpc  |g| 1.65  0s
+  step 1364/27293 train ~2.293 bpc  |g| 0.45  80s
+  step 2728/27293 train ~2.158 bpc  |g| 0.47  158s
+  step 4092/27293 train ~2.098 bpc  |g| 0.46  236s
+  step 5456/27293 train ~2.063 bpc  |g| 0.46  313s
+  step 6820/27293 train ~2.026 bpc  |g| 0.50  390s
+  step 8184/27293 train ~2.003 bpc  |g| 0.54  467s
+  step 9548/27293 train ~1.983 bpc  |g| 0.48  548s
+  step 10912/27293 train ~1.966 bpc  |g| 0.51  629s
+  step 12276/27293 train ~1.952 bpc  |g| 0.57  712s
+  step 13640/27293 train ~1.935 bpc  |g| 0.50  796s
+  step 15004/27293 train ~1.917 bpc  |g| 0.52  881s
+  step 16368/27293 train ~1.904 bpc  |g| 0.57  966s
+  step 17732/27293 train ~1.912 bpc  |g| 0.56  1048s
+  step 19096/27293 train ~1.893 bpc  |g| 0.57  1131s
+  step 20460/27293 train ~1.888 bpc  |g| 0.59  1210s
+  step 21824/27293 train ~1.891 bpc  |g| 0.54  1286s
+  step 23188/27293 train ~1.875 bpc  |g| 0.54  1367s
+  step 24552/27293 train ~1.866 bpc  |g| 0.58  1451s
+  step 25916/27293 train ~1.868 bpc  |g| 0.63  1528s
+  step 27280/27293 train ~1.866 bpc  |g| 0.53  1605s
+sample: le findára n'um murmurio, eu, 
+  Como eu te vi:
+  Levava-me longamente uma voz estantema.
+  Sou a gente Façamos...
+
+                                          
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/tfm-a4-m256-grp-first-181_bpe32768-h128-l2-s64-extra-all-uniform-e1-seed1.bin

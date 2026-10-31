@@ -1,0 +1,32 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.460 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.992 bpc  |g| 0.41  5s
+  step 496/4978 train ~2.589 bpc  |g| 0.44  9s
+  step 744/4978 train ~2.408 bpc  |g| 0.41  14s
+  step 992/4978 train ~2.295 bpc  |g| 0.40  19s
+  step 1240/4978 train ~2.222 bpc  |g| 0.45  24s
+  step 1488/4978 train ~2.171 bpc  |g| 0.44  29s
+  step 1736/4978 train ~2.135 bpc  |g| 0.44  34s
+  step 1984/4978 train ~2.101 bpc  |g| 0.46  40s
+  step 2232/4978 train ~2.073 bpc  |g| 0.48  46s
+  step 2480/4978 train ~2.055 bpc  |g| 0.48  51s
+  step 2728/4978 train ~2.041 bpc  |g| 0.49  57s
+  step 2976/4978 train ~2.022 bpc  |g| 0.44  63s
+  step 3224/4978 train ~2.007 bpc  |g| 0.47  69s
+  step 3472/4978 train ~2.003 bpc  |g| 0.51  74s
+  step 3720/4978 train ~1.986 bpc  |g| 0.49  80s
+  step 3968/4978 train ~1.989 bpc  |g| 0.49  85s
+  step 4216/4978 train ~1.979 bpc  |g| 0.49  90s
+  step 4464/4978 train ~1.974 bpc  |g| 0.47  96s
+  step 4712/4978 train ~1.978 bpc  |g| 0.50  100s
+  step 4960/4978 train ~1.973 bpc  |g| 0.48  105s
+sample: le findára n'um murmurio, eu, 
+    Novo, nunca me desleo, um malote de 1814600
+
+
+                                                   Noronha
+
+
+    
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-seed1.bin

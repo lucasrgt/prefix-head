@@ -1,0 +1,36 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.455 bpc  |g| 0.29  0s
+  step 248/4978 train ~3.010 bpc  |g| 0.35  5s
+  step 496/4978 train ~2.615 bpc  |g| 0.37  9s
+  step 744/4978 train ~2.413 bpc  |g| 0.33  14s
+  step 992/4978 train ~2.296 bpc  |g| 0.34  19s
+  step 1240/4978 train ~2.222 bpc  |g| 0.35  23s
+  step 1488/4978 train ~2.171 bpc  |g| 0.36  28s
+  step 1736/4978 train ~2.138 bpc  |g| 0.35  33s
+  step 1984/4978 train ~2.105 bpc  |g| 0.36  37s
+  step 2232/4978 train ~2.079 bpc  |g| 0.36  42s
+  step 2480/4978 train ~2.062 bpc  |g| 0.37  46s
+  step 2728/4978 train ~2.050 bpc  |g| 0.36  51s
+  step 2976/4978 train ~2.032 bpc  |g| 0.35  56s
+  step 3224/4978 train ~2.018 bpc  |g| 0.36  60s
+  step 3472/4978 train ~2.016 bpc  |g| 0.38  65s
+  step 3720/4978 train ~2.000 bpc  |g| 0.37  69s
+  step 3968/4978 train ~2.003 bpc  |g| 0.37  74s
+  step 4216/4978 train ~1.993 bpc  |g| 0.38  78s
+  step 4464/4978 train ~1.989 bpc  |g| 0.36  83s
+  step 4712/4978 train ~1.993 bpc  |g| 0.37  87s
+  step 4960/4978 train ~1.988 bpc  |g| 0.36  105s
+sample: le findára n'um murmurio, eu, 
+hee seriam? Ai, o cego mesmo olhar:
+
+--Olha.
+
+--Ave? O taboleiro
+deparação d'ella Ega!
+
+--Para chamar! Tem estado a outra cousa, meu, o seu
+divor da graça
+essenão que a José Dias não se diz a tua vapo; mas o marquez. Allembrou-me um acto
+ao ver tem do 202; fugdimento,
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin

@@ -1,0 +1,28 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 256, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.457 bpc  |g| 0.30  0s
+  step 248/4978 train ~2.996 bpc  |g| 0.41  5s
+  step 496/4978 train ~2.629 bpc  |g| 0.35  9s
+  step 744/4978 train ~2.415 bpc  |g| 0.37  14s
+  step 992/4978 train ~2.306 bpc  |g| 0.35  19s
+  step 1240/4978 train ~2.225 bpc  |g| 0.36  23s
+  step 1488/4978 train ~2.161 bpc  |g| 0.36  28s
+  step 1736/4978 train ~2.132 bpc  |g| 0.37  33s
+  step 1984/4978 train ~2.103 bpc  |g| 0.38  37s
+  step 2232/4978 train ~2.077 bpc  |g| 0.37  42s
+  step 2480/4978 train ~2.058 bpc  |g| 0.38  46s
+  step 2728/4978 train ~2.042 bpc  |g| 0.38  51s
+  step 2976/4978 train ~2.026 bpc  |g| 0.36  56s
+  step 3224/4978 train ~2.016 bpc  |g| 0.38  60s
+  step 3472/4978 train ~2.000 bpc  |g| 0.38  65s
+  step 3720/4978 train ~1.997 bpc  |g| 0.38  70s
+  step 3968/4978 train ~1.995 bpc  |g| 0.38  75s
+  step 4216/4978 train ~1.989 bpc  |g| 0.38  79s
+  step 4464/4978 train ~1.985 bpc  |g| 0.37  84s
+  step 4712/4978 train ~1.979 bpc  |g| 0.37  88s
+  step 4960/4978 train ~1.970 bpc  |g| 0.37  93s
+sample: le findára n'um murmurio, eu, 
+     E-cri e mais mais tão invovel...
+                                                          Que bobre a senhora que
+ 
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s256-chrono1024-seed1.bin

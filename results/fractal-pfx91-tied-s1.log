@@ -1,0 +1,30 @@
+sosc pfx-91x91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 1160962, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.456 bpc  |g| 0.28  0s
+  step 248/4978 train ~3.215 bpc  |g| 0.33  20s
+  step 496/4978 train ~2.746 bpc  |g| 0.36  34s
+  step 744/4978 train ~2.576 bpc  |g| 0.44  55s
+  step 992/4978 train ~2.502 bpc  |g| 0.41  72s
+  step 1240/4978 train ~2.448 bpc  |g| 0.45  88s
+  step 1488/4978 train ~2.419 bpc  |g| 0.55  105s
+  step 1736/4978 train ~2.386 bpc  |g| 0.52  122s
+  step 1984/4978 train ~2.370 bpc  |g| 0.54  136s
+  step 2232/4978 train ~2.338 bpc  |g| 0.52  178s
+  step 2480/4978 train ~2.336 bpc  |g| 0.56  189s
+  step 2728/4978 train ~2.319 bpc  |g| 0.55  201s
+  step 2976/4978 train ~2.306 bpc  |g| 0.53  212s
+  step 3224/4978 train ~2.293 bpc  |g| 0.54  222s
+  step 3472/4978 train ~2.295 bpc  |g| 0.57  231s
+  step 3720/4978 train ~2.270 bpc  |g| 0.61  240s
+  step 3968/4978 train ~2.281 bpc  |g| 0.53  249s
+  step 4216/4978 train ~2.282 bpc  |g| 0.56  259s
+  step 4464/4978 train ~2.257 bpc  |g| 0.53  266s
+  step 4712/4978 train ~2.270 bpc  |g| 0.65  275s
+  step 4960/4978 train ~2.249 bpc  |g| 0.66  283s
+sample: le findára n'um murmurio, eu, 
+
+O cousa de taviam perfuma nos leveiro, um mais. Pôo, algusado. O tylhas
+de "ça. Não de Cavalleiro voltar-?--runo na Estetavam com o vivo, que
+brado a mel Peguixosos perguntar a ainda elle me não foi a veruito de
+trazeligireiu: a serrima á caavaz de Laja. D-os.
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-91x91_bpe8192-h128-l2-s64-stateful64-seed1.bin

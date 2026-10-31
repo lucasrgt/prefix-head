@@ -1,0 +1,29 @@
+sosc grp-first-317:bpe100000: radix 316x317, h 128, layers 2, seq 64, params 25891284, state 816 B, train 25048100 tok
+  step 0/24462 train ~3.600 bpc  |g| 0.83  0s
+  step 1223/24462 train ~2.205 bpc  |g| 0.44  113s
+  step 2446/24462 train ~2.099 bpc  |g| 0.48  226s
+  step 3669/24462 train ~2.031 bpc  |g| 0.55  341s
+  step 4892/24462 train ~1.954 bpc  |g| 0.51  459s
+  step 6115/24462 train ~1.992 bpc  |g| 0.53  583s
+  step 7338/24462 train ~1.898 bpc  |g| 0.47  701s
+  step 8561/24462 train ~1.862 bpc  |g| 0.63  831s
+  step 9784/24462 train ~1.862 bpc  |g| 0.97  946s
+  step 11007/24462 train ~1.869 bpc  |g| 0.69  1079s
+  step 12230/24462 train ~1.864 bpc  |g| 0.55  1208s
+  step 13453/24462 train ~1.900 bpc  |g| 0.74  1347s
+  step 14676/24462 train ~1.818 bpc  |g| 0.75  1477s
+  step 15899/24462 train ~1.801 bpc  |g| 0.57  1605s
+  step 17122/24462 train ~1.807 bpc  |g| 0.64  1734s
+  step 18345/24462 train ~1.796 bpc  |g| 0.58  1863s
+  step 19568/24462 train ~1.780 bpc  |g| 0.65  1991s
+  step 20791/24462 train ~1.799 bpc  |g| 0.58  2118s
+  step 22014/24462 train ~1.800 bpc  |g| 0.59  2255s
+  step 23237/24462 train ~1.779 bpc  |g| 0.69  2374s
+  step 24460/24462 train ~1.855 bpc  |g| 0.65  2493s
+sample: le findára n'um murmurio, eu, 
+    -h! minha mãe estás morto te vou não tees,
+  Mas se tens um amor de Corinna? Ha casar a minha meza,
+         a não trocul n'esta me
+            Minha sepultura á minha
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-317_bpe100000-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin

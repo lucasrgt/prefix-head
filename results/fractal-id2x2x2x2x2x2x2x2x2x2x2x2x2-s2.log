@@ -1,0 +1,36 @@
+sosc nd2x2x2x2x2x2x2x2x2x2x2x2x2:bpe8192: radix 2x2x2x2x2x2x2x2x2x2x2x2x2, h 128, layers 2, seq 64, params 3230794, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.528 bpc  |g| 1.14  0s
+  step 248/4978 train ~2.957 bpc  |g| 0.49  9s
+  step 496/4978 train ~2.646 bpc  |g| 0.54  17s
+  step 744/4978 train ~2.471 bpc  |g| 0.55  26s
+  step 992/4978 train ~2.379 bpc  |g| 0.55  34s
+  step 1240/4978 train ~2.341 bpc  |g| 0.56  43s
+  step 1488/4978 train ~2.294 bpc  |g| 0.58  51s
+  step 1736/4978 train ~2.259 bpc  |g| 0.61  83s
+  step 1984/4978 train ~2.233 bpc  |g| 0.61  92s
+  step 2232/4978 train ~2.215 bpc  |g| 0.61  101s
+  step 2480/4978 train ~2.197 bpc  |g| 0.57  109s
+  step 2728/4978 train ~2.189 bpc  |g| 0.60  118s
+  step 2976/4978 train ~2.170 bpc  |g| 0.59  126s
+  step 3224/4978 train ~2.150 bpc  |g| 0.57  135s
+  step 3472/4978 train ~2.156 bpc  |g| 0.61  144s
+  step 3720/4978 train ~2.130 bpc  |g| 0.60  152s
+  step 3968/4978 train ~2.111 bpc  |g| 0.61  161s
+  step 4216/4978 train ~2.113 bpc  |g| 0.63  169s
+  step 4464/4978 train ~2.144 bpc  |g| 0.59  177s
+  step 4712/4978 train ~2.133 bpc  |g| 0.63  185s
+  step 4960/4978 train ~2.119 bpc  |g| 0.61  193s
+sample: le findára n'um murmurio, eu, 'umir, berrando a
+banta.
+
+Na cara, que um sujeito largo horoupos com o sacris?...
+
+--Ilaria. Para recomui a licção pontos de olhos de casar, tinha boa cavalcha:
+
+--Isso o marido!
+
+Sama de Gonçalo, com os dedos vermelha, e ao pénte.
+
+Em olhe o candieiro de trither, com a cabeça que tinha o Baptista seu sou
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-nd2x2x2x2x2x2x2x2x2x2x2x2x2_bpe8192-h128-l2-s64-stateful64-seed2.bin

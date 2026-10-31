@@ -1,0 +1,8 @@
+gemma270m: adapt-full 1.7944 (418s)
+[W1008 19:13:28.500596438 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 671088640 bytes (free: 335740928, total: 8196849664).
+  freq done in 432s
+[W1008 19:20:38.107219297 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 671088640 bytes (free: 509542400, total: 8196849664).
+  id done in 429s
+[W1008 19:27:53.973676147 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 671088640 bytes (free: 137232384, total: 8196849664).
+  random done in 436s
+  sem done in 432s

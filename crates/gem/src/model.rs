@@ -278,6 +278,15 @@ impl Gemma {
         }
     }
 
+    /// Halves the bytes of the body's block scales; the head keeps f32 scales for row lookups.
+    pub fn compact(&mut self) {
+        for l in &mut self.layers {
+            for m in [&mut l.q, &mut l.k, &mut l.v, &mut l.o, &mut l.gate, &mut l.up, &mut l.down] {
+                m.compact_scales();
+            }
+        }
+    }
+
     pub fn body_bytes(&self) -> usize {
         self.layers.iter().map(|l| [&l.q, &l.k, &l.v, &l.o, &l.gate, &l.up, &l.down].iter().map(|m| m.bytes()).sum::<usize>()).sum()
     }

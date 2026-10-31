@@ -1,0 +1,31 @@
+sosc pfx-2x2x2x2x2x2x2x2x2x2x2x2x2:bpe8192: radix 2x2x2x2x2x2x2x2x2x2x2x2x2, h 128, layers 2, seq 64, params 1120870, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.533 bpc  |g| 0.73  0s
+  step 248/4978 train ~3.349 bpc  |g| 0.52  7s
+  step 496/4978 train ~3.169 bpc  |g| 0.81  14s
+  step 744/4978 train ~3.020 bpc  |g| 0.80  20s
+  step 992/4978 train ~2.932 bpc  |g| 1.04  27s
+  step 1240/4978 train ~2.856 bpc  |g| 0.99  34s
+  step 1488/4978 train ~2.797 bpc  |g| 0.81  41s
+  step 1736/4978 train ~2.746 bpc  |g| 1.03  48s
+  step 1984/4978 train ~2.713 bpc  |g| 0.94  55s
+  step 2232/4978 train ~2.695 bpc  |g| 0.85  61s
+  step 2480/4978 train ~2.669 bpc  |g| 0.80  68s
+  step 2728/4978 train ~2.650 bpc  |g| 0.88  75s
+  step 2976/4978 train ~2.632 bpc  |g| 0.87  82s
+  step 3224/4978 train ~2.611 bpc  |g| 0.95  89s
+  step 3472/4978 train ~2.615 bpc  |g| 0.88  96s
+  step 3720/4978 train ~2.591 bpc  |g| 0.91  103s
+  step 3968/4978 train ~2.574 bpc  |g| 0.85  110s
+  step 4216/4978 train ~2.576 bpc  |g| 0.79  117s
+  step 4464/4978 train ~2.589 bpc  |g| 0.88  123s
+  step 4712/4978 train ~2.585 bpc  |g| 0.79  130s
+  step 4960/4978 train ~2.574 bpc  |g| 0.75  137s
+sample: le findára n'um murmurio, eu,  abrações,1-se dos casa,nica a
+cabembsa.
+D tremer alarleginhos--para obsveificalhava, Quiz de ido
+escancutinas quatro um
+sua opentante, atirando e dos uma dentes andatou-seCazilionamita, tal desesperaistrado... Os fortuna
+com orelhada que não semanas Padre Duto. Sophia, Joanna, erguerava que seis modestam de Paris,
+o se não; em somno vingança"; céo, que ju
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-2x2x2x2x2x2x2x2x2x2x2x2x2_bpe8192-h128-l2-s64-stateful64-seed2.bin

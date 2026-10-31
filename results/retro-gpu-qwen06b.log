@@ -1,0 +1,11 @@
+qwen06b: adapt-full 1.6123 (387s)
+[W1008 20:15:19.606125932 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 817889280 bytes (free: 565379072, total: 8196849664).
+  prefix done in 408s
+[W1008 20:21:54.799524045 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 817889280 bytes (free: 548732928, total: 8196849664).
+  freq done in 394s
+[W1008 20:28:31.330302430 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 817889280 bytes (free: 521076736, total: 8196849664).
+  id done in 398s
+[W1008 20:35:39.408117589 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 817889280 bytes (free: 534446080, total: 8196849664).
+  random done in 428s
+[W1008 20:42:35.063201546 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 817889280 bytes (free: 866516992, total: 8196849664).
+  sem done in 416s

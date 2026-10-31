@@ -1,0 +1,31 @@
+sosc pfx-21x21x19:bpe8192: radix 21x21x19, h 128, layers 2, seq 64, params 1151625, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.475 bpc  |g| 0.36  0s
+  step 248/4978 train ~3.257 bpc  |g| 0.37  6s
+  step 496/4978 train ~2.907 bpc  |g| 0.44  12s
+  step 744/4978 train ~2.782 bpc  |g| 0.51  19s
+  step 992/4978 train ~2.718 bpc  |g| 0.56  25s
+  step 1240/4978 train ~2.659 bpc  |g| 0.52  32s
+  step 1488/4978 train ~2.606 bpc  |g| 0.55  38s
+  step 1736/4978 train ~2.555 bpc  |g| 0.67  45s
+  step 1984/4978 train ~2.523 bpc  |g| 0.62  51s
+  step 2232/4978 train ~2.502 bpc  |g| 0.63  57s
+  step 2480/4978 train ~2.475 bpc  |g| 0.58  64s
+  step 2728/4978 train ~2.459 bpc  |g| 0.64  70s
+  step 2976/4978 train ~2.440 bpc  |g| 0.61  76s
+  step 3224/4978 train ~2.422 bpc  |g| 0.63  82s
+  step 3472/4978 train ~2.425 bpc  |g| 0.62  89s
+  step 3720/4978 train ~2.399 bpc  |g| 0.64  95s
+  step 3968/4978 train ~2.382 bpc  |g| 0.67  101s
+  step 4216/4978 train ~2.384 bpc  |g| 0.76  107s
+  step 4464/4978 train ~2.401 bpc  |g| 0.65  113s
+  step 4712/4978 train ~2.395 bpc  |g| 0.62  119s
+  step 4960/4978 train ~2.385 bpc  |g| 0.67  125s
+sample: le findára n'um murmurio, eu, 
+agora molleno, em réis que merito musivo, e posso temperamentava
+cionsinariam, Miminuições e se entender que o--val ao secca lêr.
+
+Eu continuava a materia acostumaculos de peito; era Mmonite-o, Achiada,
+has de uma conforta. Mas o relacia; e embora traveda, nem vidros,
+cuirova, que leinhou as suas sabe? Ás
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-21x21x19_bpe8192-h128-l2-s64-stateful64-seed2.bin

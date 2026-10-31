@@ -12,6 +12,20 @@ pub struct Mat {
     pub rows: usize,
     pub cols: usize,
     pub bits: u8,
+    pub s16: Vec<u16>,
+}
+
+pub fn to_f16(f: f32) -> u16 {
+    let x = f.to_bits();
+    let (sign, mant) = ((x >> 16) & 0x8000, x & 0x7f_ffff);
+    let exp = ((x >> 23) & 0xff) as i32 - 127 + 15;
+    if exp <= 0 {
+        return sign as u16;
+    }
+    if exp >= 31 {
+        return (sign | 0x7c00) as u16;
+    }
+    (sign | (exp as u32) << 10 | mant >> 13) as u16 + ((mant >> 12) & 1) as u16
 }
 
 pub fn f16(x: u16) -> f32 {
@@ -35,7 +49,7 @@ impl Mat {
             s.push(f16(u16::from_le_bytes([blk[0], blk[1]])));
             q.extend(blk[2..].iter().map(|&b| b as i8));
         }
-        Self { q, s, rows, cols, bits: 8 }
+        Self { q, s, rows, cols, bits: 8, s16: Vec::new() }
     }
 
     /// GGUF Q4_0: per 32 weights an f16 scale and 16 bytes in the layout `to_q4` produces.
@@ -48,17 +62,17 @@ impl Mat {
             s.push(f16(u16::from_le_bytes([blk[0], blk[1]])));
             q.extend(blk[2..].iter().map(|&b| b as i8));
         }
-        Self { q, s, rows, cols, bits: 4 }
+        Self { q, s, rows, cols, bits: 4, s16: Vec::new() }
     }
 
     /// GGUF F16, kept as raw half floats and multiplied against the unquantized activation.
     pub fn from_f16(raw: &[u8], rows: usize, cols: usize) -> Self {
         assert_eq!(raw.len(), rows * cols * 2);
-        Self { q: raw.iter().map(|&b| b as i8).collect(), s: Vec::new(), rows, cols, bits: 16 }
+        Self { q: raw.iter().map(|&b| b as i8).collect(), s: Vec::new(), rows, cols, bits: 16, s16: Vec::new() }
     }
 
     pub fn empty() -> Self {
-        Self { q: Vec::new(), s: Vec::new(), rows: 0, cols: 0, bits: 8 }
+        Self { q: Vec::new(), s: Vec::new(), rows: 0, cols: 0, bits: 8, s16: Vec::new() }
     }
 
     /// In place: row i becomes the old row `order[i]`, following permutation cycles with one spare row.
@@ -102,7 +116,7 @@ impl Mat {
                 s.extend_from_slice(&self.s[r * b..(r + 1) * b]);
             }
         }
-        Self { q, s, rows: ids.len(), cols: self.cols, bits: self.bits }
+        Self { q, s, rows: ids.len(), cols: self.cols, bits: self.bits, s16: Vec::new() }
     }
 
     fn row_bytes(&self) -> usize {
@@ -128,7 +142,7 @@ impl Mat {
     /// F16 weights at 8 bits: per 32 weights, scale = max |w| / 127.
     pub fn to_q8(&self) -> Self {
         if self.bits == 8 {
-            return Self { q: self.q.clone(), s: self.s.clone(), rows: self.rows, cols: self.cols, bits: 8 };
+            return Self { q: self.q.clone(), s: self.s.clone(), rows: self.rows, cols: self.cols, bits: 8, s16: Vec::new() };
         }
         assert_eq!(self.bits, 16);
         let mut q = Vec::with_capacity(self.rows * self.cols);
@@ -141,7 +155,7 @@ impl Mat {
             q.extend(w.iter().map(|v| (v * inv).round() as i8));
             s.push(d);
         }
-        Self { q, s, rows: self.rows, cols: self.cols, bits: 8 }
+        Self { q, s, rows: self.rows, cols: self.cols, bits: 8, s16: Vec::new() }
     }
 
     /// The same weights at 4 bits: per 32 weights, scale = max |w| / 7 and round(w / scale) in [-8, 7].
@@ -161,7 +175,7 @@ impl Mat {
             q.extend((0..16).map(|j| (n[j] | (n[j + 16] << 4)) as i8));
             s.push(d);
         }
-        Self { q, s, rows: self.rows, cols: self.cols, bits: 4 }
+        Self { q, s, rows: self.rows, cols: self.cols, bits: 4, s16: Vec::new() }
     }
 
     pub fn row_f32(&self, r: usize) -> Vec<f32> {
@@ -169,7 +183,16 @@ impl Mat {
     }
 
     pub fn bytes(&self) -> usize {
-        self.q.len() + self.s.len() * 4
+        self.q.len() + self.s.len() * 4 + self.s16.len() * 2
+    }
+
+    /// Stores the block scales as half floats (2 bytes per 32 weights instead of 4). Only the matvec
+    /// kernels read them afterwards; row lookups, gathers and permutations need the f32 scales.
+    pub fn compact_scales(&mut self) {
+        if self.bits != 16 && self.s16.is_empty() {
+            self.s16 = self.s.iter().map(|&v| to_f16(v)).collect();
+            self.s = Vec::new();
+        }
     }
 }
 
@@ -407,7 +430,67 @@ pub fn detect() -> Isa {
     }
 }
 
+#[target_feature(enable = "avx512f,avx512bw,f16c")]
+unsafe fn dot4_avx512_h(wq: &[i8], ws: &[u16], a: &Act) -> f32 {
+    unsafe {
+        let mut acc = _mm512_setzero_ps();
+        let mask = _mm_set1_epi8(15);
+        let eight = _mm256_set1_epi8(8);
+        for b in 0..wq.len() / 16 {
+            let raw = _mm_loadu_si128(wq.as_ptr().add(b * 16) as *const __m128i);
+            let lo = _mm_and_si128(raw, mask);
+            let hi = _mm_and_si128(_mm_srli_epi16(raw, 4), mask);
+            let w = _mm512_cvtepi8_epi16(_mm256_sub_epi8(_mm256_set_m128i(hi, lo), eight));
+            let x = _mm512_cvtepi8_epi16(_mm256_loadu_si256(a.q.as_ptr().add(b * 32) as *const __m256i));
+            let scale = _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(*ws.get_unchecked(b) as i32))) * *a.s.get_unchecked(b);
+            acc = _mm512_fmadd_ps(_mm512_cvtepi32_ps(_mm512_madd_epi16(w, x)), _mm512_set1_ps(scale), acc);
+        }
+        _mm512_reduce_add_ps(acc)
+    }
+}
+
+#[target_feature(enable = "avx512f,avx512bw,f16c")]
+unsafe fn dot_avx512_h(wq: &[i8], ws: &[u16], a: &Act) -> f32 {
+    unsafe {
+        let mut acc = _mm512_setzero_ps();
+        for b in 0..wq.len() / 32 {
+            let w = _mm512_cvtepi8_epi16(_mm256_loadu_si256(wq.as_ptr().add(b * 32) as *const __m256i));
+            let x = _mm512_cvtepi8_epi16(_mm256_loadu_si256(a.q.as_ptr().add(b * 32) as *const __m256i));
+            let scale = _mm_cvtss_f32(_mm_cvtph_ps(_mm_cvtsi32_si128(*ws.get_unchecked(b) as i32))) * *a.s.get_unchecked(b);
+            acc = _mm512_fmadd_ps(_mm512_cvtepi32_ps(_mm512_madd_epi16(w, x)), _mm512_set1_ps(scale), acc);
+        }
+        _mm512_reduce_add_ps(acc)
+    }
+}
+
+fn rows_h(m: &Mat, a: &Act, isa: Isa, r0: usize, out: &mut [f32]) {
+    let (c, b) = (m.row_bytes(), m.cols / 32);
+    let mut wide = vec![0f32; b];
+    for (i, y) in out.iter_mut().enumerate() {
+        let r = r0 + i;
+        let (wq, ws) = (&m.q[r * c..(r + 1) * c], &m.s16[r * b..(r + 1) * b]);
+        *y = match (m.bits, isa) {
+            (4, Isa::Avx512) => unsafe { dot4_avx512_h(wq, ws, a) },
+            (8, Isa::Avx512) => unsafe { dot_avx512_h(wq, ws, a) },
+            (bits, isa) => {
+                for (w, &h) in wide.iter_mut().zip(ws) {
+                    *w = f16(h);
+                }
+                match (bits, isa) {
+                    (8, Isa::Avx2) => unsafe { dot_avx2(wq, &wide, a) },
+                    (8, _) => dot_scalar(wq, &wide, a),
+                    (_, Isa::Avx2) => unsafe { dot4_avx2(wq, &wide, a) },
+                    _ => dot4_scalar(wq, &wide, a),
+                }
+            }
+        };
+    }
+}
+
 fn rows(m: &Mat, a: &Act, isa: Isa, r0: usize, out: &mut [f32]) {
+    if !m.s16.is_empty() {
+        return rows_h(m, a, isa, r0, out);
+    }
     let (c, b) = (m.row_bytes(), m.cols / 32);
     for (i, y) in out.iter_mut().enumerate() {
         let r = r0 + i;

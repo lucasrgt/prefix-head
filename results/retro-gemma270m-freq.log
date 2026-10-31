@@ -1,0 +1,11 @@
+gemma270m freq: vocab 262144, d 640, 512 classes of <= 512, train 649605 rows, test 213807 rows
+  step 380/3806 class loss 1.5252 nats/token  3s
+  step 760/3806 class loss 1.5038 nats/token  5s
+  step 1140/3806 class loss 1.4845 nats/token  7s
+  step 1520/3806 class loss 1.4609 nats/token  9s
+  step 1900/3806 class loss 1.4343 nats/token  12s
+  step 2280/3806 class loss 1.4191 nats/token  14s
+  step 2660/3806 class loss 1.3936 nats/token  16s
+  step 3040/3806 class loss 1.3778 nats/token  17s
+  step 3420/3806 class loss 1.3577 nats/token  19s
+  step 3800/3806 class loss 1.3447 nats/token  21s

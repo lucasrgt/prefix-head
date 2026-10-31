@@ -1,0 +1,35 @@
+osc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.456 bpc  |g| 0.32  0s
+  step 248/4978 train ~2.960 bpc  |g| 0.48  5s
+  step 496/4978 train ~2.613 bpc  |g| 0.51  9s
+  step 744/4978 train ~2.431 bpc  |g| 0.48  14s
+  step 992/4978 train ~2.322 bpc  |g| 0.43  18s
+  step 1240/4978 train ~2.252 bpc  |g| 0.42  23s
+  step 1488/4978 train ~2.207 bpc  |g| 0.46  27s
+  step 1736/4978 train ~2.159 bpc  |g| 0.41  31s
+  step 1984/4978 train ~2.139 bpc  |g| 0.56  36s
+  step 2232/4978 train ~2.097 bpc  |g| 0.42  54s
+  step 2480/4978 train ~2.093 bpc  |g| 0.50  59s
+  step 2728/4978 train ~2.076 bpc  |g| 0.49  63s
+  step 2976/4978 train ~2.054 bpc  |g| 0.42  67s
+  step 3224/4978 train ~2.042 bpc  |g| 0.44  71s
+  step 3472/4978 train ~2.049 bpc  |g| 0.52  76s
+  step 3720/4978 train ~2.023 bpc  |g| 0.45  80s
+  step 3968/4978 train ~2.033 bpc  |g| 0.49  84s
+  step 4216/4978 train ~2.029 bpc  |g| 0.42  88s
+  step 4464/4978 train ~1.999 bpc  |g| 0.49  92s
+  step 4712/4978 train ~2.012 bpc  |g| 0.60  96s
+  step 4960/4978 train ~1.992 bpc  |g| 0.66  101s
+sample: le findára n'um murmurio, eu, 
+
+O dia, de soluços, nos lá dentro do leito, sob o relogio:
+
+--Hoyrão! Que
+tecer Maria... Que aqui a noite á casa, ao pobre é capaz da janella,
+toda com uma linda...
+
+Famalhete... E não vino e a facto, não imagerosa. O ruido de lh'o mestre, o matello era um revulgante
+noite; atirou em alcova, mas
+esten
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

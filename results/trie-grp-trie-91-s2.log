@@ -1,0 +1,36 @@
+sosc grp-trie-91:bpe8192: radix 106x91, h 128, layers 2, seq 64, params 2572132, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.514 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.981 bpc  |g| 0.42  5s
+  step 496/4978 train ~2.582 bpc  |g| 0.42  11s
+  step 744/4978 train ~2.385 bpc  |g| 0.43  16s
+  step 992/4978 train ~2.267 bpc  |g| 0.44  22s
+  step 1240/4978 train ~2.207 bpc  |g| 0.45  28s
+  step 1488/4978 train ~2.147 bpc  |g| 0.52  33s
+  step 1736/4978 train ~2.104 bpc  |g| 0.47  39s
+  step 1984/4978 train ~2.071 bpc  |g| 0.49  45s
+  step 2232/4978 train ~2.048 bpc  |g| 0.55  51s
+  step 2480/4978 train ~2.027 bpc  |g| 0.55  57s
+  step 2728/4978 train ~2.018 bpc  |g| 0.55  63s
+  step 2976/4978 train ~1.999 bpc  |g| 0.51  69s
+  step 3224/4978 train ~1.978 bpc  |g| 0.52  75s
+  step 3472/4978 train ~1.981 bpc  |g| 0.54  81s
+  step 3720/4978 train ~1.958 bpc  |g| 0.52  87s
+  step 3968/4978 train ~1.937 bpc  |g| 0.52  93s
+  step 4216/4978 train ~1.942 bpc  |g| 0.52  99s
+  step 4464/4978 train ~1.978 bpc  |g| 0.53  105s
+  step 4712/4978 train ~1.962 bpc  |g| 0.54  111s
+  step 4960/4978 train ~1.948 bpc  |g| 0.50  117s
+sample: le findára n'um murmurio, eu, 
+
+Senhor, realou-se perturbador dos joelhos mezes:
+
+--Ora é o Ruéo!... V--nem Copiro, a Deus, que me digceste!
+
+
+Depois de fugir:--"Tom D. Juliana, a ir Snr.a Intentam,
+sobre a fazer para o ceu a verão, que lhe fôra o melhor, o Bstrolevel;
+mas Rubião?
+
+--Deixe-me que Juliana!
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-trie-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

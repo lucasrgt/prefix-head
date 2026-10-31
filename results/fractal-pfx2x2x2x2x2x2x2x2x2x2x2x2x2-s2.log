@@ -1,0 +1,33 @@
+sosc pfx-2x2x2x2x2x2x2x2x2x2x2x2x2:bpe8192: radix 2x2x2x2x2x2x2x2x2x2x2x2x2, h 128, layers 2, seq 64, params 3230794, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.509 bpc  |g| 0.60  0s
+  step 248/4978 train ~2.922 bpc  |g| 0.54  9s
+  step 496/4978 train ~2.541 bpc  |g| 0.54  17s
+  step 744/4978 train ~2.365 bpc  |g| 0.61  25s
+  step 992/4978 train ~2.260 bpc  |g| 0.56  34s
+  step 1240/4978 train ~2.216 bpc  |g| 0.58  42s
+  step 1488/4978 train ~2.163 bpc  |g| 0.68  51s
+  step 1736/4978 train ~2.125 bpc  |g| 0.61  59s
+  step 1984/4978 train ~2.095 bpc  |g| 0.61  67s
+  step 2232/4978 train ~2.072 bpc  |g| 0.73  76s
+  step 2480/4978 train ~2.055 bpc  |g| 0.70  84s
+  step 2728/4978 train ~2.046 bpc  |g| 0.65  93s
+  step 2976/4978 train ~2.026 bpc  |g| 0.66  101s
+  step 3224/4978 train ~2.005 bpc  |g| 0.61  109s
+  step 3472/4978 train ~2.008 bpc  |g| 0.64  117s
+  step 3720/4978 train ~1.981 bpc  |g| 0.70  126s
+  step 3968/4978 train ~1.962 bpc  |g| 0.67  134s
+  step 4216/4978 train ~1.964 bpc  |g| 0.65  143s
+  step 4464/4978 train ~2.000 bpc  |g| 0.66  151s
+  step 4712/4978 train ~1.984 bpc  |g| 0.67  159s
+  step 4960/4978 train ~1.971 bpc  |g| 0.68  167s
+sample: le findára n'um murmurio, eu,  inho o corre direitim, a Baição d'ago viera dois montes--que o assobergar á beira de lidentonula que se
+estavam profundamente as duas duras que ainda lhe torciam sempre pelas
+enticas e cevazes.
+
+A carta se não se achava-se em labio de ponteiro:
+
+--É melhor sahir.
+
+E então um sorriso côr de ju
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-pfx-2x2x2x2x2x2x2x2x2x2x2x2x2_bpe8192-h128-l2-s64-stateful64-seed2.bin

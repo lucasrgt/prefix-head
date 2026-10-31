@@ -1,0 +1,19 @@
+loaded /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin (grp-first-91:bpe8192 test_tokens=203405 test_bpc=1.9344), state 816 B
+14 books, 75755 chars scored (5505 in capitalised tokens)
+starting state                       bpc  bpc capitals bpc first 128     state B
+cold (zero state)                 1.9904        2.5008        2.0679           0
+last 16 tokens                    1.9883        2.4980        2.0425         816
+last 64 tokens                    1.9881        2.4976        2.0398         816
+last 256 tokens                   1.9880        2.4967        2.0392         816
+last 1024 tokens                  1.9880        2.4968        2.0394         816
+last 4096 tokens                  1.9880        2.4968        2.0394         816
+last 16384 tokens                 1.9880        2.4968        2.0394         816
+whole book (moment)               1.9880        2.4968        2.0394         816
+whole book, 8-bit state           1.9880        2.4968        2.0394         204
+whole book, 4-bit state           1.9880        2.4973        2.0390         102
+whole book, 2-bit state           1.9892        2.5005        2.0529          51
+whole book, 1-bit state           1.9900        2.4984        2.0624          25
+another book's moment             1.9907        2.4994        2.0712         816
+
+reach the end-of-train state of all 14 books: re-read 1784405 tokens = 6.64 s, 430.1 J package; restore 14 moments (11424 B) = 7.9 µs
+books: 18220 21406 23145 26988 31347 31971 40409 42942 54829 55682 55752 67535 67740 69187

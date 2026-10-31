@@ -1,0 +1,19 @@
+loaded /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/osc-n64-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin (grp-first-91:bpe8192 test_tokens=196665 test_bpc=2.1086), state 1024 B
+14 books, 77996 chars scored (6575 in capitalised tokens)
+starting state                       bpc  bpc capitals bpc first 128     state B
+cold (zero state)                 2.1730        2.2084        2.1964           0
+last 16 tokens                    2.1716        2.2077        2.1790        1024
+last 64 tokens                    2.1713        2.2081        2.1752        1024
+last 256 tokens                   2.1712        2.2087        2.1744        1024
+last 1024 tokens                  2.1713        2.2088        2.1747        1024
+last 4096 tokens                  2.1713        2.2088        2.1746        1024
+last 16384 tokens                 2.1713        2.2088        2.1746        1024
+whole book (moment)               2.1713        2.2088        2.1746        1024
+whole book, 8-bit state           2.1713        2.2088        2.1746         256
+whole book, 4-bit state           2.1713        2.2087        2.1745         128
+whole book, 2-bit state           2.1713        2.2082        2.1749          64
+whole book, 1-bit state           2.1718        2.2085        2.1811          32
+another book's moment             2.1719        2.2099        2.1838        1024
+
+reach the end-of-train state of all 14 books: re-read 1698884 tokens = 6.53 s, 452.5 J package; restore 14 moments (14336 B) = 13.5 µs
+books: 18220 21406 23145 26988 31347 31971 40409 42942 54829 55682 55752 67535 67740 69187

@@ -1,0 +1,41 @@
+kosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2221876, state 8192 B, train 1698884 tok
+  step 0/4978 train ~3.465 bpc  |g| 0.28  0s
+  step 248/4978 train ~3.010 bpc  |g| 0.33  18s
+  step 496/4978 train ~2.586 bpc  |g| 0.38  35s
+  step 744/4978 train ~2.389 bpc  |g| 0.37  53s
+  step 992/4978 train ~2.278 bpc  |g| 0.38  76s
+  step 1240/4978 train ~2.209 bpc  |g| 0.39  95s
+  step 1488/4978 train ~2.162 bpc  |g| 0.40  114s
+  step 1736/4978 train ~2.128 bpc  |g| 0.40  132s
+  step 1984/4978 train ~2.097 bpc  |g| 0.41  150s
+  step 2232/4978 train ~2.072 bpc  |g| 0.41  170s
+  step 2480/4978 train ~2.056 bpc  |g| 0.42  190s
+  step 2728/4978 train ~2.044 bpc  |g| 0.41  210s
+  step 2976/4978 train ~2.026 bpc  |g| 0.40  232s
+  step 3224/4978 train ~2.011 bpc  |g| 0.41  251s
+  step 3472/4978 train ~2.009 bpc  |g| 0.44  269s
+  step 3720/4978 train ~1.992 bpc  |g| 0.43  287s
+  step 3968/4978 train ~1.996 bpc  |g| 0.42  305s
+  step 4216/4978 train ~1.987 bpc  |g| 0.43  323s
+  step 4464/4978 train ~1.982 bpc  |g| 0.44  341s
+  step 4712/4978 train ~1.985 bpc  |g| 0.42  359s
+  step 4960/4978 train ~1.981 bpc  |g| 0.42  377s
+sample: le findára n'um murmurio, eu, 
+
+O doutor Governador--creto de casa! Ah, virar! É o Dr.iversidade, que tariam com
+attete de Affonso, na lividez da roça de
+Jarcobarélho!...
+
+Foi a menina
+
+Amarini!
+
+
+
+
+Julião a teu senhor, possivel, meu irmão, ensinar o seminario. O senhor que
+lhe
+Rubião é a cuia! Como
+pronte
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/kosc-n512-grp-first-91_bpe8192-h128-l2-s64-seed1.bin

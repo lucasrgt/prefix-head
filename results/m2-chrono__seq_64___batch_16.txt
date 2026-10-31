@@ -1,0 +1,19 @@
+loaded /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-seed1.bin (grp-first-91:bpe8192 test_tokens=196665 test_bpc=2.1241), state 1024 B
+14 books, 77996 chars scored (6575 in capitalised tokens)
+starting state                       bpc  bpc capitals     state B
+cold (zero state)                 2.1679        2.1739           0
+last 16 tokens                    2.1677        2.1722        1024
+last 64 tokens                    2.1686        2.1719        1024
+last 256 tokens                   2.1722        2.1703        1024
+last 1024 tokens                  2.1800        2.1723        1024
+last 4096 tokens                  2.1845        2.1727        1024
+last 16384 tokens                 2.1848        2.1722        1024
+whole book (moment)               2.1848        2.1722        1024
+whole book, 8-bit state           2.1850        2.1720         256
+whole book, 4-bit state           2.1832        2.1782         128
+whole book, 2-bit state           2.1679        2.1738          64
+whole book, 1-bit state           2.2115        2.1634          32
+another book's moment             2.1868        2.1760        1024
+
+reach the end-of-train state of all 14 books: re-read 1698884 tokens = 6.91 s, 576.5 J package; restore 14 moments (14336 B) = 9.9 µs
+books: 18220 21406 23145 26988 31347 31971 40409 42942 54829 55682 55752 67535 67740 69187

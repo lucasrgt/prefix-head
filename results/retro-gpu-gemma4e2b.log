@@ -1,0 +1,28 @@
+gemma4e2b: adapt-full nan (0s)
+[W1008 21:48:03.435056870 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1610612736 bytes (free: 651689984, total: 8196849664).
+[W1008 21:48:03.489876475 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1610612736 bytes (free: 1461190656, total: 8196849664).
+[W1008 21:48:03.490024034 CUDACachingAllocator.cpp:3934] memory allocation failed with OOM on device 0 while trying to allocate 1610612736 bytes (free: 1461190656, total: 8196849664).
+Traceback (most recent call last):
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 326, in <module>
+    main()
+    ~~~~^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 290, in main
+    a, b = train_self(htr, w, g, epochs, lr_self)
+           ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 163, in train_self
+    a = centroid(w, g).clone().requires_grad_()
+        ~~~~~~~~^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 158, in centroid
+    blk = g.blocks(w.float())
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 132, in blocks
+    b = w[self.pad.clamp(min=0)] * self.valid[:, None]
+        ~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 1.50 GiB. GPU 0 has a total capacity of 7.63 GiB of which 1.36 GiB is free. Process 2236 has 4.22 MiB memory in use. Process 3097 has 98.00 MiB memory in use. Process 5170 has 593.25 MiB memory in use. Process 5255 has 56.66 MiB memory in use. Process 21979 has 182.28 MiB memory in use. Including non-PyTorch memory, this process has 4.51 GiB memory in use. Of the allocated memory 4.38 GiB is allocated by PyTorch, and 7.61 MiB is reserved by PyTorch but unallocated. If reserved but unallocated memory is large try setting PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True to avoid fragmentation.  See documentation for Memory Management  (https://docs.pytorch.org/docs/stable/notes/cuda.html#optimizing-memory-usage-with-pytorch-cuda-alloc-conf)
+gemma4e2b: adapt-full nan (0s)
+  prefix done in 156s
+  g4 done in 157s
+  prefix done in 149s
+  freq done in 145s
+  id done in 144s
+  random done in 149s
+  sem done in 151s

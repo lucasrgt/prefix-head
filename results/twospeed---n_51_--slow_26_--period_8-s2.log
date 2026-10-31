@@ -1,0 +1,34 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.459 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.979 bpc  |g| 0.43  5s
+  step 496/4978 train ~2.589 bpc  |g| 0.40  10s
+  step 744/4978 train ~2.398 bpc  |g| 0.46  14s
+  step 992/4978 train ~2.284 bpc  |g| 0.43  19s
+  step 1240/4978 train ~2.224 bpc  |g| 0.45  24s
+  step 1488/4978 train ~2.163 bpc  |g| 0.51  29s
+  step 1736/4978 train ~2.122 bpc  |g| 0.47  34s
+  step 1984/4978 train ~2.088 bpc  |g| 0.48  38s
+  step 2232/4978 train ~2.067 bpc  |g| 0.50  43s
+  step 2480/4978 train ~2.047 bpc  |g| 0.45  48s
+  step 2728/4978 train ~2.039 bpc  |g| 0.47  52s
+  step 2976/4978 train ~2.018 bpc  |g| 0.46  57s
+  step 3224/4978 train ~1.998 bpc  |g| 0.48  62s
+  step 3472/4978 train ~2.005 bpc  |g| 0.49  66s
+  step 3720/4978 train ~1.979 bpc  |g| 0.51  71s
+  step 3968/4978 train ~1.959 bpc  |g| 0.52  76s
+  step 4216/4978 train ~1.964 bpc  |g| 0.47  81s
+  step 4464/4978 train ~1.998 bpc  |g| 0.49  85s
+  step 4712/4978 train ~1.983 bpc  |g| 0.51  90s
+  step 4960/4978 train ~1.970 bpc  |g| 0.48  95s
+sample: le findára n'um murmurio, eu, 
+risinhadalenço, ou menos de papagar, um mais quente.
+
+--Então? Não tem-se a esta Feitosa, snr. Carlos Amaro reconhece os
+olhos officios
+liam!
+
+Ete que tem alguem sim que me adorava o senhor parocho, appareceu absoltiplicando-se
+com um riso pinheiral, occulte é que surgir se terece de
+Bêar e ao pé da Amor
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-slow26p8-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

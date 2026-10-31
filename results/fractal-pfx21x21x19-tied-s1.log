@@ -1,0 +1,34 @@
+sosc pfx-21x21x19:bpe8192: radix 21x21x19, h 128, layers 2, seq 64, params 1151625, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.481 bpc  |g| 0.36  0s
+  step 248/4978 train ~3.245 bpc  |g| 0.38  7s
+  step 496/4978 train ~2.907 bpc  |g| 0.45  14s
+  step 744/4978 train ~2.782 bpc  |g| 0.57  21s
+  step 992/4978 train ~2.714 bpc  |g| 0.56  28s
+  step 1240/4978 train ~2.653 bpc  |g| 0.54  34s
+  step 1488/4978 train ~2.611 bpc  |g| 0.63  41s
+  step 1736/4978 train ~2.565 bpc  |g| 0.56  49s
+  step 1984/4978 train ~2.537 bpc  |g| 0.69  57s
+  step 2232/4978 train ~2.494 bpc  |g| 0.59  64s
+  step 2480/4978 train ~2.482 bpc  |g| 0.64  72s
+  step 2728/4978 train ~2.462 bpc  |g| 0.58  80s
+  step 2976/4978 train ~2.442 bpc  |g| 0.60  88s
+  step 3224/4978 train ~2.425 bpc  |g| 0.66  96s
+  step 3472/4978 train ~2.428 bpc  |g| 0.67  105s
+  step 3720/4978 train ~2.400 bpc  |g| 0.58  113s
+  step 3968/4978 train ~2.407 bpc  |g| 0.60  121s
+  step 4216/4978 train ~2.408 bpc  |g| 0.69  129s
+  step 4464/4978 train ~2.383 bpc  |g| 0.62  137s
+  step 4712/4978 train ~2.396 bpc  |g| 0.72  145s
+  step 4960/4978 train ~2.374 bpc  |g| 0.83  153s
+sample: le findára n'um murmurio, eu, 
+
+
+Ccassoladame Julições mãos tratar doutor, nomes que palbesse não voz de
+commotino e dos seu gabbé... abse do sem odição escarlate, atirou a
+outros o arrancava as precisando para um grava a sua ebro, Achhos, o
+ou a senhoras, e animal:
+
+--Se a salvau tranquillao. Sua Paris, n'uma voltou no João Eram sobre acudirado
+desconrossu
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-21x21x19_bpe8192-h128-l2-s64-stateful64-seed1.bin

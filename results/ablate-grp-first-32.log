@@ -1,0 +1,31 @@
+sosc grp-first-32:bpe8192: radix 256x32, h 128, layers 2, seq 64, params 2237004, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.446 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.965 bpc  |g| 0.39  4s
+  step 496/4978 train ~2.570 bpc  |g| 0.40  8s
+  step 744/4978 train ~2.381 bpc  |g| 0.46  11s
+  step 992/4978 train ~2.273 bpc  |g| 0.44  15s
+  step 1240/4978 train ~2.207 bpc  |g| 0.45  19s
+  step 1488/4978 train ~2.164 bpc  |g| 0.47  23s
+  step 1736/4978 train ~2.115 bpc  |g| 0.49  27s
+  step 1984/4978 train ~2.094 bpc  |g| 0.50  30s
+  step 2232/4978 train ~2.050 bpc  |g| 0.49  34s
+  step 2480/4978 train ~2.046 bpc  |g| 0.50  38s
+  step 2728/4978 train ~2.027 bpc  |g| 0.51  42s
+  step 2976/4978 train ~2.003 bpc  |g| 0.48  46s
+  step 3224/4978 train ~1.989 bpc  |g| 0.54  49s
+  step 3472/4978 train ~1.996 bpc  |g| 0.56  53s
+  step 3720/4978 train ~1.970 bpc  |g| 0.49  57s
+  step 3968/4978 train ~1.981 bpc  |g| 0.50  61s
+  step 4216/4978 train ~1.975 bpc  |g| 0.52  65s
+  step 4464/4978 train ~1.943 bpc  |g| 0.48  68s
+  step 4712/4978 train ~1.957 bpc  |g| 0.56  72s
+  step 4960/4978 train ~1.935 bpc  |g| 0.58  76s
+sample: le findára n'um murmurio, eu, 
+
+Mas na côxara rapidia o mysterioso encantadores de D. horaz, um
+biar, suor, ao Bastardo e bem cedo perto, com a pachesta. Tudo isto é,
+anta, a minha Dionysia, o seu palio da commissão, e
+empreral-as e me que me não perrossa! Sotima do
+Cuscripto da serr com os
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-32_bpe8192-h128-l2-s64-stateful64-seed1.bin

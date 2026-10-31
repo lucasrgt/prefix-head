@@ -1,0 +1,28 @@
+tfm grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2415156, state 131072 B, train 1698884 tok
+  step 0/4978 train ~3.486 bpc  |g| 0.55  0s
+  step 248/4978 train ~2.920 bpc  |g| 0.45  10s
+  step 496/4978 train ~2.549 bpc  |g| 0.59  19s
+  step 744/4978 train ~2.371 bpc  |g| 0.57  29s
+  step 992/4978 train ~2.268 bpc  |g| 0.57  38s
+  step 1240/4978 train ~2.206 bpc  |g| 0.62  47s
+  step 1488/4978 train ~2.161 bpc  |g| 0.61  57s
+  step 1736/4978 train ~2.129 bpc  |g| 0.61  66s
+  step 1984/4978 train ~2.100 bpc  |g| 0.62  76s
+  step 2232/4978 train ~2.073 bpc  |g| 0.63  85s
+  step 2480/4978 train ~2.054 bpc  |g| 0.66  94s
+  step 2728/4978 train ~2.041 bpc  |g| 0.68  104s
+  step 2976/4978 train ~2.022 bpc  |g| 0.64  113s
+  step 3224/4978 train ~2.003 bpc  |g| 0.68  123s
+  step 3472/4978 train ~1.999 bpc  |g| 0.71  132s
+  step 3720/4978 train ~1.978 bpc  |g| 0.69  141s
+  step 3968/4978 train ~1.980 bpc  |g| 0.70  151s
+  step 4216/4978 train ~1.969 bpc  |g| 0.71  160s
+  step 4464/4978 train ~1.961 bpc  |g| 0.70  169s
+  step 4712/4978 train ~1.965 bpc  |g| 0.71  178s
+  step 4960/4978 train ~1.959 bpc  |g| 0.71  188s
+sample: le findára n'um murmurio, eu, 
+                                                                        
+      
+Enf
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/tfm-a4-m256-grp-first-91_bpe8192-h128-l2-s64-seed1.bin

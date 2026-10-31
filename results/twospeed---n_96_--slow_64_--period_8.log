@@ -1,0 +1,31 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2275252, state 1536 B, train 1698884 tok
+  step 0/4978 train ~3.461 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.968 bpc  |g| 0.39  5s
+  step 496/4978 train ~2.577 bpc  |g| 0.41  10s
+  step 744/4978 train ~2.388 bpc  |g| 0.46  15s
+  step 992/4978 train ~2.279 bpc  |g| 0.44  20s
+  step 1240/4978 train ~2.210 bpc  |g| 0.44  25s
+  step 1488/4978 train ~2.165 bpc  |g| 0.46  30s
+  step 1736/4978 train ~2.116 bpc  |g| 0.49  35s
+  step 1984/4978 train ~2.093 bpc  |g| 0.53  40s
+  step 2232/4978 train ~2.051 bpc  |g| 0.49  45s
+  step 2480/4978 train ~2.046 bpc  |g| 0.49  50s
+  step 2728/4978 train ~2.027 bpc  |g| 0.53  55s
+  step 2976/4978 train ~2.002 bpc  |g| 0.50  60s
+  step 3224/4978 train ~1.990 bpc  |g| 0.51  65s
+  step 3472/4978 train ~1.997 bpc  |g| 0.52  70s
+  step 3720/4978 train ~1.970 bpc  |g| 0.54  75s
+  step 3968/4978 train ~1.981 bpc  |g| 0.52  80s
+  step 4216/4978 train ~1.974 bpc  |g| 0.50  85s
+  step 4464/4978 train ~1.944 bpc  |g| 0.54  90s
+  step 4712/4978 train ~1.957 bpc  |g| 0.59  95s
+  step 4960/4978 train ~1.936 bpc  |g| 0.58  100s
+sample: le findára n'um murmurio, eu, 
+negidamento, uma outra prima Maia. Cá vou, é porque a vontade havia que só
+a maior João Romão se achava Domingos, inquietar a risos de Araken.
+
+Evorada; a repardo explicar. Depois na tosse e ahi, com o lado
+pacto: "Bem-se no governo uma luneta que se soubemos
+algumacendo ao collecaes do Alterio
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n96-slow64p8-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

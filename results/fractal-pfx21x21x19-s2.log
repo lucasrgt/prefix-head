@@ -1,0 +1,31 @@
+sosc pfx-21x21x19:bpe8192: radix 21x21x19, h 128, layers 2, seq 64, params 2284245, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.468 bpc  |g| 0.36  0s
+  step 248/4978 train ~2.951 bpc  |g| 0.53  7s
+  step 496/4978 train ~2.562 bpc  |g| 0.47  14s
+  step 744/4978 train ~2.376 bpc  |g| 0.49  22s
+  step 992/4978 train ~2.267 bpc  |g| 0.49  28s
+  step 1240/4978 train ~2.211 bpc  |g| 0.49  35s
+  step 1488/4978 train ~2.152 bpc  |g| 0.56  42s
+  step 1736/4978 train ~2.112 bpc  |g| 0.52  48s
+  step 1984/4978 train ~2.081 bpc  |g| 0.55  55s
+  step 2232/4978 train ~2.058 bpc  |g| 0.60  61s
+  step 2480/4978 train ~2.039 bpc  |g| 0.53  68s
+  step 2728/4978 train ~2.029 bpc  |g| 0.56  74s
+  step 2976/4978 train ~2.010 bpc  |g| 0.56  81s
+  step 3224/4978 train ~1.989 bpc  |g| 0.57  87s
+  step 3472/4978 train ~1.994 bpc  |g| 0.54  93s
+  step 3720/4978 train ~1.969 bpc  |g| 0.55  100s
+  step 3968/4978 train ~1.947 bpc  |g| 0.58  106s
+  step 4216/4978 train ~1.952 bpc  |g| 0.56  113s
+  step 4464/4978 train ~1.988 bpc  |g| 0.58  119s
+  step 4712/4978 train ~1.973 bpc  |g| 0.57  127s
+  step 4960/4978 train ~1.959 bpc  |g| 0.54  135s
+sample: le findára n'um murmurio, eu, 
+Amaro, e ensolado:--O passou; ella posso ser resolver tudo--d dizer, com
+um dialo secco. Uma tia Ega, tudo o vento que as
+reclas eram adoesculos. Era um me contrara que ela cahira de dentro,
+amba, se ella de sahir para o Fidalgo; com ella tremula-lhe no seu
+velho
+desaffrendo lascieiro, uma saia;
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-pfx-21x21x19_bpe8192-h128-l2-s64-stateful64-seed2.bin

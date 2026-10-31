@@ -1,0 +1,2 @@
+gemma4.final_logit_softcapping [30.]
+token_embd.weight (262144, 1536)

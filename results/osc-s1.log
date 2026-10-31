@@ -1,0 +1,36 @@
+osc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.456 bpc  |g| 0.32  0s
+  step 248/4978 train ~2.991 bpc  |g| 0.42  5s
+  step 496/4978 train ~2.628 bpc  |g| 0.46  9s
+  step 744/4978 train ~2.450 bpc  |g| 0.41  14s
+  step 992/4978 train ~2.339 bpc  |g| 0.42  19s
+  step 1240/4978 train ~2.262 bpc  |g| 0.44  23s
+  step 1488/4978 train ~2.210 bpc  |g| 0.44  28s
+  step 1736/4978 train ~2.172 bpc  |g| 0.43  33s
+  step 1984/4978 train ~2.137 bpc  |g| 0.45  37s
+  step 2232/4978 train ~2.110 bpc  |g| 0.46  42s
+  step 2480/4978 train ~2.092 bpc  |g| 0.46  46s
+  step 2728/4978 train ~2.078 bpc  |g| 0.47  51s
+  step 2976/4978 train ~2.059 bpc  |g| 0.44  55s
+  step 3224/4978 train ~2.043 bpc  |g| 0.46  60s
+  step 3472/4978 train ~2.040 bpc  |g| 0.49  79s
+  step 3720/4978 train ~2.023 bpc  |g| 0.46  83s
+  step 3968/4978 train ~2.025 bpc  |g| 0.46  88s
+  step 4216/4978 train ~2.015 bpc  |g| 0.50  92s
+  step 4464/4978 train ~2.010 bpc  |g| 0.47  97s
+  step 4712/4978 train ~2.014 bpc  |g| 0.47  102s
+  step 4960/4978 train ~2.009 bpc  |g| 0.47  106s
+sample: le findára n'um murmurio, eu, 
+
+O marido e sahiu? Para o cego impaciente, tomelhoso ou
+quatrophistoes
+dorm anasta de
+que poderia grande cousa de sciencia; e Brecorriano, no seu
+despei arranjar o
+agrario:
+
+--Não estava em ninguem tão dia a tudo, tambÉ no mesmo por outro para medalha sorriu. No a
+curção de Nosso Disse-lhe o
+ale
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/osc-n64-grp-first-91_bpe8192-h128-l2-s64-seed1.bin

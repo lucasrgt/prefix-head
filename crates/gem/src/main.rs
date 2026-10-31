@@ -208,6 +208,9 @@ fn main() {
     let head_bits: u8 = arg(&args, "--head-bits", 0);
     m.requantize(body_bits == 4, false);
     m.requantize_head(head_bits);
+    if !args.iter().any(|a| a == "--wide-scales") {
+        m.compact();
+    }
     let bos = m.bos;
     let off = bos.is_some() as usize;
     let mut full = Full::new(&m);

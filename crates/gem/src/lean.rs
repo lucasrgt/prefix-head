@@ -11,7 +11,7 @@
 use crate::gguf::Gguf;
 use crate::model::{Gemma, dot};
 use crate::pool::Pool;
-use crate::q8::{Act, Isa, matvec, matvec_rows};
+use crate::q8::{Act, Isa, matvec, matvec_rows, to_f16};
 use crate::{arg, pieces, tokenize_with};
 use std::path::PathBuf;
 use std::time::Instant;
@@ -76,19 +76,6 @@ impl Classes {
     }
 }
 
-fn to_f16(f: f32) -> u16 {
-    let x = f.to_bits();
-    let (sign, mant) = ((x >> 16) & 0x8000, x & 0x7f_ffff);
-    let exp = ((x >> 23) & 0xff) as i32 - 127 + 15;
-    if exp <= 0 {
-        return sign as u16;
-    }
-    if exp >= 31 {
-        return (sign | 0x7c00) as u16;
-    }
-    (sign | (exp as u32) << 10 | mant >> 13) as u16 + ((mant >> 12) & 1) as u16
-}
-
 #[allow(clippy::too_many_arguments)]
 fn next_token(classes: &mut Option<Classes>, m: &Gemma, h: &[f32], act: &mut Act, logits: &mut [f32], fallbacks: &mut usize, pool: &Pool, isa: Isa) -> u32 {
     if let Some(Some(t)) = classes.as_mut().map(|c| c.next(m, h, act, pool, isa)) {
@@ -130,6 +117,7 @@ pub fn run(args: &[String]) {
     let stops = [g.u("tokenizer.ggml.eos_token_id") as u32, g.u_or("tokenizer.ggml.bos_token_id", u32::MAX as usize) as u32];
     let mut m = Gemma::load(&g, ctx, true);
     drop(g);
+    m.compact();
     let mut classes = (!full).then(|| {
         let base = root.join("data/retro").join(&head2);
         let rd = |ext: &str| std::fs::read(base.with_extension(ext)).unwrap_or_else(|e| panic!("{}.{ext}: {e}", base.display()));

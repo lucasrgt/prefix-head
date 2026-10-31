@@ -1,0 +1,35 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 33651144 tok
+  step 0/32863 train ~3.804 bpc  |g| 0.44  0s
+  step 1643/32863 train ~2.378 bpc  |g| 0.37  29s
+  step 3286/32863 train ~2.129 bpc  |g| 0.38  58s
+  step 4929/32863 train ~2.145 bpc  |g| 0.37  100s
+  step 6572/32863 train ~2.082 bpc  |g| 0.42  130s
+  step 8215/32863 train ~2.070 bpc  |g| 0.39  163s
+  step 9858/32863 train ~2.005 bpc  |g| 0.37  194s
+  step 11501/32863 train ~2.044 bpc  |g| 0.39  224s
+  step 13144/32863 train ~1.982 bpc  |g| 0.45  253s
+  step 14787/32863 train ~2.024 bpc  |g| 0.41  282s
+  step 16430/32863 train ~1.986 bpc  |g| 0.41  310s
+  step 18073/32863 train ~1.981 bpc  |g| 0.42  339s
+  step 19716/32863 train ~1.990 bpc  |g| 0.41  367s
+  step 21359/32863 train ~1.977 bpc  |g| 0.44  395s
+  step 23002/32863 train ~1.966 bpc  |g| 0.43  424s
+  step 24645/32863 train ~2.011 bpc  |g| 0.43  452s
+  step 26288/32863 train ~1.934 bpc  |g| 0.47  481s
+  step 27931/32863 train ~1.953 bpc  |g| 0.45  509s
+  step 29574/32863 train ~1.952 bpc  |g| 0.43  538s
+  step 31217/32863 train ~2.000 bpc  |g| 0.44  566s
+  step 32860/32863 train ~1.990 bpc  |g| 0.43  595s
+sample: le findára n'um murmurio, eu, 
+tuavam já sósinhos... Ah! emfim que o vapor, que é nada, aumnia! Mames
+Carute com Jorge.
+
+--Saquisto para a mão de axeraes, a saber, a minha Freire; tu queres
+dizer que lhe hade ser igual a tua tristeza.
+
+--Não será obrigado a ninguem; porque se tendes suspirar a vontade
+dizer, com só pelos Mouros.
+
+Mas
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-extra-all-uniform-e1-seed1.bin

@@ -1,0 +1,32 @@
+sosc pfx-2x2x2x2x2x2x2x2x2x2x2x2x2:bpe8192: radix 2x2x2x2x2x2x2x2x2x2x2x2x2, h 128, layers 2, seq 64, params 1120870, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.538 bpc  |g| 0.72  0s
+  step 248/4978 train ~3.347 bpc  |g| 0.47  26s
+  step 496/4978 train ~3.182 bpc  |g| 0.56  54s
+  step 744/4978 train ~3.035 bpc  |g| 0.88  85s
+  step 992/4978 train ~2.927 bpc  |g| 0.76  118s
+  step 1240/4978 train ~2.850 bpc  |g| 0.70  154s
+  step 1488/4978 train ~2.804 bpc  |g| 0.95  182s
+  step 1736/4978 train ~2.758 bpc  |g| 0.78  212s
+  step 1984/4978 train ~2.728 bpc  |g| 0.91  233s
+  step 2232/4978 train ~2.685 bpc  |g| 0.68  260s
+  step 2480/4978 train ~2.674 bpc  |g| 0.82  282s
+  step 2728/4978 train ~2.652 bpc  |g| 0.85  304s
+  step 2976/4978 train ~2.633 bpc  |g| 0.81  363s
+  step 3224/4978 train ~2.617 bpc  |g| 0.89  388s
+  step 3472/4978 train ~2.616 bpc  |g| 0.90  416s
+  step 3720/4978 train ~2.589 bpc  |g| 0.85  442s
+  step 3968/4978 train ~2.595 bpc  |g| 0.85  466s
+  step 4216/4978 train ~2.596 bpc  |g| 0.80  493s
+  step 4464/4978 train ~2.573 bpc  |g| 0.89  522s
+  step 4712/4978 train ~2.585 bpc  |g| 0.89  554s
+  step 4960/4978 train ~2.565 bpc  |g| 1.09  580s
+sample: le findára n'um murmurio, eu,  atrazDrae, dos casarças, apreceu. "Esa.
+Deira, effeito, merntanassem o miserida, comerda; namoquilm
+escanculo mólhatro com o pé da bom e dos verdadeiro da
+quasi liaccada; sendo pensei
+e tal tristeza o
+noz, mezes...
+
+--Não coupé; não semanas a estender o General entre pobre deventuraria a desabre, e de Santa Macáccacommocunidez d'ir
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-2x2x2x2x2x2x2x2x2x2x2x2x2_bpe8192-h128-l2-s64-stateful64-seed1.bin

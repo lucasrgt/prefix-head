@@ -1,0 +1,33 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.460 bpc  |g| 0.32  0s
+  step 248/4978 train ~2.990 bpc  |g| 0.36  5s
+  step 496/4978 train ~2.563 bpc  |g| 0.42  9s
+  step 744/4978 train ~2.372 bpc  |g| 0.39  14s
+  step 992/4978 train ~2.265 bpc  |g| 0.41  19s
+  step 1240/4978 train ~2.199 bpc  |g| 0.43  23s
+  step 1488/4978 train ~2.154 bpc  |g| 0.43  28s
+  step 1736/4978 train ~2.123 bpc  |g| 0.42  33s
+  step 1984/4978 train ~2.092 bpc  |g| 0.43  37s
+  step 2232/4978 train ~2.067 bpc  |g| 0.44  42s
+  step 2480/4978 train ~2.051 bpc  |g| 0.45  46s
+  step 2728/4978 train ~2.038 bpc  |g| 0.44  51s
+  step 2976/4978 train ~2.020 bpc  |g| 0.42  56s
+  step 3224/4978 train ~2.005 bpc  |g| 0.45  60s
+  step 3472/4978 train ~2.003 bpc  |g| 0.46  65s
+  step 3720/4978 train ~1.986 bpc  |g| 0.44  70s
+  step 3968/4978 train ~1.990 bpc  |g| 0.44  75s
+  step 4216/4978 train ~1.980 bpc  |g| 0.46  79s
+  step 4464/4978 train ~1.975 bpc  |g| 0.44  84s
+  step 4712/4978 train ~1.979 bpc  |g| 0.44  89s
+  step 4960/4978 train ~1.975 bpc  |g| 0.44  94s
+sample: le findára n'um murmurio, eu, 
+18848; mas eu não podia vir; o vestido, encerável, que tinha
+mais escuderar-me a
+conta á casa, com seu sol que a parecer para vity,
+ogeirando Amelia em que se marcha das cormmados,
+estendia-a em pontos e obrassentes, por um resto de
+Meóculos de
+servinte.
+
+--É
+

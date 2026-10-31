@@ -1,0 +1,33 @@
+sosc grp-first-181:bpe8192: radix 46x181, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.454 bpc  |g| 0.29  0s
+  step 248/4978 train ~2.959 bpc  |g| 0.39  6s
+  step 496/4978 train ~2.560 bpc  |g| 0.43  13s
+  step 744/4978 train ~2.377 bpc  |g| 0.48  19s
+  step 992/4978 train ~2.270 bpc  |g| 0.45  25s
+  step 1240/4978 train ~2.202 bpc  |g| 0.45  32s
+  step 1488/4978 train ~2.157 bpc  |g| 0.48  38s
+  step 1736/4978 train ~2.109 bpc  |g| 0.50  44s
+  step 1984/4978 train ~2.088 bpc  |g| 0.55  51s
+  step 2232/4978 train ~2.044 bpc  |g| 0.49  57s
+  step 2480/4978 train ~2.040 bpc  |g| 0.52  63s
+  step 2728/4978 train ~2.021 bpc  |g| 0.53  70s
+  step 2976/4978 train ~1.997 bpc  |g| 0.50  76s
+  step 3224/4978 train ~1.983 bpc  |g| 0.54  82s
+  step 3472/4978 train ~1.991 bpc  |g| 0.55  89s
+  step 3720/4978 train ~1.964 bpc  |g| 0.56  95s
+  step 3968/4978 train ~1.975 bpc  |g| 0.54  101s
+  step 4216/4978 train ~1.969 bpc  |g| 0.55  108s
+  step 4464/4978 train ~1.936 bpc  |g| 0.51  114s
+  step 4712/4978 train ~1.950 bpc  |g| 0.60  120s
+  step 4960/4978 train ~1.929 bpc  |g| 0.60  126s
+sample: le findára n'um murmurio, eu, 
+187000:
+
+Amaro lado, menores:
+
+--Não ouvira aqui! Quincas Euindo a confide-me! Se é a Calda, não conteja á porta da
+Lerdade; é que uma botões caminhar a minha senhora, para Carlos,
+de ir ter, e abanou um ponto e mania para o manres... No terras da
+calção de Luiza estava se não achou o
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-181_bpe8192-h128-l2-s64-stateful64-seed1.bin

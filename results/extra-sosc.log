@@ -1,0 +1,33 @@
+sosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 33651144 tok
+  step 0/32863 train ~3.821 bpc  |g| 0.43  0s
+  step 1643/32863 train ~2.364 bpc  |g| 0.55  29s
+  step 3286/32863 train ~2.117 bpc  |g| 0.52  58s
+  step 4929/32863 train ~2.137 bpc  |g| 0.51  87s
+  step 6572/32863 train ~2.074 bpc  |g| 0.49  115s
+  step 8215/32863 train ~2.061 bpc  |g| 0.67  144s
+  step 9858/32863 train ~1.994 bpc  |g| 1.14  173s
+  step 11501/32863 train ~2.035 bpc  |g| 0.75  202s
+  step 13144/32863 train ~1.970 bpc  |g| 0.62  231s
+  step 14787/32863 train ~2.011 bpc  |g| 0.84  260s
+  step 16430/32863 train ~1.971 bpc  |g| 0.63  289s
+  step 18073/32863 train ~1.970 bpc  |g| 0.63  319s
+  step 19716/32863 train ~1.976 bpc  |g| 1.21  348s
+  step 21359/32863 train ~1.962 bpc  |g| 0.74  377s
+  step 23002/32863 train ~1.948 bpc  |g| 0.95  407s
+  step 24645/32863 train ~1.997 bpc  |g| 0.66  437s
+  step 26288/32863 train ~1.917 bpc  |g| 0.79  468s
+  step 27931/32863 train ~1.935 bpc  |g| 0.65  499s
+  step 29574/32863 train ~1.935 bpc  |g| 0.75  529s
+  step 31217/32863 train ~1.980 bpc  |g| 0.64  560s
+  step 32860/32863 train ~1.973 bpc  |g| 0.81  591s
+sample: le findára n'um murmurio, eu, 
+e, já estava sinta:
+
+--Vi-lhe. Disudo uma boça... Tempo algum filho a um secca a mãe que
+esfarve, será de bloca... á noite. Por ahi seja a minha Mornima, se
+recante, ensageira aos seus rostos infantis, meninos! aquela tâmos
+de Açar.
+
+--Ah! suspiro Quintholicos
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-91_bpe8192-h128-l2-s64-stateful64-extra-all-uniform-e1-seed1.bin

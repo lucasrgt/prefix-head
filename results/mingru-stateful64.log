@@ -1,0 +1,32 @@
+mingru grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217780, state 1024 B, train 1698884 tok
+  step 0/4978 train ~3.455 bpc  |g| 0.29  0s
+  step 248/4978 train ~2.978 bpc  |g| 0.36  5s
+  step 496/4978 train ~2.601 bpc  |g| 0.35  9s
+  step 744/4978 train ~2.398 bpc  |g| 0.37  14s
+  step 992/4978 train ~2.282 bpc  |g| 0.35  18s
+  step 1240/4978 train ~2.211 bpc  |g| 0.36  23s
+  step 1488/4978 train ~2.166 bpc  |g| 0.38  28s
+  step 1736/4978 train ~2.119 bpc  |g| 0.38  32s
+  step 1984/4978 train ~2.099 bpc  |g| 0.37  37s
+  step 2232/4978 train ~2.057 bpc  |g| 0.37  41s
+  step 2480/4978 train ~2.054 bpc  |g| 0.38  46s
+  step 2728/4978 train ~2.037 bpc  |g| 0.40  50s
+  step 2976/4978 train ~2.013 bpc  |g| 0.37  55s
+  step 3224/4978 train ~2.002 bpc  |g| 0.38  59s
+  step 3472/4978 train ~2.010 bpc  |g| 0.39  63s
+  step 3720/4978 train ~1.985 bpc  |g| 0.38  68s
+  step 3968/4978 train ~1.993 bpc  |g| 0.40  72s
+  step 4216/4978 train ~1.989 bpc  |g| 0.37  77s
+  step 4464/4978 train ~1.959 bpc  |g| 0.38  81s
+  step 4712/4978 train ~1.971 bpc  |g| 0.41  86s
+  step 4960/4978 train ~1.952 bpc  |g| 0.44  90s
+sample: le findára n'um murmurio, eu, 
+ immenso referricoleonho. Alencar, o marido. Ella sua voz e avente se vê a corcavel; João
+Embos de altura, se de Teive, como se-navia a sua
+forta
+excellenteja transborda, e iria o dia Carlos tão rica pôz a mim" e o matennte, por um resto de
+Meícia de
+solticia
+com o
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mingru-grp-first-91_bpe8192-h128-l2-s64-chrono1024-stateful64-seed1.bin

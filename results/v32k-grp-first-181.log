@@ -1,0 +1,32 @@
+sosc grp-first-181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 1378432 tok
+  step 0/4039 train ~3.232 bpc  |g| 0.30  0s
+  step 201/4039 train ~2.764 bpc  |g| 0.45  9s
+  step 402/4039 train ~2.425 bpc  |g| 0.40  18s
+  step 603/4039 train ~2.274 bpc  |g| 0.38  26s
+  step 804/4039 train ~2.192 bpc  |g| 0.48  35s
+  step 1005/4039 train ~2.138 bpc  |g| 0.44  43s
+  step 1206/4039 train ~2.067 bpc  |g| 0.44  52s
+  step 1407/4039 train ~2.029 bpc  |g| 0.45  61s
+  step 1608/4039 train ~2.009 bpc  |g| 0.47  70s
+  step 1809/4039 train ~1.972 bpc  |g| 0.47  78s
+  step 2010/4039 train ~1.943 bpc  |g| 0.48  87s
+  step 2211/4039 train ~1.908 bpc  |g| 0.45  96s
+  step 2412/4039 train ~1.895 bpc  |g| 0.46  105s
+  step 2613/4039 train ~1.838 bpc  |g| 0.49  113s
+  step 2814/4039 train ~1.856 bpc  |g| 0.49  122s
+  step 3015/4039 train ~1.861 bpc  |g| 0.47  132s
+  step 3216/4039 train ~1.856 bpc  |g| 0.47  141s
+  step 3417/4039 train ~1.855 bpc  |g| 0.52  150s
+  step 3618/4039 train ~1.811 bpc  |g| 0.50  159s
+  step 3819/4039 train ~1.843 bpc  |g| 0.55  167s
+  step 4020/4039 train ~1.808 bpc  |g| 0.49  176s
+sample: le findára n'um murmurio, eu, 
+
+O coupé de roço que lhe digntas na trimala. Um antigo
+baão pelo seu soalho, Affonso da
+paixção não achava
+balou os anciedade, foi um charuto ao numero 39ologia, e sillorrica ao lado
+de meio do seu pae.
+Pelleijava os filhos Leçoscambicijo então estremeceu. E logo quando
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-181_bpe32768-h128-l2-s64-stateful64-seed1.bin

@@ -1,0 +1,59 @@
+sosc ndcf182x181:bpe32768: radix 182x181, h 128, layers 2, seq 64, params 8578736, state 816 B, train 1378432 tok
+  step 0/4039 train ~3.231 bpc  |g| 0.39  0s
+  step 201/4039 train ~2.735 bpc  |g| 0.41  8s
+  step 402/4039 train ~2.442 bpc  |g| 0.40  16s
+  step 603/4039 train ~2.312 bpc  |g| 0.38  24s
+  step 804/4039 train ~2.234 bpc  |g| 0.44  32s
+  step 1005/4039 train ~2.177 bpc  |g| 0.41  40s
+  step 1206/4039 train ~2.103 bpc  |g| 0.40  48s
+  step 1407/4039 train ~2.064 bpc  |g| 0.45  56s
+  step 1608/4039 train ~2.045 bpc  |g| 0.44  64s
+  step 1809/4039 train ~2.007 bpc  |g| 0.48  72s
+  step 2010/4039 train ~1.980 bpc  |g| 0.54  80s
+  step 2211/4039 train ~1.950 bpc  |g| 0.46  88s
+  step 2412/4039 train ~1.939 bpc  |g| 0.48  95s
+  step 2613/4039 train ~1.885 bpc  |g| 0.46  104s
+  step 2814/4039 train ~1.902 bpc  |g| 0.45  112s
+  step 3015/4039 train ~1.909 bpc  |g| 0.46  120s
+  step 3216/4039 train ~1.904 bpc  |g| 0.45  128s
+  step 3417/4039 train ~1.903 bpc  |g| 0.50  136s
+  step 3618/4039 train ~1.864 bpc  |g| 0.46  144s
+  step 3819/4039 train ~1.892 bpc  |g| 0.46  152s
+  step 4020/4039 train ~1.857 bpc  |g| 0.45  160s
+sample: le findára n'um murmurio, eu,       Que qual era uma honra o outro...
+
+O mez.
+
+
+LXXX bem!
+
+X
+
+
+
+CAPITULO ordem!
+
+
+
+
+
+II
+
+
+
+
+
+
+Imagiramente perdi, distra!
+
+
+
+
+Incos.
+
+
+
+
+A amor que morreu entre a mesa com as regças. E "o
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-ndcf182x181_bpe32768-h128-l2-s64-stateful64-seed1.bin

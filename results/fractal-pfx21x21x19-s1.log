@@ -1,0 +1,31 @@
+sosc pfx-21x21x19:bpe8192: radix 21x21x19, h 128, layers 2, seq 64, params 2284245, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.474 bpc  |g| 0.36  0s
+  step 248/4978 train ~2.950 bpc  |g| 0.43  18s
+  step 496/4978 train ~2.546 bpc  |g| 0.47  33s
+  step 744/4978 train ~2.362 bpc  |g| 0.50  45s
+  step 992/4978 train ~2.261 bpc  |g| 0.50  59s
+  step 1240/4978 train ~2.198 bpc  |g| 0.48  70s
+  step 1488/4978 train ~2.157 bpc  |g| 0.57  81s
+  step 1736/4978 train ~2.110 bpc  |g| 0.52  92s
+  step 1984/4978 train ~2.090 bpc  |g| 0.55  104s
+  step 2232/4978 train ~2.049 bpc  |g| 0.54  116s
+  step 2480/4978 train ~2.046 bpc  |g| 0.54  125s
+  step 2728/4978 train ~2.027 bpc  |g| 0.54  136s
+  step 2976/4978 train ~2.004 bpc  |g| 0.51  145s
+  step 3224/4978 train ~1.989 bpc  |g| 0.53  154s
+  step 3472/4978 train ~1.997 bpc  |g| 0.62  162s
+  step 3720/4978 train ~1.970 bpc  |g| 0.53  169s
+  step 3968/4978 train ~1.981 bpc  |g| 0.53  177s
+  step 4216/4978 train ~1.974 bpc  |g| 0.54  183s
+  step 4464/4978 train ~1.944 bpc  |g| 0.54  189s
+  step 4712/4978 train ~1.957 bpc  |g| 0.60  196s
+  step 4960/4978 train ~1.936 bpc  |g| 0.63  203s
+sample: le findára n'um murmurio, eu, 
+Dirafados, por quem onde, na tipoia e nos seus peiras enganos.
+
+O Pimentava. O curvitão rosnou a um geito: "Panha-os ao
+medo Irene dos odios tempos, mergudos, que ella digava, Jacintho era o
+rancão de Carlos, pouco esmitar as praias em roda do candieiro do sol e
+de catreto, encontrando a sua saia á
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-pfx-21x21x19_bpe8192-h128-l2-s64-stateful64-seed1.bin

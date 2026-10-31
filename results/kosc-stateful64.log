@@ -1,0 +1,36 @@
+kosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2221876, state 8192 B, train 1698884 tok
+  step 0/4978 train ~3.465 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.996 bpc  |g| 0.32  18s
+  step 496/4978 train ~2.579 bpc  |g| 0.36  37s
+  step 744/4978 train ~2.379 bpc  |g| 0.40  56s
+  step 992/4978 train ~2.268 bpc  |g| 0.39  77s
+  step 1240/4978 train ~2.202 bpc  |g| 0.40  96s
+  step 1488/4978 train ~2.161 bpc  |g| 0.40  116s
+  step 1736/4978 train ~2.113 bpc  |g| 0.41  135s
+  step 1984/4978 train ~2.096 bpc  |g| 0.48  155s
+  step 2232/4978 train ~2.056 bpc  |g| 0.40  175s
+  step 2480/4978 train ~2.053 bpc  |g| 0.42  194s
+  step 2728/4978 train ~2.036 bpc  |g| 0.46  214s
+  step 2976/4978 train ~2.015 bpc  |g| 0.41  233s
+  step 3224/4978 train ~2.001 bpc  |g| 0.45  252s
+  step 3472/4978 train ~2.011 bpc  |g| 0.44  271s
+  step 3720/4978 train ~1.985 bpc  |g| 0.42  291s
+  step 3968/4978 train ~1.996 bpc  |g| 0.42  310s
+  step 4216/4978 train ~1.989 bpc  |g| 0.42  332s
+  step 4464/4978 train ~1.958 bpc  |g| 0.41  352s
+  step 4712/4978 train ~1.973 bpc  |g| 0.47  372s
+  step 4960/4978 train ~1.953 bpc  |g| 0.51  391s
+sample: le findára n'um murmurio, eu, 
+
+O coupé dos seus vasos e despendres:
+
+--Ora é o Paço... O vão a chegar D. Rui.
+
+--O que me digas se vestia, agarrava ao meu, o seu
+brecar!
+
+Amaro não vendo, bem caro branco em que eu adivinhára vêr imaginava uma cera em situação para respirar ao
+novo de D. Anna--que não
+conhece
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/kosc-n512-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

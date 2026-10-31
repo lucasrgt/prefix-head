@@ -1,0 +1,27 @@
+  106568 word-start tokens, 94520 continuations
+  reassign: 57456 tokens moved
+  reassign: 67451 tokens moved
+  reassign: 58386 tokens moved
+[W1009 16:36:55.284929451 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 100728832, total: 8196849664).
+[W1009 16:38:18.966931987 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 122421248, total: 8196849664).
+[W1009 16:38:18.021648681 CUDACachingAllocator.cpp:528] expandable_segments: memory mapping failed with OOM on device 0 while trying to map 20971520 bytes (free: 124518400, total: 8196849664).
+Traceback (most recent call last):
+  File "/home/lucasrgt/Work/frugal/tools/gpu/explore.py", line 203, in <module>
+    main()
+    ~~~~^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/explore.py", line 199, in main
+    getattr(run, exp)()
+    ~~~~~~~~~~~~~~~~~^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/explore.py", line 72, in sweep
+    g, _, _, kl = self.two_level(order, m)
+                  ~~~~~~~~~~~~~~^^^^^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/explore.py", line 60, in two_level
+    a, b = retro.train_self(self.htr, self.w, g, 2.0, 1e-3)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 170, in train_self
+    a = centroid(w, g).clone().requires_grad_()
+        ~~~~~~~~^^^^^^
+  File "/home/lucasrgt/Work/frugal/tools/gpu/retro.py", line 164, in centroid
+    blk = w[idx[s : s + 128].clamp(min=0)].float() * val[s : s + 128, :, None]
+          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~~~~~
+torch.OutOfMemoryError: CUDA out of memory. Tried to allocate 2.18 GiB. GPU 0 has a total capacity of 7.63 GiB of which 1.42 GiB is free. Process 2236 has 4.22 MiB memory in use. Process 3097 has 98.00 MiB memory in use. Process 5170 has 64.75 MiB memory in use. Process 5255 has 56.66 MiB memory in use. Process 21979 has 249.91 MiB memory in use. Including non-PyTorch memory, this process has 4.61 GiB memory in use. Of the allocated memory 4.38 GiB is allocated by PyTorch, and 92.32 MiB is reserved by PyTorch but unallocated.

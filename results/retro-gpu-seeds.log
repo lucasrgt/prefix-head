@@ -1,0 +1,42 @@
+gemma270m: adapt-full nan (0s)
+  prefix done in 122s
+  sem done in 127s
+  prefix done in 122s
+  g4 done in 119s
+qwen06b: adapt-full nan (0s)
+  prefix done in 83s
+  sem done in 80s
+gemma1b: adapt-full nan (0s)
+  prefix done in 135s
+  sem done in 138s
+  prefix done in 140s
+  g4 done in 137s
+gemma4e2b: adapt-full nan (0s)
+  prefix done in 152s
+  sem done in 152s
+  prefix done in 149s
+  g4 done in 152s
+gptoss20b: adapt-full nan (0s)
+  prefix done in 79s
+  sem done in 79s
+gemma270m: adapt-full nan (0s)
+  prefix done in 124s
+  sem done in 125s
+  prefix done in 127s
+  g4 done in 127s
+qwen06b: adapt-full nan (0s)
+  prefix done in 87s
+  sem done in 83s
+gemma1b: adapt-full nan (0s)
+  prefix done in 137s
+  sem done in 136s
+  prefix done in 139s
+  g4 done in 138s
+gemma4e2b: adapt-full nan (0s)
+  prefix done in 143s
+  sem done in 141s
+  prefix done in 145s
+  g4 done in 151s
+gptoss20b: adapt-full nan (0s)
+  prefix done in 77s
+  sem done in 78s

@@ -1,0 +1,32 @@
+sosc pfx-10x10x10x9:bpe8192: radix 10x10x10x9, h 128, layers 2, seq 64, params 1226739, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.519 bpc  |g| 0.43  0s
+  step 248/4978 train ~3.273 bpc  |g| 0.47  26s
+  step 496/4978 train ~3.001 bpc  |g| 0.64  63s
+  step 744/4978 train ~2.881 bpc  |g| 0.63  90s
+  step 992/4978 train ~2.791 bpc  |g| 0.71  114s
+  step 1240/4978 train ~2.714 bpc  |g| 0.64  148s
+  step 1488/4978 train ~2.661 bpc  |g| 0.76  172s
+  step 1736/4978 train ~2.613 bpc  |g| 0.72  210s
+  step 1984/4978 train ~2.582 bpc  |g| 0.82  245s
+  step 2232/4978 train ~2.541 bpc  |g| 0.71  296s
+  step 2480/4978 train ~2.531 bpc  |g| 0.70  335s
+  step 2728/4978 train ~2.513 bpc  |g| 0.64  356s
+  step 2976/4978 train ~2.495 bpc  |g| 0.63  376s
+  step 3224/4978 train ~2.479 bpc  |g| 0.71  396s
+  step 3472/4978 train ~2.479 bpc  |g| 0.73  410s
+  step 3720/4978 train ~2.452 bpc  |g| 0.75  428s
+  step 3968/4978 train ~2.459 bpc  |g| 0.72  442s
+  step 4216/4978 train ~2.461 bpc  |g| 0.73  458s
+  step 4464/4978 train ~2.437 bpc  |g| 0.73  472s
+  step 4712/4978 train ~2.452 bpc  |g| 0.73  492s
+  step 4960/4978 train ~2.429 bpc  |g| 1.02  510s
+sample: le findára n'um murmurio, eu,    "o por laologidevar Ai, escanir.
+
+E a mólheu o Hntrobados a Distes negodecinos da resistgidalgo Chigo,
+estaquêdasseque, costume, ao que que mette� ensir, deviam cerrado, para
+canlas?
+
+--Quando tosso para vinho-se o etc. Pidadas; a olhando
+visrosad, o medibado e que parece as mãos os seus
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-tied-pfx-10x10x10x9_bpe8192-h128-l2-s64-stateful64-seed1.bin

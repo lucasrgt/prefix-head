@@ -1,0 +1,39 @@
+mamba grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2261388, state 20224 B, train 1698884 tok
+  step 0/4978 train ~3.456 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.958 bpc  |g| 0.57  8s
+  step 496/4978 train ~2.537 bpc  |g| 0.58  17s
+  step 744/4978 train ~2.359 bpc  |g| 0.62  25s
+  step 992/4978 train ~2.260 bpc  |g| 0.59  34s
+  step 1240/4978 train ~2.213 bpc  |g| 0.58  42s
+  step 1488/4978 train ~2.163 bpc  |g| 0.59  51s
+  step 1736/4978 train ~2.123 bpc  |g| 0.63  61s
+  step 1984/4978 train ~2.096 bpc  |g| 0.62  70s
+  step 2232/4978 train ~2.076 bpc  |g| 0.63  89s
+  step 2480/4978 train ~2.057 bpc  |g| 0.64  99s
+  step 2728/4978 train ~2.048 bpc  |g| 0.63  108s
+  step 2976/4978 train ~2.029 bpc  |g| 0.64  116s
+  step 3224/4978 train ~2.010 bpc  |g| 0.65  124s
+  step 3472/4978 train ~2.013 bpc  |g| 0.68  133s
+  step 3720/4978 train ~1.985 bpc  |g| 0.71  141s
+  step 3968/4978 train ~1.967 bpc  |g| 0.68  149s
+  step 4216/4978 train ~1.971 bpc  |g| 0.69  158s
+  step 4464/4978 train ~2.002 bpc  |g| 0.69  166s
+  step 4712/4978 train ~1.987 bpc  |g| 0.69  174s
+  step 4960/4978 train ~1.972 bpc  |g| 0.70  183s
+sample: le findára n'um murmurio, eu, 
+
+O conego a sua viginha, era desmanchava-lhe o que é o
+sorusto que só
+lhe de
+interessara a
+clariosa humidas. O uma chama, observando o velho, no seu
+desibrada
+que o não tinha proprio, ainda ha medo.
+
+--Olha! Uma singencia!
+
+E muito surprehendida; quasi tocar,
+Só que elle ainda se ha
+diter
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/mamba-a4-n16-di0-grp-first-91_bpe8192-h128-l2-s64-stateful64-seed2.bin

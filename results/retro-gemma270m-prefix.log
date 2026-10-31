@@ -1,0 +1,11 @@
+gemma270m prefix: vocab 262144, d 640, 512 classes of <= 512, train 649605 rows, test 213807 rows
+  step 380/3806 class loss 3.8656 nats/token  2s
+  step 760/3806 class loss 3.6991 nats/token  3s
+  step 1140/3806 class loss 3.6000 nats/token  5s
+  step 1520/3806 class loss 3.4263 nats/token  6s
+  step 1900/3806 class loss 3.3295 nats/token  8s
+  step 2280/3806 class loss 3.2733 nats/token  9s
+  step 2660/3806 class loss 3.1496 nats/token  11s
+  step 3040/3806 class loss 3.0296 nats/token  13s
+  step 3420/3806 class loss 2.9764 nats/token  14s
+  step 3800/3806 class loss 2.9150 nats/token  16s

@@ -1,0 +1,50 @@
+sosc grp-first-64:bpe8192: radix 128x64, h 128, layers 2, seq 64, params 2204108, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.454 bpc  |g| 0.28  0s
+  step 248/4978 train ~2.966 bpc  |g| 0.38  4s
+  step 496/4978 train ~2.569 bpc  |g| 0.41  8s
+  step 744/4978 train ~2.377 bpc  |g| 0.44  12s
+  step 992/4978 train ~2.269 bpc  |g| 0.46  16s
+  step 1240/4978 train ~2.201 bpc  |g| 0.45  20s
+  step 1488/4978 train ~2.159 bpc  |g| 0.52  24s
+  step 1736/4978 train ~2.110 bpc  |g| 0.49  28s
+  step 1984/4978 train ~2.088 bpc  |g| 0.50  31s
+  step 2232/4978 train ~2.044 bpc  |g| 0.50  35s
+  step 2480/4978 train ~2.040 bpc  |g| 0.56  39s
+  step 2728/4978 train ~2.022 bpc  |g| 0.53  43s
+  step 2976/4978 train ~1.998 bpc  |g| 0.51  47s
+  step 3224/4978 train ~1.985 bpc  |g| 0.50  51s
+  step 3472/4978 train ~1.994 bpc  |g| 0.56  55s
+  step 3720/4978 train ~1.966 bpc  |g| 0.52  58s
+  step 3968/4978 train ~1.976 bpc  |g| 0.51  62s
+  step 4216/4978 train ~1.970 bpc  |g| 0.53  66s
+  step 4464/4978 train ~1.938 bpc  |g| 0.54  70s
+  step 4712/4978 train ~1.952 bpc  |g| 0.58  74s
+  step 4960/4978 train ~1.932 bpc  |g| 0.60  78s
+sample: le findára n'um murmurio, eu, 
+
+Vella, e sava... A ingleza para todos os quem o Major:--Não só é
+d'ella,
+havelluda a nossa loja de D. Maria...
+
+
+
+
+CAPITULO!...
+
+QuIV
+
+D
+
+
+Eram sangue.
+
+
+
+
+CAPITULO CXII
+
+
+
+Fholenimetas por uma soluçar alação de Madyn e ins
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-first-64_bpe8192-h128-l2-s64-stateful64-seed1.bin

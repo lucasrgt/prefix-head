@@ -341,7 +341,8 @@ impl SelOsc {
     pub fn save(&mut self, path: &std::path::Path, meta: &str) -> std::io::Result<()> {
         use std::io::Write;
         let radix = self.head.radix.iter().map(|r| r.to_string()).collect::<Vec<_>>().join("x");
-        let header = format!("sosc {} {} {} {} {radix}\n{meta}\n", self.vocab, self.h, self.n, self.layers);
+        let tied = if self.head.tied { " tied" } else { "" };
+        let header = format!("sosc {} {} {} {} {radix}{tied}\n{meta}\n", self.vocab, self.h, self.n, self.layers);
         let mut f = std::io::BufWriter::new(std::fs::File::create(path)?);
         f.write_all(header.as_bytes())?;
         for p in self.params_mut() {
@@ -361,6 +362,9 @@ impl SelOsc {
         assert_eq!(f[0], "sosc", "not a selective-oscillator checkpoint");
         let radix = f[5].split('x').map(|r| r.parse().unwrap()).collect();
         let mut m = Self::new(f[1].parse().unwrap(), radix, f[2].parse().unwrap(), f[3].parse().unwrap(), f[4].parse().unwrap(), 0);
+        if f.get(6) == Some(&"tied") {
+            m.head.tie(0);
+        }
         let mut it = lines.next().unwrap().chunks_exact(4).map(|c| f32::from_le_bytes(c.try_into().unwrap()));
         for p in m.params_mut() {
             for w in p.w.iter_mut() {

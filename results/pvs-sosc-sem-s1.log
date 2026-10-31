@@ -1,0 +1,31 @@
+sosc grp-sem-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2217472, state 816 B, train 1698884 tok
+  step 0/4978 train ~3.455 bpc  |g| 0.29  0s
+  step 248/4978 train ~2.985 bpc  |g| 0.38  5s
+  step 496/4978 train ~2.631 bpc  |g| 0.42  10s
+  step 744/4978 train ~2.436 bpc  |g| 0.44  15s
+  step 992/4978 train ~2.333 bpc  |g| 0.43  20s
+  step 1240/4978 train ~2.271 bpc  |g| 0.42  25s
+  step 1488/4978 train ~2.231 bpc  |g| 0.45  30s
+  step 1736/4978 train ~2.185 bpc  |g| 0.45  35s
+  step 1984/4978 train ~2.168 bpc  |g| 0.47  39s
+  step 2232/4978 train ~2.127 bpc  |g| 0.47  44s
+  step 2480/4978 train ~2.124 bpc  |g| 0.50  48s
+  step 2728/4978 train ~2.106 bpc  |g| 0.50  52s
+  step 2976/4978 train ~2.084 bpc  |g| 0.45  57s
+  step 3224/4978 train ~2.068 bpc  |g| 0.48  61s
+  step 3472/4978 train ~2.078 bpc  |g| 0.46  65s
+  step 3720/4978 train ~2.051 bpc  |g| 0.51  70s
+  step 3968/4978 train ~2.060 bpc  |g| 0.49  74s
+  step 4216/4978 train ~2.056 bpc  |g| 0.49  78s
+  step 4464/4978 train ~2.026 bpc  |g| 0.49  83s
+  step 4712/4978 train ~2.039 bpc  |g| 0.50  87s
+  step 4960/4978 train ~2.018 bpc  |g| 0.61  92s
+sample: le findára n'um murmurio, eu, 8co de geono pão de fruella, naqueloncada no caminho, e logo os cavalloseiras onde
+musava os bagasvlavibantes.
+
+--Alit n'a Franntemente recordar e fina, em jornaes de mulher?
+
+O coctirança de papel, elle era lampada; fechar derreva o
+pletoril, proceradora outro naturalmente, com o cavallo:
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/sosc-n51-grp-sem-91_bpe8192-h128-l2-s64-stateful64-seed1.bin

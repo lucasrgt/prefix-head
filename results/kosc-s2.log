@@ -1,0 +1,33 @@
+kosc grp-first-91:bpe8192: radix 91x91, h 128, layers 2, seq 64, params 2221876, state 8192 B, train 1698884 tok
+  step 0/4978 train ~3.458 bpc  |g| 0.29  0s
+  step 248/4978 train ~3.006 bpc  |g| 0.31  31s
+  step 496/4978 train ~2.595 bpc  |g| 0.35  49s
+  step 744/4978 train ~2.386 bpc  |g| 0.37  67s
+  step 992/4978 train ~2.281 bpc  |g| 0.39  84s
+  step 1240/4978 train ~2.204 bpc  |g| 0.39  102s
+  step 1488/4978 train ~2.161 bpc  |g| 0.43  132s
+  step 1736/4978 train ~2.128 bpc  |g| 0.40  149s
+  step 1984/4978 train ~2.099 bpc  |g| 0.40  166s
+  step 2232/4978 train ~2.071 bpc  |g| 0.39  186s
+  step 2480/4978 train ~2.050 bpc  |g| 0.40  206s
+  step 2728/4978 train ~2.040 bpc  |g| 0.42  225s
+  step 2976/4978 train ~2.022 bpc  |g| 0.41  246s
+  step 3224/4978 train ~2.007 bpc  |g| 0.42  266s
+  step 3472/4978 train ~2.007 bpc  |g| 0.45  284s
+  step 3720/4978 train ~1.992 bpc  |g| 0.41  303s
+  step 3968/4978 train ~1.992 bpc  |g| 0.42  321s
+  step 4216/4978 train ~1.983 bpc  |g| 0.44  339s
+  step 4464/4978 train ~1.977 bpc  |g| 0.42  356s
+  step 4712/4978 train ~1.974 bpc  |g| 0.41  373s
+  step 4960/4978 train ~1.978 bpc  |g| 0.42  390s
+sample: le findára n'um murmurio, eu, 
+isso uma deposta, ou no confessario está-se no que é o
+camuro, que só
+com ninguem,
+sem uma tel aquella mulher exhalando as pirar com a noticia das folhasidades, enchia-me,
+e superfir a ninguem, não só parecera ahi na mão sobre a
+chapuz, perseguida insolado. Depois, surgiu uma senhora verde.
+
+Á casa, de Jorge. Cos ou razão
+
+saved /home/lucasrgt/Work/frugal/crates/ruler/../../data/models/kosc-n512-grp-first-91_bpe8192-h128-l2-s64-seed2.bin
