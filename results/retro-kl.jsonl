@@ -109,3 +109,17 @@
 {"model": "qwenchat", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.0745}
 {"model": "qwenchat", "group": "hyb", "classes": 390, "kl_bpc": 0.0978}
 {"model": "qwenchat", "group": "sem", "classes": 390, "kl_bpc": 0.1893}
+{"model": "qcoder", "group": "prefix", "classes": 390, "kl_bpc": 0.103}
+{"model": "qcoder", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.0935}
+{"model": "qcoder", "group": "hyb", "classes": 390, "kl_bpc": 0.1163}
+{"model": "qcoder", "group": "freq", "classes": 390, "kl_bpc": 0.284}
+{"model": "qcoder", "group": "sem", "classes": 390, "kl_bpc": 0.271}
+{"model": "qcoder", "group": "random", "classes": 390, "kl_bpc": 0.3332}
+{"model": "qcoder", "group": "id", "classes": 390, "kl_bpc": 0.3301}
+{"model": "qwen3code", "group": "prefix", "classes": 390, "kl_bpc": 0.0919}
+{"model": "qwen3code", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.0795}
+{"model": "qwen3code", "group": "hyb", "classes": 390, "kl_bpc": 0.1026}
+{"model": "qwen3code", "group": "freq", "classes": 390, "kl_bpc": 0.2587}
+{"model": "qwen3code", "group": "sem", "classes": 390, "kl_bpc": 0.2339}
+{"model": "qwen3code", "group": "random", "classes": 390, "kl_bpc": 0.2926}
+{"model": "qwen3code", "group": "id", "classes": 390, "kl_bpc": 0.2964}

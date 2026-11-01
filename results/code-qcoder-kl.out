@@ -1,0 +1,7 @@
+{"model": "qcoder", "group": "prefix", "classes": 390, "kl_bpc": 0.103}
+{"model": "qcoder", "group": "prefix-128", "classes": 1187, "kl_bpc": 0.0935}
+{"model": "qcoder", "group": "hyb", "classes": 390, "kl_bpc": 0.1163}
+{"model": "qcoder", "group": "freq", "classes": 390, "kl_bpc": 0.284}
+{"model": "qcoder", "group": "sem", "classes": 390, "kl_bpc": 0.271}
+{"model": "qcoder", "group": "random", "classes": 390, "kl_bpc": 0.3332}
+{"model": "qcoder", "group": "id", "classes": 390, "kl_bpc": 0.3301}
